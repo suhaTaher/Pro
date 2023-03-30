@@ -35,8 +35,8 @@ public class PlannerFrame extends javax.swing.JFrame {
     long millis=System.currentTimeMillis();
     java.sql.Date Tdate = new java.sql.Date(millis);
     private final String username;
-       
     private CardLayout cardLayout;
+    
     public PlannerFrame(String UserID) {
         initComponents();
         cardLayout = (CardLayout) PlannerCards.getLayout();
