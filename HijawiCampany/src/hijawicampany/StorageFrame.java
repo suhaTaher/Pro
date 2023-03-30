@@ -9,14 +9,19 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -35,9 +40,117 @@ public class StorageFrame extends javax.swing.JFrame {
         cardLayout = (CardLayout) StorageCards.getLayout();
         setColor(this.ExpiredListOfTools);
         cardLayout.show(StorageCards, "card5");
-        
+        toolexpired();
+        tabelcontent();
         this.username=UserID;
         this.jLabel2.setText(username);  
+    }
+    
+        public void toolexpired(){
+
+        String[] columnNames = {"اسم الاداة", "نوع الاداة", "القطاع","رقم المنطقة" ,"الممر", "الحجم"," رقم الحاملة"};
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    DefaultTableModel model = new DefaultTableModel();
+                     model.setColumnIdentifiers(columnNames);
+                    jTable1.setModel(model);
+                    jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    jTable1.setFillsViewportHeight(true);
+                    jTable1.setRowHeight(40);
+                    String tname;
+                    String ttype;
+                     String sector;
+                    String size="";
+                    int size1;
+                    int area=0;
+                    int isle=0;
+                    String supplier;
+                    int cno=0;  
+                    PreparedStatement ps1 = connection.prepareStatement("SELECT * FROM dicut WHERE DateOfFinishOrder IS NOT NULL ");
+                    ResultSet rs1 = ps1.executeQuery();
+                    while(rs1.next())
+                    {
+                        tname=rs1.getString(1);
+                      ttype=rs1.getString(2);
+                      sector=rs1.getString(3);
+                      size1=rs1.getInt(4);
+                      area=rs1.getInt(5);
+                      isle=rs1.getInt(10);
+                       cno=rs1.getInt(11);
+                       if(size1==1)size="70*100";
+                       else if(size1==2)size="30*50";
+                       else size="غير ذلك";
+                      model.addRow(new Object[]{tname, ttype, sector, area,isle,size,cno});
+                       
+                    }
+                    PreparedStatement ps2 = connection.prepareStatement("SELECT * FROM iplate WHERE DateOfFinishOrder IS NOT NULL ");
+                    ResultSet rs2 = ps2.executeQuery();
+                    while(rs2.next())
+                    {
+                        tname=rs2.getString(1);
+                      ttype=rs2.getString(2);
+                      sector=rs2.getString(3);
+                      size1=rs2.getInt(4);
+                      area=rs2.getInt(5);
+                      isle=rs2.getInt(9);
+                       cno=rs2.getInt(10);
+                       if(size1==1)size="70*100";
+                       else if(size1==2)size="30*50";
+                       else size="غير ذلك";
+                      model.addRow(new Object[]{tname, ttype, sector, area,isle,size,cno});
+                    }
+                     PreparedStatement ps = connection.prepareStatement("SELECT * FROM iclasheh WHERE DateOfFinishOrder IS NOT NULL ");
+                    ResultSet rs = ps.executeQuery();
+                    while(rs.next())
+                    {
+                        tname=rs.getString(1);
+                      ttype=rs.getString(2);
+                      sector=rs.getString(3);
+                      size1=rs.getInt(4);
+                      area=rs.getInt(5);
+                      isle=rs.getInt(9);
+                       cno=rs.getInt(10);
+                       if(size1==1)size="70*100";
+                       else if(size1==2)size="30*50";
+                       else size="غير ذلك";
+                      model.addRow(new Object[]{tname, ttype, sector, area,isle,size,cno});
+                    }             
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }             
+    }
+        
+   public void tabelcontent(){
+        String[] columnNames = {"رقم الطلبية", "تاريخ الطلبية", "تاريخ التسليم", "اسم الاداة","الملفات"};
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    DefaultTableModel model = new DefaultTableModel();
+                     model.setColumnIdentifiers(columnNames);
+                    jTable2.setModel(model);
+                    jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    jTable2.setFillsViewportHeight(true);
+                    jTable2.setRowHeight(40);
+                    int id=0;
+                    Date orderdate;
+                     String Finishdate;
+                    String toolname;
+                    String fileUrl;         
+                    PreparedStatement ps1 = connection.prepareStatement("select * from orders");
+                    ResultSet rs1 = ps1.executeQuery();
+                    while(rs1.next())
+                    {
+                      id=rs1.getInt(1);
+                      orderdate=rs1.getDate(2);
+                      Finishdate=rs1.getString(3);
+                      toolname=rs1.getString(4);
+                      fileUrl=rs1.getString(5);
+                      model.addRow(new Object[]{id, orderdate, Finishdate, toolname,fileUrl});
+                    }            
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }              
     }
 
     /**
@@ -85,7 +198,7 @@ public class StorageFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel38 = new javax.swing.JLabel();
-        AddChangeOrder = new javax.swing.JPanel();
+        AddChangeTool = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
@@ -130,7 +243,51 @@ public class StorageFrame extends javax.swing.JFrame {
         OK = new javax.swing.JPanel();
         jLabel43 = new javax.swing.JLabel();
         jLabel56 = new javax.swing.JLabel();
-        OPOnOrders = new javax.swing.JPanel();
+        OPOnTools = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel25 = new javax.swing.JLabel();
+        searchKey1 = new javax.swing.JTextField();
+        search = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        Tool2 = new javax.swing.JTextField();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel28 = new javax.swing.JLabel();
+        Supplier1 = new javax.swing.JTextField();
+        jPanel21 = new javax.swing.JPanel();
+        jLabel29 = new javax.swing.JLabel();
+        Size1 = new javax.swing.JTextField();
+        jPanel22 = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        jPanel24 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        area = new javax.swing.JTextField();
+        jPanel25 = new javax.swing.JPanel();
+        jLabel32 = new javax.swing.JLabel();
+        isle = new javax.swing.JTextField();
+        jPanel26 = new javax.swing.JPanel();
+        jLabel33 = new javax.swing.JLabel();
+        CarierNo1 = new javax.swing.JTextField();
+        jPanel27 = new javax.swing.JPanel();
+        jLabel34 = new javax.swing.JLabel();
+        sector = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        jPanel28 = new javax.swing.JPanel();
+        jLabel36 = new javax.swing.JLabel();
+        colorNo1 = new javax.swing.JTextField();
+        jPanel29 = new javax.swing.JPanel();
+        jLabel37 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Colors1 = new javax.swing.JList<>();
+        Status = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel55 = new javax.swing.JLabel();
+        OPTool = new javax.swing.JComboBox<>();
+        Ok = new javax.swing.JPanel();
+        jLabel58 = new javax.swing.JLabel();
+        jLabel59 = new javax.swing.JLabel();
         OrderList1 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -435,7 +592,7 @@ public class StorageFrame extends javax.swing.JFrame {
 
         StorageCards.add(ExpiredToolsList, "card5");
 
-        AddChangeOrder.setBackground(new java.awt.Color(255, 255, 255));
+        AddChangeTool.setBackground(new java.awt.Color(250, 250, 250));
 
         jPanel15.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -484,7 +641,7 @@ public class StorageFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(OP, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(SearchBTN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(searchKey2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -610,7 +767,7 @@ public class StorageFrame extends javax.swing.JFrame {
                 .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -703,9 +860,9 @@ public class StorageFrame extends javax.swing.JFrame {
         OKLayout.setHorizontalGroup(
             OKLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(OKLayout.createSequentialGroup()
-                .addGap(106, 106, 106)
+                .addGap(61, 61, 61)
                 .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         OKLayout.setVerticalGroup(
             OKLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -725,7 +882,7 @@ public class StorageFrame extends javax.swing.JFrame {
                             .addGroup(jPanel15Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -738,13 +895,13 @@ public class StorageFrame extends javax.swing.JFrame {
                                     .addGap(17, 17, 17)
                                     .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jPanel36, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                                        .addComponent(OK, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
+                                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(OK, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGap(28, 28, 28))
                                 .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap(50, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -782,43 +939,350 @@ public class StorageFrame extends javax.swing.JFrame {
         jLabel56.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel56.setText("البحث عن أداه");
 
-        javax.swing.GroupLayout AddChangeOrderLayout = new javax.swing.GroupLayout(AddChangeOrder);
-        AddChangeOrder.setLayout(AddChangeOrderLayout);
-        AddChangeOrderLayout.setHorizontalGroup(
-            AddChangeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddChangeOrderLayout.createSequentialGroup()
+        javax.swing.GroupLayout AddChangeToolLayout = new javax.swing.GroupLayout(AddChangeTool);
+        AddChangeTool.setLayout(AddChangeToolLayout);
+        AddChangeToolLayout.setHorizontalGroup(
+            AddChangeToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AddChangeToolLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel56)
                 .addGap(79, 79, 79))
-            .addGroup(AddChangeOrderLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+            .addGroup(AddChangeToolLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
-        AddChangeOrderLayout.setVerticalGroup(
-            AddChangeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddChangeOrderLayout.createSequentialGroup()
-                .addContainerGap(53, Short.MAX_VALUE)
+        AddChangeToolLayout.setVerticalGroup(
+            AddChangeToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddChangeToolLayout.createSequentialGroup()
+                .addContainerGap(42, Short.MAX_VALUE)
                 .addComponent(jLabel56)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56))
+                .addGap(75, 75, 75))
         );
 
-        StorageCards.add(AddChangeOrder, "card4");
+        StorageCards.add(AddChangeTool, "card4");
 
-        javax.swing.GroupLayout OPOnOrdersLayout = new javax.swing.GroupLayout(OPOnOrders);
-        OPOnOrders.setLayout(OPOnOrdersLayout);
-        OPOnOrdersLayout.setHorizontalGroup(
-            OPOnOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 790, Short.MAX_VALUE)
+        OPOnTools.setBackground(new java.awt.Color(250, 250, 250));
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel7.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel25.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel25.setText("اسم الأداة");
+
+        search.setBackground(new java.awt.Color(0, 43, 91));
+        search.setForeground(new java.awt.Color(51, 51, 51));
+        search.setPreferredSize(new java.awt.Dimension(147, 42));
+        search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchMouseClicked(evt);
+            }
+        });
+
+        jLabel40.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel40.setText("بحث");
+
+        javax.swing.GroupLayout searchLayout = new javax.swing.GroupLayout(search);
+        search.setLayout(searchLayout);
+        searchLayout.setHorizontalGroup(
+            searchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchLayout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(43, Short.MAX_VALUE))
         );
-        OPOnOrdersLayout.setVerticalGroup(
-            OPOnOrdersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+        searchLayout.setVerticalGroup(
+            searchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
         );
 
-        StorageCards.add(OPOnOrders, "card3");
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchKey1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchKey1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 634, -1));
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel26.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setText("نوع الأداة");
+        jPanel8.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        Tool2.setEditable(false);
+        Tool2.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel8.add(Tool2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        jPanel6.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, -1, -1));
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel28.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel28.setText("المورد ");
+        jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        Supplier1.setEditable(false);
+        Supplier1.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel9.add(Supplier1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        jPanel6.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
+
+        jPanel21.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel29.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel29.setText("الحجم");
+        jPanel21.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        Size1.setEditable(false);
+        Size1.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel21.add(Size1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        jPanel6.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, -1, -1));
+
+        jPanel22.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel30.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel30.setText("موقع التخرين");
+
+        jPanel24.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel24.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel31.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel31.setText("المنطقة");
+        jPanel24.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        area.setEditable(false);
+        area.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel24.add(area, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        jPanel25.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel25.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel32.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel32.setText("الممر");
+        jPanel25.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        isle.setEditable(false);
+        isle.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel25.add(isle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        jPanel26.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel26.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel33.setBackground(new java.awt.Color(250, 250, 250));
+        jLabel33.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel33.setText("الحاملة");
+        jPanel26.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        CarierNo1.setEditable(false);
+        CarierNo1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel26.add(CarierNo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        jPanel27.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel27.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel34.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel34.setText("القطاع");
+        jPanel27.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        sector.setEditable(false);
+        sector.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel27.add(sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
+        jPanel22.setLayout(jPanel22Layout);
+        jPanel22Layout.setHorizontalGroup(
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel22Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel22Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29))
+        );
+        jPanel22Layout.setVerticalGroup(
+            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel22Layout.createSequentialGroup()
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
+
+        jLabel35.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel35.setText("الألوان");
+        jPanel6.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 500, 90, 32));
+
+        jPanel28.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel28.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel36.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel36.setText("عدد الألوان");
+        jPanel28.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, 60, 40));
+
+        colorNo1.setEditable(false);
+        colorNo1.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel28.add(colorNo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+
+        jPanel6.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 540, 280, -1));
+
+        jPanel29.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel37.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel37.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel37.setText("الألوان");
+        jPanel29.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        Colors1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(Colors1);
+
+        jPanel29.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 100));
+
+        jPanel6.add(jPanel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 540, 260, -1));
+
+        Status.setForeground(new java.awt.Color(204, 0, 0));
+        Status.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Status.setText("Status");
+        jPanel6.add(Status, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 151, 186, 39));
+
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel55.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel55.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel55.setText("العملية");
+        jPanel10.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+
+        OPTool.setForeground(new java.awt.Color(0, 43, 91));
+        OPTool.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "استعارة", "ارجاع", "حذف" }));
+        OPTool.setPreferredSize(new java.awt.Dimension(190, 42));
+        jPanel10.add(OPTool, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        jPanel6.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, -1, -1));
+
+        Ok.setBackground(new java.awt.Color(255, 255, 255));
+        Ok.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 43, 91), 1, true));
+        Ok.setForeground(new java.awt.Color(51, 51, 51));
+        Ok.setPreferredSize(new java.awt.Dimension(190, 42));
+        Ok.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OkMouseClicked(evt);
+            }
+        });
+
+        jLabel58.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jLabel58.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel58.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel58.setText("موافق");
+
+        javax.swing.GroupLayout OkLayout = new javax.swing.GroupLayout(Ok);
+        Ok.setLayout(OkLayout);
+        OkLayout.setHorizontalGroup(
+            OkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(OkLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
+        );
+        OkLayout.setVerticalGroup(
+            OkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel58, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+        );
+
+        jPanel6.add(Ok, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 610, 200, -1));
+
+        jLabel59.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        jLabel59.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel59.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel59.setText("عمليات على الأدوات");
+
+        javax.swing.GroupLayout OPOnToolsLayout = new javax.swing.GroupLayout(OPOnTools);
+        OPOnTools.setLayout(OPOnToolsLayout);
+        OPOnToolsLayout.setHorizontalGroup(
+            OPOnToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(OPOnToolsLayout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addGroup(OPOnToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel59, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 702, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(47, Short.MAX_VALUE))
+        );
+        OPOnToolsLayout.setVerticalGroup(
+            OPOnToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(OPOnToolsLayout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel59)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        StorageCards.add(OPOnTools, "card3");
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1160,7 +1624,8 @@ public class StorageFrame extends javax.swing.JFrame {
         char TypeOfTool=search.charAt(0);
         Connection connection;
         PreparedStatement ps,ps1,ps2;    
-       
+       if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Search Field Is Empty" );}
+       else{
         switch (TypeOfTool) {
             case 'D':
                 try {
@@ -1291,6 +1756,7 @@ public class StorageFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"Not Found" );
                 break;
         }
+       }
    this.Tool1.setSelectedItem(TypeOfTool1);
    this.suplier.setSelectedItem(supplier1);
    this.Size2.setSelectedItem(size1);
@@ -1300,6 +1766,397 @@ public class StorageFrame extends javax.swing.JFrame {
    this.CarierNo2.setText(Integer.toString(carierNo));
    this.colorNo3.setText(Integer.toString(colornumber1));
     }//GEN-LAST:event_SearchBTNMouseClicked
+
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        // TODO add your handling code here:
+        Vector data = new Vector();
+        this.Tool2.setText("");
+        this.Supplier1.setText("");
+        this.Size1.setText("");
+        this.sector.setText("");
+        this.area.setText("");
+        this.isle.setText("");
+        this.CarierNo1.setText("");
+        this.colorNo1.setText("");
+        this.Colors1.setListData(data);
+        String TypeOfTool1="";
+        String size1="";
+        String JobOfTool1="";
+        String supplier1="";
+        String status1="";
+        int status;
+        int size=0;
+        int flag=0;
+        int isle=0;
+        int carierNo =0;
+        int ordernumber1=0;
+        int colornumber1=0;
+        int area=0;
+        String search=this.searchKey1.getText();
+        if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
+        else{
+            char TypeOfTool=search.charAt(0);
+            Connection connection;
+            PreparedStatement ps,ps1,ps2;
+
+            switch (TypeOfTool) {
+                case 'D':
+                try {
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps = connection.prepareStatement("select * from dicut where name= ?");
+                    ps.setString(1,search );
+                    ResultSet rs = ps.executeQuery();
+                    if(rs.next())
+                    {
+                        TypeOfTool1=rs.getString(2);
+                        JobOfTool1=rs.getString(3);
+                        size=rs.getInt(4);
+                        area=rs.getInt(5);
+                        status=rs.getInt(6);
+                        supplier1=rs.getString(9);
+                        isle=rs.getInt(10);
+                        carierNo =rs.getInt(11);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        switch (size) {
+                            case 1:
+                            size1="70×100";
+                            break;
+                            case 2:
+                            size1="50×30";
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            break;
+                            default:
+                            break;
+                        }
+
+                    }
+
+                    else  JOptionPane.showMessageDialog(this,"Not Found" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                }       break;
+                case 'P':
+                try{
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps1 = connection.prepareStatement("select * from iplate where name= ?");
+                    ps1.setString(1,search );
+                    ResultSet rs1 = ps1.executeQuery();
+                    if(rs1.next())
+                    {
+                        TypeOfTool1=rs1.getString(2);
+                        JobOfTool1=rs1.getString(3);
+                        size=rs1.getInt(4);
+                        area=rs1.getInt(5);
+                        status=rs1.getInt(6);
+                        isle=rs1.getInt(9);
+                        carierNo =rs1.getInt(10);
+                        colornumber1=rs1.getInt(11);
+                        ps2 = connection.prepareStatement("select * from color where platename= ?");
+                        ps2.setString(1,search );
+                        ResultSet rs2 = ps2.executeQuery();
+                        while(rs2.next()){data.addElement(rs2.getString(2));}
+                        this.Colors1.setListData(data);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        switch (size) {
+                            case 1:
+                            size1="70×100";
+                            break;
+                            case 2:
+                            size1="50×30";
+                            break;
+                            default:
+                            break;
+                        }
+                    }
+                    else  JOptionPane.showMessageDialog(this,"Not Found" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                }       break;
+                case 'C':
+                try{
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
+                    ps1.setString(1,search );
+                    ResultSet rs1 = ps1.executeQuery();
+                    if(rs1.next())
+                    {
+                        TypeOfTool1=rs1.getString(2);
+                        JobOfTool1=rs1.getString(3);
+                        size=rs1.getInt(4);
+                        status=rs1.getInt(6);
+                        area=rs1.getInt(5);
+                        isle=rs1.getInt(9);
+                        carierNo=rs1.getInt(10);
+                        colornumber1=rs1.getInt(11);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        switch (size) {
+                            case 1:
+                            size1="70×100";
+                            break;
+                            case 2:
+                            size1="50×30";
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            break;
+                            default:
+                            break;
+                        }
+
+                    }
+                    else  JOptionPane.showMessageDialog(this,"Not Found" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                }       break;
+                default:
+                JOptionPane.showMessageDialog(this,"Not Found" );
+                break;
+            }
+        }
+
+        this.Tool2.setText(TypeOfTool1);
+        this.Supplier1.setText(supplier1);
+        this.Size1.setText(size1);
+        this.sector.setText(JobOfTool1);
+        this.Status.setText(status1);
+        this.area.setText(Integer.toString(area));
+        this.isle.setText(Integer.toString(isle));
+        this.CarierNo1.setText(Integer.toString(carierNo));
+        this.colorNo1.setText(Integer.toString(colornumber1));
+    }//GEN-LAST:event_searchMouseClicked
+
+    private void OkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OkMouseClicked
+        // TODO add your handling code here:
+                String otype=(String) this.OPTool.getSelectedItem(); 
+boolean empty=this.searchKey1.getText().isEmpty();
+
+  if(otype=="استعارة" && !empty){
+      String search=this.searchKey1.getText();
+      char type=search.charAt(0);
+      int status=0;
+      if(type=='D'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s1 = ps.executeQuery();
+                if(s1.next()) status =s1.getInt(1);
+                if(status==1){
+               PreparedStatement ps1 = connection.prepareStatement("UPDATE dicut SET status=? WHERE name=?");
+               ps1.setInt(1,0);
+                 ps1.setString(2,search);
+                    boolean rs = ps1.execute();
+             if(!rs)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+               
+                }
+                else JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
+                
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      }
+      else  if(type=='P'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s2 = ps.executeQuery();
+                if(s2.next()) status =s2.getInt(1);
+                if(status==1){
+               PreparedStatement ps2 = connection.prepareStatement("UPDATE iplate SET status=? WHERE name=?");
+               ps2.setInt(1,0);
+                 ps2.setString(2,search);
+                    boolean rs2 = ps2.execute();
+             if(!rs2)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+               
+                }
+                else JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
+                
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      } 
+            else  if(type=='C'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s3 = ps.executeQuery();
+                if(s3.next()) status =s3.getInt(1);
+                if(status==1){
+               PreparedStatement ps3 = connection.prepareStatement("UPDATE iclasheh SET status=? WHERE name=?");
+               ps3.setInt(1,0);
+               ps3.setString(2,search);
+                boolean rs3 = ps3.execute();
+             if(!rs3)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+               
+                }
+                else JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
+                
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      } 
+  }
+    if(otype=="ارجاع" && !empty){
+      String search=this.searchKey1.getText();
+      char type=search.charAt(0);
+      int status=0;
+      if(type=='D'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s1 = ps.executeQuery();
+                if(s1.next()) status =s1.getInt(1);
+                if(status==0){
+               PreparedStatement ps1 = connection.prepareStatement("UPDATE dicut SET status=? WHERE name=?");
+               ps1.setInt(1,1);
+                 ps1.setString(2,search);
+                    boolean rs = ps1.execute();
+             if(!rs)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+               
+                }
+                else JOptionPane.showMessageDialog(this, "الاداة  متوفرة ");
+                
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      }
+      else  if(type=='P'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s2 = ps.executeQuery();
+                if(s2.next()) status =s2.getInt(1);
+                if(status==0){
+               PreparedStatement ps2 = connection.prepareStatement("UPDATE iplate SET status=? WHERE name=?");
+               ps2.setInt(1,1);
+                 ps2.setString(2,search);
+                    boolean rs2 = ps2.execute();
+             if(!rs2)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+               
+                }
+                else JOptionPane.showMessageDialog(this, "الاداة متوفرة");
+                
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      } 
+            else  if(type=='C'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s3 = ps.executeQuery();
+                if(s3.next()) status =s3.getInt(1);
+                if(status==0){
+               PreparedStatement ps3 = connection.prepareStatement("UPDATE iclasheh SET status=? WHERE name=?");
+               ps3.setInt(1,1);
+               ps3.setString(2,search);
+                boolean rs3 = ps3.execute();
+             if(!rs3)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+               
+                }
+                else JOptionPane.showMessageDialog(this, "الاداة متوفرة");
+                
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      } 
+  }
+        if(otype=="حذف" && !empty){
+      String search=this.searchKey1.getText();
+      char type=search.charAt(0);
+      int status=0;
+      if(type=='D'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s1 = ps.executeQuery();
+                if(s1.next()) {
+                     PreparedStatement ps1 = connection.prepareStatement("DELETE FROM dicut WHERE  name=?");  
+                 ps1.setString(1,search);
+                    boolean rs1 = ps1.execute();
+             if(!rs1)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+                }  
+                   JOptionPane.showMessageDialog(this, "لم يتم العثور على الاداة");
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      }
+      else  if(type=='P'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
+              ps.setString(1,search);
+                ResultSet s1 = ps.executeQuery();
+                if(s1.next()) {
+                     PreparedStatement ps1 = connection.prepareStatement("DELETE FROM iplate  WHERE  name=?");  
+                 ps1.setString(1,search);
+                    boolean rs1 = ps1.execute();
+             if(!rs1)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+                }   
+                   JOptionPane.showMessageDialog(this, "لم يتم العثور على الاداة");
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          }
+         
+      } 
+            else  if(type=='C'){
+          Connection connection;
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
+              ps.setString(1,search);
+               ResultSet s1 = ps.executeQuery();
+              if(s1.next()) {
+                     PreparedStatement ps1 = connection.prepareStatement("DELETE FROM iclasheh  WHERE  name=?");  
+                 ps1.setString(1,search);
+                    boolean rs1 = ps1.execute();
+             if(!rs1)JOptionPane.showMessageDialog(this, "تم ىنجاح");
+             else  JOptionPane.showMessageDialog(this, "Erorr"); 
+                }  
+              JOptionPane.showMessageDialog(this, "لم يتم العثور على الاداة");
+          } catch (SQLException ex) {
+              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+          } 
+      } 
+  }
+    }//GEN-LAST:event_OkMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1337,28 +2194,39 @@ public class StorageFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel AddChangeOrder;
+    private javax.swing.JPanel AddChangeTool;
     private javax.swing.JPanel AddOrder_Change;
     private javax.swing.JTextField Area3;
+    private javax.swing.JTextField CarierNo1;
     private javax.swing.JTextField CarierNo2;
+    private javax.swing.JList<String> Colors1;
     private javax.swing.JPanel ExpiredListOfTools;
     private javax.swing.JPanel ExpiredToolsList;
     private javax.swing.JPanel LogOut;
     private javax.swing.JPanel OK;
     private javax.swing.JComboBox<String> OP;
-    private javax.swing.JPanel OPOnOrders;
+    private javax.swing.JPanel OPOnTools;
+    private javax.swing.JComboBox<String> OPTool;
     private javax.swing.JPanel OP_Orders;
+    private javax.swing.JPanel Ok;
     private javax.swing.JPanel OrderList1;
     private javax.swing.JPanel Order_List;
     private javax.swing.JPanel SearchBTN;
     private javax.swing.JComboBox<String> Sector;
     private javax.swing.JPanel SidePannel;
+    private javax.swing.JTextField Size1;
     private javax.swing.JComboBox<String> Size2;
+    private javax.swing.JLabel Status;
     private javax.swing.JLabel Status1;
     private javax.swing.JPanel StorageCards;
+    private javax.swing.JTextField Supplier1;
     private javax.swing.JComboBox<String> Tool1;
+    private javax.swing.JTextField Tool2;
     private javax.swing.JTextField aisle3;
+    private javax.swing.JTextField area;
+    private javax.swing.JTextField colorNo1;
     private javax.swing.JTextField colorNo3;
+    private javax.swing.JTextField isle;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox4;
@@ -1366,11 +2234,24 @@ public class StorageFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
@@ -1386,17 +2267,29 @@ public class StorageFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
+    private javax.swing.JPanel jPanel24;
+    private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel26;
+    private javax.swing.JPanel jPanel27;
+    private javax.swing.JPanel jPanel28;
+    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
@@ -1408,12 +2301,20 @@ public class StorageFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel37;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JPanel search;
     private javax.swing.JPanel search3;
+    private javax.swing.JTextField searchKey1;
     private javax.swing.JTextField searchKey2;
+    private javax.swing.JTextField sector;
     private javax.swing.JComboBox<String> suplier;
     // End of variables declaration//GEN-END:variables
 }

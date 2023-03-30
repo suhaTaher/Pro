@@ -121,6 +121,11 @@ public class LogIn extends javax.swing.JFrame {
         jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 0, 191, 47));
 
         jPanel7.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel7MouseClicked(evt);
+            }
+        });
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setBackground(new java.awt.Color(0, 43, 91));
@@ -244,6 +249,13 @@ public class LogIn extends javax.swing.JFrame {
             } catch (Exception ex ) { JOptionPane.showMessageDialog(this,"Wrong Email and/or Password \n"+ex );} 
         }
     }//GEN-LAST:event_jPanel6MouseClicked
+
+    private void jPanel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseClicked
+        // TODO add your handling code here:
+        PassChang p=new PassChang(); 
+        this.setVisible(false);
+        p.setVisible(true);
+    }//GEN-LAST:event_jPanel7MouseClicked
 
     /**
      * @param args the command line arguments

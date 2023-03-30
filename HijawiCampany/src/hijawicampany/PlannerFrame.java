@@ -11,15 +11,20 @@ import java.awt.HeadlessException;
 import java.io.File;
 import java.security.SecureRandom;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -46,6 +51,39 @@ public class PlannerFrame extends javax.swing.JFrame {
         this.username=UserID;
         this.jLabel2.setText(username);    
         OrderDate.setDate(Tdate);
+        tabelcontent();
+    }
+    
+        public void tabelcontent(){
+             String[] columnNames = {"رقم الطلبية", "تاريخ الطلبية", "تاريخ التسليم", "اسم الاداة","الملفات"};
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    DefaultTableModel model = new DefaultTableModel();
+                     model.setColumnIdentifiers(columnNames);
+                    jTable1.setModel(model);
+                    jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    jTable1.setFillsViewportHeight(true);
+                     jTable1.setRowHeight(40);
+                    int id=0;
+                    Date orderdate;
+                     String Finishdate;
+                    String toolname;
+                    String fileUrl;    
+                   PreparedStatement ps1 = connection.prepareStatement("select * from orders");
+                    ResultSet rs1 = ps1.executeQuery();
+                    while(rs1.next())
+                    {
+                        id=rs1.getInt(1);
+                      orderdate=rs1.getDate(2);
+                      Finishdate=rs1.getString(3);
+                      toolname=rs1.getString(4);
+                      fileUrl=rs1.getString(5);
+                       model.addRow(new Object[]{id, orderdate, Finishdate, toolname,fileUrl});
+                    }        
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }                
     }
     
     void setColor(JPanel panel) {
@@ -259,7 +297,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddEmpLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addGap(31, 31, 31))
+                .addContainerGap())
         );
         AddEmpLayout.setVerticalGroup(
             AddEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -691,6 +729,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel34.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel34.setForeground(new java.awt.Color(0, 43, 91));
         jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel34.setText("حذف");
@@ -1505,7 +1544,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         workertype.setBackground(new java.awt.Color(245, 245, 245));
         workertype.setEditable(true);
         workertype.setForeground(new java.awt.Color(0, 43, 91));
-        workertype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "قسم التخطيط", "الادارة", "مسؤول المخازن", "مدير المبيعات" }));
+        workertype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "قسم التخطيط", "مسؤول المخازن", "مدير المبيعات" }));
 
         javax.swing.GroupLayout jPanel42Layout = new javax.swing.GroupLayout(jPanel42);
         jPanel42.setLayout(jPanel42Layout);
