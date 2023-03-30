@@ -53,13 +53,15 @@ public class LogIn extends javax.swing.JFrame {
 
         jPanel1.setLayout(null);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/im11.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled-7.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -67,7 +69,7 @@ public class LogIn extends javax.swing.JFrame {
         );
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(0, 0, 360, 550);
+        jPanel2.setBounds(0, 0, 390, 550);
 
         jPanel3.setBackground(new java.awt.Color(250, 250, 250));
 
@@ -88,9 +90,7 @@ public class LogIn extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(250, 250, 250));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        UserID.setForeground(new java.awt.Color(204, 204, 204));
-        UserID.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        UserID.setText("الرقم التعريفي ");
+        UserID.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         UserID.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 UserIDFocusGained(evt);
@@ -106,7 +106,7 @@ public class LogIn extends javax.swing.JFrame {
         jLabel4.setText("الرقم التعريفي");
         jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 0, -1, -1));
 
-        jPanel6.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel6.setBackground(new java.awt.Color(0, 43, 91));
         jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel6MouseClicked(evt);
@@ -146,7 +146,7 @@ public class LogIn extends javax.swing.JFrame {
                             .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,7 +165,7 @@ public class LogIn extends javax.swing.JFrame {
         );
 
         jPanel1.add(jPanel3);
-        jPanel3.setBounds(360, 0, 390, 550);
+        jPanel3.setBounds(380, 0, 370, 550);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,18 +184,18 @@ public class LogIn extends javax.swing.JFrame {
 
     private void UserIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserIDFocusGained
         // TODO add your handling code here:
-        if(this.UserID.getText().equals("الرقم التعريفي ")){
+      /*  if(this.UserID.getText().equals("الرقم التعريفي ")){
             this.UserID.setText("");
             this.UserID.setForeground(new Color (0,0,0));
-        }
+        }*/
     }//GEN-LAST:event_UserIDFocusGained
 
     private void UserIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UserIDFocusLost
         // TODO add your handling code here:
-        if(this.UserID.getText().equals("")){
+      /*  if(this.UserID.getText().equals("")){
             this.UserID.setText("الرقم التعريفي");
             this.UserID.setForeground(new Color (153,153,153));
-        }
+        }*/
     }//GEN-LAST:event_UserIDFocusLost
 
     private void jPanel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseClicked
@@ -203,11 +203,9 @@ public class LogIn extends javax.swing.JFrame {
         String password=new String(PassWord.getPassword());              
         Connection connection;
         PreparedStatement ps;  
-        
         if(UserID.getText().isEmpty() || password.isEmpty()){
             JOptionPane.showMessageDialog(this,"Empty Passwoord or email" );
         }
-        
         else{
            try {
                int id=Integer.parseInt(UserID.getText());

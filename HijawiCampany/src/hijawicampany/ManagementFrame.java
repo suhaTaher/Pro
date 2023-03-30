@@ -32,21 +32,26 @@ public class ManagementFrame extends javax.swing.JFrame {
      * Creates new form ManagementFrame
      */
     private CardLayout cardLayout;
+    private final String username;
     public ManagementFrame(String UserID) {
         initComponents();
         cardLayout = (CardLayout) EmpCards.getLayout();
         setColor(this.emp);
+        
+        this.username=UserID;
+        this.jLabel2.setText(username);
+
     }
     
         
     void setColor(JPanel panel) {
        // panel.setBackground(new Color(20, 63, 111));
-       panel.setBackground(new Color(71, 71, 71));
+       panel.setBackground(new Color(0,43, 91));
     }
     
     void resetColor(JPanel panel) {
        // panel.setBackground(new Color(0,43,91));
-        panel.setBackground(new Color(51,51,51));
+        panel.setBackground(new Color(20,63,111));
     }
 
     /**
@@ -286,7 +291,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        AddWorker.setBackground(new java.awt.Color(51, 51, 51));
+        AddWorker.setBackground(new java.awt.Color(0, 43, 91));
         AddWorker.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 AddWorkerMouseClicked(evt);
@@ -472,7 +477,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                     .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        SearchWorker.setBackground(new java.awt.Color(51, 51, 51));
+        SearchWorker.setBackground(new java.awt.Color(0, 43, 91));
         SearchWorker.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SearchWorkerMouseClicked(evt);
@@ -568,7 +573,9 @@ public class ManagementFrame extends javax.swing.JFrame {
                 .addComponent(ID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        DeleteWorker.setBackground(new java.awt.Color(204, 0, 0));
+        DeleteWorker.setBackground(new java.awt.Color(255, 255, 255));
+        DeleteWorker.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 43, 91), 1, true));
+        DeleteWorker.setForeground(new java.awt.Color(204, 0, 0));
         DeleteWorker.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 DeleteWorkerMouseClicked(evt);
@@ -577,7 +584,7 @@ public class ManagementFrame extends javax.swing.JFrame {
 
         jLabel24.setBackground(new java.awt.Color(255, 255, 255));
         jLabel24.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel24.setForeground(new java.awt.Color(0, 43, 91));
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel24.setText("حذف");
 
@@ -667,7 +674,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel25.setText("اسم الأداة");
 
-        search.setBackground(new java.awt.Color(51, 51, 51));
+        search.setBackground(new java.awt.Color(0, 43, 91));
         search.setForeground(new java.awt.Color(51, 51, 51));
         search.setPreferredSize(new java.awt.Dimension(147, 42));
         search.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -990,6 +997,7 @@ public class ManagementFrame extends javax.swing.JFrame {
 
         EmpCards.add(SearchTool, "card5");
 
+        OrderList.setBackground(new java.awt.Color(255, 255, 255));
         OrderList.setPreferredSize(new java.awt.Dimension(790, 750));
 
         jPanel30.setBackground(new java.awt.Color(255, 255, 255));
@@ -1012,13 +1020,14 @@ public class ManagementFrame extends javax.swing.JFrame {
         jPanel30.setLayout(jPanel30Layout);
         jPanel30Layout.setHorizontalGroup(
             jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
         );
         jPanel30Layout.setVerticalGroup(
             jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel30Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
@@ -1031,20 +1040,20 @@ public class ManagementFrame extends javax.swing.JFrame {
         OrderListLayout.setHorizontalGroup(
             OrderListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(OrderListLayout.createSequentialGroup()
-                .addGap(55, 55, 55)
+                .addContainerGap(52, Short.MAX_VALUE)
                 .addGroup(OrderListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         OrderListLayout.setVerticalGroup(
             OrderListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(OrderListLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(35, 35, 35)
                 .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         EmpCards.add(OrderList, "card4");
@@ -1052,7 +1061,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jPanel1.add(EmpCards);
         EmpCards.setBounds(0, 0, 790, 750);
 
-        SidePannel.setBackground(new java.awt.Color(51, 51, 51));
+        SidePannel.setBackground(new java.awt.Color(20, 63, 111));
 
         jPanel4.setBackground(new java.awt.Color(250, 250, 250));
 
@@ -1079,7 +1088,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        emp.setBackground(new java.awt.Color(51, 51, 51));
+        emp.setBackground(new java.awt.Color(20, 63, 111));
         emp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 empMouseClicked(evt);
@@ -1115,7 +1124,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        tools.setBackground(new java.awt.Color(51, 51, 51));
+        tools.setBackground(new java.awt.Color(20, 63, 111));
         tools.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 toolsMouseClicked(evt);
@@ -1129,7 +1138,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jLabel7.setText("البحث عن أداه");
         tools.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 110, 50));
 
-        list.setBackground(new java.awt.Color(51, 51, 51));
+        list.setBackground(new java.awt.Color(20, 63, 111));
         list.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 listMouseClicked(evt);
@@ -1254,10 +1263,7 @@ public class ManagementFrame extends javax.swing.JFrame {
           if(workername.isEmpty() || email.isEmpty()){
                  JOptionPane.showMessageDialog(this,"Empty username or email" );
                }
-          
           else{
-      
-       
         String type=(String) this.workertype.getSelectedItem();
         Connection connection;
         PreparedStatement ps,p;
@@ -1341,7 +1347,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                        p = connection.prepareStatement("DELETE FROM user where id = ?");
                        p.setInt(1,workerid);
                        boolean rs = p.execute();
-                       if(!rs) JOptionPane.showMessageDialog(this, "تم الحذف بنجاح");
+                       if(!rs){ JOptionPane.showMessageDialog(this, "تم الحذف بنجاح");ID.setText("");}
                        else JOptionPane.showMessageDialog(this, "Error In DataBase");   
                     }
                     else{JOptionPane.showMessageDialog(this, "No Such User In DataBase");}
