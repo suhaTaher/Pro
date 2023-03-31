@@ -139,7 +139,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jLabel43 = new javax.swing.JLabel();
         jPanel31 = new javax.swing.JPanel();
         jLabel44 = new javax.swing.JLabel();
-        email1 = new javax.swing.JTextField();
+        newPassword = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jPanel23 = new javax.swing.JPanel();
@@ -216,10 +216,10 @@ public class ManagementFrame extends javax.swing.JFrame {
         EmpCards.setPreferredSize(new java.awt.Dimension(790, 750));
         EmpCards.setLayout(new java.awt.CardLayout());
 
-        AddEmp.setBackground(new java.awt.Color(250, 250, 250));
+        AddEmp.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jPanel6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(240, 240, 240), 1, true));
 
         jPanel11.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -440,6 +440,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jLabel5.setText("البحث عن موظف");
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(240, 240, 240), 1, true));
 
         jPanel18.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -475,7 +476,7 @@ public class ManagementFrame extends javax.swing.JFrame {
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                 .addGap(24, 24, 24)
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -502,9 +503,9 @@ public class ManagementFrame extends javax.swing.JFrame {
         jPanel20Layout.setHorizontalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel20Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                .addGap(12, 12, 12)
+                .addGap(0, 0, 0)
+                .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -579,15 +580,14 @@ public class ManagementFrame extends javax.swing.JFrame {
         jLabel44.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel44.setText("كلمة السر الجديدة");
 
-        email1.setBackground(new java.awt.Color(250, 250, 250));
+        newPassword.setBackground(new java.awt.Color(250, 250, 250));
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
         jPanel31Layout.setHorizontalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel31Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(email1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                .addComponent(newPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
@@ -598,7 +598,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(email1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(newPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -606,7 +606,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap(41, Short.MAX_VALUE)
+                .addContainerGap(43, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel7Layout.createSequentialGroup()
@@ -635,13 +635,13 @@ public class ManagementFrame extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addGap(30, 30, 30)
                 .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addComponent(EditPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -656,6 +656,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jLabel6.setText("حذف موظف");
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(240, 240, 240), 1, true));
 
         jPanel23.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1416,11 +1417,16 @@ public class ManagementFrame extends javax.swing.JFrame {
 
     private void EditPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditPassMouseClicked
         // TODO add your handling code here:
-        if (empNo.getText().isEmpty()){
-        JOptionPane.showMessageDialog(this, "Empty Search Bar");
+        if ( empNo.getText().isEmpty()){
+           JOptionPane.showMessageDialog(this, "Enter employee ID");
         }
         else{
-            int workerid=Integer.parseInt(this.empNo.getText());
+           int workerid=Integer.parseInt(this.empNo.getText());
+           if ( newPassword.getText().isEmpty()){
+              JOptionPane.showMessageDialog(this, "Enter newpassword ");
+           }
+           else{
+            String newpass=this.newPassword.getText();
             Connection connection;
             PreparedStatement ps,p;
             try{
@@ -1429,13 +1435,15 @@ public class ManagementFrame extends javax.swing.JFrame {
                 p.setInt(1,workerid);
                 ResultSet s = p.executeQuery();
                 if(s.next()){
-                    String wname=s.getString(1);
-                    String email=s.getString(3);
-                   this.name.setText(wname);
-                   this.email.setText(email);
+                    ps = connection.prepareStatement("UPDATE user SET password = ?  WHERE id = ?");
+                    ps.setString(1,newpass);
+                    ps.setInt(2,workerid); 
+                    ps.execute();
+                    JOptionPane.showMessageDialog(this, "تمت العملية بنجاح");
                 }
                 else{ JOptionPane.showMessageDialog(this, "No Such User In DataBase");}
             }catch (HeadlessException | SQLException ex ) {JOptionPane.showMessageDialog(this,"Wrong \n"+ex );}
+        }
         }
     }//GEN-LAST:event_EditPassMouseClicked
 
@@ -1657,6 +1665,27 @@ public class ManagementFrame extends javax.swing.JFrame {
 
     private void SearchWorker1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchWorker1MouseClicked
         // TODO add your handling code here:
+        if (empNo.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Empty Search Bar");
+        }
+        else{
+            int workerid=Integer.parseInt(this.empNo.getText());
+            Connection connection;
+            PreparedStatement ps,p;
+            try{
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                p = connection.prepareStatement("select * from user where id = ?");
+                p.setInt(1,workerid);
+                ResultSet s = p.executeQuery();
+                if(s.next()){
+                    String wname=s.getString(1);
+                    String email=s.getString(3);
+                    this.name.setText(wname);
+                    this.email.setText(email);
+                }
+                else{ JOptionPane.showMessageDialog(this, "No Such User In DataBase");}
+            }catch (HeadlessException | SQLException ex ) {JOptionPane.showMessageDialog(this,"Wrong \n"+ex );}
+        }
     }//GEN-LAST:event_SearchWorker1MouseClicked
 
     /**
@@ -1717,7 +1746,6 @@ public class ManagementFrame extends javax.swing.JFrame {
     private javax.swing.JTextField aisle;
     private javax.swing.JTextField colorNo;
     private javax.swing.JTextField email;
-    private javax.swing.JTextField email1;
     private javax.swing.JPanel emp;
     private javax.swing.JTextField empNo;
     private javax.swing.JLabel jLabel10;
@@ -1805,6 +1833,7 @@ public class ManagementFrame extends javax.swing.JFrame {
     private javax.swing.JTextField name;
     private javax.swing.JTextField name1;
     private javax.swing.JTextField name2;
+    private javax.swing.JTextField newPassword;
     private javax.swing.JPanel search;
     private javax.swing.JTextField searchKey;
     private javax.swing.JTextField sector;

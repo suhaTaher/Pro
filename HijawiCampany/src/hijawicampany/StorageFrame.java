@@ -8,6 +8,11 @@ package hijawicampany;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -44,6 +49,173 @@ public class StorageFrame extends javax.swing.JFrame {
         tabelcontent();
         this.username=UserID;
         this.jLabel2.setText(username);  
+    }
+    
+    public void search(){
+        
+                Vector data = new Vector();
+        this.Tool2.setText("");
+        this.Supplier1.setText("");
+        this.Size1.setText("");
+        this.sector.setText("");
+        this.area.setText("");
+        this.isle.setText("");
+        this.CarierNo1.setText("");
+        this.colorNo1.setText("");
+        this.Colors1.setListData(data);
+        String TypeOfTool1="";
+        String size1="";
+        String JobOfTool1="";
+        String supplier1="";
+        String status1="";
+        int status;
+        int size=0;
+        int flag=0;
+        int isle=0;
+        int carierNo =0;
+        int ordernumber1=0;
+        int colornumber1=0;
+        int area=0;
+        String search=this.searchKey1.getText();
+        if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
+        else{
+            char TypeOfTool=search.charAt(0);
+            Connection connection;
+            PreparedStatement ps,ps1,ps2;
+
+            switch (TypeOfTool) {
+                case 'D':
+                try {
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps = connection.prepareStatement("select * from dicut where name= ?");
+                    ps.setString(1,search );
+                    ResultSet rs = ps.executeQuery();
+                    if(rs.next())
+                    {
+                        TypeOfTool1=rs.getString(2);
+                        JobOfTool1=rs.getString(3);
+                        size=rs.getInt(4);
+                        area=rs.getInt(5);
+                        status=rs.getInt(6);
+                        supplier1=rs.getString(9);
+                        isle=rs.getInt(10);
+                        carierNo =rs.getInt(11);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        switch (size) {
+                            case 1:
+                            size1="70×100";
+                            break;
+                            case 2:
+                            size1="50×30";
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            break;
+                            default:
+                            break;
+                        }
+
+                    }
+
+                    else  JOptionPane.showMessageDialog(this,"Not Found" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                }       break;
+                case 'P':
+                try{
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps1 = connection.prepareStatement("select * from iplate where name= ?");
+                    ps1.setString(1,search );
+                    ResultSet rs1 = ps1.executeQuery();
+                    if(rs1.next())
+                    {
+                        TypeOfTool1=rs1.getString(2);
+                        JobOfTool1=rs1.getString(3);
+                        size=rs1.getInt(4);
+                        area=rs1.getInt(5);
+                        status=rs1.getInt(6);
+                        isle=rs1.getInt(9);
+                        carierNo =rs1.getInt(10);
+                        colornumber1=rs1.getInt(11);
+                        ps2 = connection.prepareStatement("select * from color where platename= ?");
+                        ps2.setString(1,search );
+                        ResultSet rs2 = ps2.executeQuery();
+                        while(rs2.next()){data.addElement(rs2.getString(2));}
+                        this.Colors1.setListData(data);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        switch (size) {
+                            case 1:
+                            size1="70×100";
+                            break;
+                            case 2:
+                            size1="50×30";
+                            break;
+                            default:
+                            break;
+                        }
+                    }
+                    else  JOptionPane.showMessageDialog(this,"Not Found" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                }       break;
+                case 'C':
+                try{
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
+                    ps1.setString(1,search );
+                    ResultSet rs1 = ps1.executeQuery();
+                    if(rs1.next())
+                    {
+                        TypeOfTool1=rs1.getString(2);
+                        JobOfTool1=rs1.getString(3);
+                        size=rs1.getInt(4);
+                        status=rs1.getInt(6);
+                        area=rs1.getInt(5);
+                        isle=rs1.getInt(9);
+                        carierNo=rs1.getInt(10);
+                        colornumber1=rs1.getInt(11);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        switch (size) {
+                            case 1:
+                            size1="70×100";
+                            break;
+                            case 2:
+                            size1="50×30";
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            break;
+                            default:
+                            break;
+                        }
+
+                    }
+                    else  JOptionPane.showMessageDialog(this,"Not Found" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                }       break;
+                default:
+                JOptionPane.showMessageDialog(this,"Not Found" );
+                break;
+            }
+        }
+
+        this.Tool2.setText(TypeOfTool1);
+        this.Supplier1.setText(supplier1);
+        this.Size1.setText(size1);
+        this.sector.setText(JobOfTool1);
+        this.Status.setText(status1);
+        this.area.setText(Integer.toString(area));
+        this.isle.setText(Integer.toString(isle));
+        this.CarierNo1.setText(Integer.toString(carierNo));
+        this.colorNo1.setText(Integer.toString(colornumber1));
+    
     }
     
         public void toolexpired(){
@@ -146,6 +318,14 @@ public class StorageFrame extends javax.swing.JFrame {
                       Finishdate=rs1.getString(3);
                       toolname=rs1.getString(4);
                       fileUrl=rs1.getString(5);
+                          try {
+        // First try to resolve as URL (file:...)
+ Path path = Paths.get(new URL(fileUrl).toURI());
+    } catch (URISyntaxException | MalformedURLException e) {
+        // If given file string isn't an URL, fall back to using a normal file 
+        
+    }
+                     
                       model.addRow(new Object[]{id, orderdate, Finishdate, toolname,fileUrl});
                     }            
         } catch (SQLException ex) {
@@ -421,7 +601,7 @@ public class StorageFrame extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("عمليات على الطلبيات");
+        jLabel1.setText("عمليات على الأدوات");
         jLabel1.setPreferredSize(new java.awt.Dimension(70, 35));
         OP_Orders.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 0, 130, 35));
 
@@ -1275,11 +1455,11 @@ public class StorageFrame extends javax.swing.JFrame {
         OPOnToolsLayout.setVerticalGroup(
             OPOnToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(OPOnToolsLayout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(33, 33, 33)
                 .addComponent(jLabel59)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         StorageCards.add(OPOnTools, "card3");
@@ -1408,6 +1588,7 @@ public class StorageFrame extends javax.swing.JFrame {
 
     private void OKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OKMouseClicked
         // TODO add your handling code here:
+        search();
         ArrayList<String> color=new ArrayList<String>();  
         int no=0;
         String otype=(String) this.OP.getSelectedItem();
@@ -1603,168 +1784,7 @@ public class StorageFrame extends javax.swing.JFrame {
 
     private void SearchBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchBTNMouseClicked
         // TODO add your handling code here:
-        this.jCheckBox1.setSelected(false);
-        this.jCheckBox2.setSelected(false);
-        this.jCheckBox4.setSelected(false);
-        this.jCheckBox5.setSelected(false);
-        String TypeOfTool1="";
-       String size1="";
-       String JobOfTool1="";
-       String supplier1="";
-       String status1="";
-       int status;
-       int size=0;
-       int flag=0;
-       int isle=0;
-       int carierNo =0;
-       int ordernumber1=0;
-       int colornumber1=0;
-       int area=0;
-        String search=this.searchKey2.getText();
-        char TypeOfTool=search.charAt(0);
-        Connection connection;
-        PreparedStatement ps,ps1,ps2;    
-       if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Search Field Is Empty" );}
-       else{
-        switch (TypeOfTool) {
-            case 'D':
-                try {
-                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
-                    ps = connection.prepareStatement("select * from dicut where name= ?");
-                    ps.setString(1,search );
-                    ResultSet rs = ps.executeQuery();
-                    if(rs.next())
-                    {
-                        TypeOfTool1=rs.getString(2);
-                        JobOfTool1=rs.getString(3);
-                        size=rs.getInt(4);
-                        area=rs.getInt(5);
-                        status=rs.getInt(6);
-                        supplier1=rs.getString(9);
-                        isle=rs.getInt(10);
-                        carierNo =rs.getInt(11);
-                        if(status==1)status1="متوفر";
-                        if(status==0) status1="غير متوفر";
-                        switch (size) {
-                            case 1:
-                                size1="70×100";
-                                break;
-                            case 2:
-                                size1="50×30";
-                                break;
-                            case 3:
-                                size1="غير ذلك";
-                                break;
-                            default:
-                                break;
-                        }
-                        
-                    }
-                    
-                    else  JOptionPane.showMessageDialog(this,"Not Found" );
-                }
-                catch (HeadlessException | SQLException ex ) {
-                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break; 
-            case 'P':
-                try{
-                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
-                    ps1 = connection.prepareStatement("select * from iplate where name= ?");
-                    ps1.setString(1,search );
-                    ResultSet rs1 = ps1.executeQuery();
-                    if(rs1.next())
-                    {
-                        TypeOfTool1=rs1.getString(2);
-                        JobOfTool1=rs1.getString(3);
-                        size=rs1.getInt(4);
-                        area=rs1.getInt(5);
-                        status=rs1.getInt(6);
-                        isle=rs1.getInt(9);
-                        carierNo =rs1.getInt(10);
-                        colornumber1=rs1.getInt(11);
-                  
-                          if(status==1)status1="متوفر";
-                        if(status==0) status1="غير متوفر";
-                        switch (size) {
-                            case 1:
-                                size1="70×100";
-                                break;
-                            case 2:
-                                size1="50×30";
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    else  JOptionPane.showMessageDialog(this,"Not Found" );
-                    ps2 = connection.prepareStatement("SELECT color FROM color WHERE platename=?");
-                    ps2.setString(1, search);
-                    ResultSet rs= ps2.executeQuery();
-                    ArrayList<String> colorr=new ArrayList<String>(); 
-                    while(rs.next()){
-                      colorr.add(rs.getString(1));
-                    }
-                   for (String color1 : colorr) {
-                   if(color1.equals("أسود"))this.jCheckBox1.setSelected(true);
-                   if(color1.equals("أزرق"))this.jCheckBox2.setSelected(true);
-                   if(color1.equals("أصفر"))this.jCheckBox4.setSelected(true);
-                   if(color1.equals("أحمر"))this.jCheckBox5.setSelected(true);
-                  }
-                }
-                catch (HeadlessException | SQLException ex ) {
-                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
-            case 'C':
-                try{
-                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
-                    ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
-                    ps1.setString(1,search );
-                    ResultSet rs1 = ps1.executeQuery();
-                    if(rs1.next())
-                    {
-                        TypeOfTool1=rs1.getString(2);
-                        JobOfTool1=rs1.getString(3);
-                        size=rs1.getInt(4);
-                        status=rs1.getInt(6);
-                        area=rs1.getInt(5);
-                        isle=rs1.getInt(9);
-                        carierNo=rs1.getInt(10);
-                        colornumber1=rs1.getInt(11);
-                        if(status==1)status1="متوفر";
-                        if(status==0) status1="غير متوفر";
-                        switch (size) {
-                           case 1:
-                                size1="70×100";
-                                break;
-                            case 2:
-                                size1="50×30";
-                                break;
-                            case 3:
-                                size1="غير ذلك";
-                                break;
-                            default:
-                                break;
-                        }
-                        
-                    }
-                    else  JOptionPane.showMessageDialog(this,"Not Found" );
-                }
-                catch (HeadlessException | SQLException ex ) {
-                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
-            default:
-                JOptionPane.showMessageDialog(this,"Not Found" );
-                break;
-        }
-       }
-   this.Tool1.setSelectedItem(TypeOfTool1);
-   this.suplier.setSelectedItem(supplier1);
-   this.Size2.setSelectedItem(size1);
-   this.Sector.setSelectedItem(JobOfTool1);
-   this.aisle3.setText(Integer.toString(area));
-   this.Area3.setText(Integer.toString(isle));
-   this.CarierNo2.setText(Integer.toString(carierNo));
-   this.colorNo3.setText(Integer.toString(colornumber1));
+        search();
     }//GEN-LAST:event_SearchBTNMouseClicked
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
@@ -1935,10 +1955,12 @@ public class StorageFrame extends javax.swing.JFrame {
 
     private void OkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OkMouseClicked
         // TODO add your handling code here:
-                String otype=(String) this.OPTool.getSelectedItem(); 
-boolean empty=this.searchKey1.getText().isEmpty();
-
-  if(otype=="استعارة" && !empty){
+    String otype=(String) this.OPTool.getSelectedItem(); 
+    boolean empty=this.searchKey1.getText().isEmpty();
+    
+    if(empty){JOptionPane.showMessageDialog(this, "اذخل اسم الأداة");}
+    else{
+      if(otype=="استعارة"){
       String search=this.searchKey1.getText();
       char type=search.charAt(0);
       int status=0;
@@ -2015,7 +2037,7 @@ boolean empty=this.searchKey1.getText().isEmpty();
          
       } 
   }
-    if(otype=="ارجاع" && !empty){
+    if(otype=="ارجاع" ){
       String search=this.searchKey1.getText();
       char type=search.charAt(0);
       int status=0;
@@ -2092,7 +2114,7 @@ boolean empty=this.searchKey1.getText().isEmpty();
          
       } 
   }
-        if(otype=="حذف" && !empty){
+        if(otype=="حذف" ){
       String search=this.searchKey1.getText();
       char type=search.charAt(0);
       int status=0;
@@ -2155,6 +2177,7 @@ boolean empty=this.searchKey1.getText().isEmpty();
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
           } 
       } 
+        }
   }
     }//GEN-LAST:event_OkMouseClicked
 
