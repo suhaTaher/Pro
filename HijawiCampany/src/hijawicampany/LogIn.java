@@ -5,7 +5,7 @@
  */
 package hijawicampany;
 
-import java.awt.Color;
+import java.awt.Image;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +22,9 @@ public class LogIn extends javax.swing.JFrame {
      */
     public LogIn() {
         initComponents();
+        Image icon;
+        icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
+        this.setIconImage(icon);
     }
 
     /**
@@ -50,6 +53,8 @@ public class LogIn extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Log In");
+        setResizable(false);
 
         jPanel1.setLayout(null);
 

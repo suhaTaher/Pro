@@ -6,12 +6,14 @@
 package hijawicampany;
 
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +27,9 @@ public class SearchForSales extends javax.swing.JFrame {
      */
     public SearchForSales(String UserID) {
         initComponents();
+        Image icon;
+        icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
+        this.setIconImage(icon);
     }
 
     /**
@@ -84,7 +89,9 @@ public class SearchForSales extends javax.swing.JFrame {
         Status1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sales");
         setBackground(new java.awt.Color(255, 255, 255));
+        setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 

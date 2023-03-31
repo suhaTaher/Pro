@@ -5,6 +5,9 @@
  */
 package hijawicampany;
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author ASUS
@@ -16,6 +19,9 @@ public class PassChang extends javax.swing.JFrame {
      */
     public PassChang() {
         initComponents();
+        Image icon;
+        icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
+        this.setIconImage(icon);
     }
 
     /**
@@ -37,6 +43,8 @@ public class PassChang extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Change Password");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -70,6 +78,11 @@ public class PassChang extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 43, 91), 1, true));
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel3MouseClicked(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 43, 91));
@@ -150,6 +163,13 @@ public class PassChang extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+        // TODO add your handling code here:
+        LogIn login=new LogIn ();
+        this.setVisible(false);
+        login.setVisible(true);
+    }//GEN-LAST:event_jPanel3MouseClicked
 
     /**
      * @param args the command line arguments

@@ -8,11 +8,10 @@ package hijawicampany;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -23,9 +22,11 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -40,7 +41,7 @@ public class StorageFrame extends javax.swing.JFrame {
     private final String username;
     private CardLayout cardLayout;
 
-    public StorageFrame(String UserID) {
+    public StorageFrame(String UserID) throws IOException {
         initComponents();
         cardLayout = (CardLayout) StorageCards.getLayout();
         setColor(this.ExpiredListOfTools);
@@ -49,6 +50,22 @@ public class StorageFrame extends javax.swing.JFrame {
         tabelcontent();
         this.username=UserID;
         this.jLabel2.setText(username);  
+        
+        Image icon;
+        icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
+        this.setIconImage(icon);
+        
+        Timer timer = new Timer(0, new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+             toolexpired();
+            tabelcontent();
+        }
+});
+
+timer.setDelay(10000);
+timer.start();
     }
     
     public void search(){
@@ -76,7 +93,7 @@ public class StorageFrame extends javax.swing.JFrame {
         int ordernumber1=0;
         int colornumber1=0;
         int area=0;
-        String search=this.searchKey1.getText();
+        String search=this.searchKey2.getText();
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
         else{
             char TypeOfTool=search.charAt(0);
@@ -218,9 +235,9 @@ public class StorageFrame extends javax.swing.JFrame {
     
     }
     
-        public void toolexpired(){
+         public void toolexpired(){
 
-        String[] columnNames = {"اسم الاداة", "نوع الاداة", "القطاع","رقم المنطقة" ,"الممر", "الحجم"," رقم الحاملة"};
+             String[] columnNames = {"اسم الاداة", "نوع الاداة", "القطاع","رقم المنطقة" ,"الممر", "الحجم"," رقم الحاملة"};
         Connection connection;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -230,6 +247,7 @@ public class StorageFrame extends javax.swing.JFrame {
                     jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
                     jTable1.setFillsViewportHeight(true);
                     jTable1.setRowHeight(40);
+                    
                     String tname;
                     String ttype;
                      String sector;
@@ -238,8 +256,10 @@ public class StorageFrame extends javax.swing.JFrame {
                     int area=0;
                     int isle=0;
                     String supplier;
-                    int cno=0;  
-                    PreparedStatement ps1 = connection.prepareStatement("SELECT * FROM dicut WHERE DateOfFinishOrder IS NOT NULL ");
+                    int cno=0;
+                    
+                    
+        PreparedStatement ps1 = connection.prepareStatement("SELECT * FROM dicut WHERE DateOfFinishOrder IS NOT NULL ");
                     ResultSet rs1 = ps1.executeQuery();
                     while(rs1.next())
                     {
@@ -287,14 +307,19 @@ public class StorageFrame extends javax.swing.JFrame {
                        else if(size1==2)size="30*50";
                        else size="غير ذلك";
                       model.addRow(new Object[]{tname, ttype, sector, area,isle,size,cno});
-                    }             
+                    }
+
+
+                    
         } catch (SQLException ex) {
             Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }             
+        }
+       
+                    
     }
         
-   public void tabelcontent(){
-        String[] columnNames = {"رقم الطلبية", "تاريخ الطلبية", "تاريخ التسليم", "اسم الاداة","الملفات"};
+     public void tabelcontent(){
+             String[] columnNames = {"رقم الطلبية", "تاريخ الطلبية", "تاريخ التسليم", "اسم الاداة","الملفات"};
         Connection connection;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -308,29 +333,26 @@ public class StorageFrame extends javax.swing.JFrame {
                     Date orderdate;
                      String Finishdate;
                     String toolname;
-                    String fileUrl;         
-                    PreparedStatement ps1 = connection.prepareStatement("select * from orders");
+                    String fileUrl;
+                    
+                    
+        PreparedStatement ps1 = connection.prepareStatement("select * from orders");
                     ResultSet rs1 = ps1.executeQuery();
                     while(rs1.next())
                     {
-                      id=rs1.getInt(1);
+                        id=rs1.getInt(1);
                       orderdate=rs1.getDate(2);
                       Finishdate=rs1.getString(3);
                       toolname=rs1.getString(4);
                       fileUrl=rs1.getString(5);
-                          try {
-        // First try to resolve as URL (file:...)
- Path path = Paths.get(new URL(fileUrl).toURI());
-    } catch (URISyntaxException | MalformedURLException e) {
-        // If given file string isn't an URL, fall back to using a normal file 
-        
-    }
-                     
-                      model.addRow(new Object[]{id, orderdate, Finishdate, toolname,fileUrl});
-                    }            
+                       model.addRow(new Object[]{id, orderdate, Finishdate, toolname,fileUrl});
+                    }
+               
         } catch (SQLException ex) {
             Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }              
+        }
+       
+                    
     }
 
     /**
@@ -368,9 +390,10 @@ public class StorageFrame extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         OP_Orders = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         Order_List = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         StorageCards = new javax.swing.JPanel();
         ExpiredToolsList = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -427,8 +450,8 @@ public class StorageFrame extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
-        searchKey1 = new javax.swing.JTextField();
-        search = new javax.swing.JPanel();
+        searchKey12 = new javax.swing.JTextField();
+        search1 = new javax.swing.JPanel();
         jLabel40 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
@@ -475,6 +498,8 @@ public class StorageFrame extends javax.swing.JFrame {
         jLabel39 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Storage");
+        setResizable(false);
 
         jPanel1.setLayout(null);
 
@@ -515,7 +540,7 @@ public class StorageFrame extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("لائحة الأدوات المنتهية");
+        jLabel3.setText("لائحة الأدوات التالفة");
 
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("__________________________");
@@ -526,10 +551,10 @@ public class StorageFrame extends javax.swing.JFrame {
             ExpiredListOfToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ExpiredListOfToolsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ExpiredListOfToolsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         ExpiredListOfToolsLayout.setVerticalGroup(
@@ -605,6 +630,14 @@ public class StorageFrame extends javax.swing.JFrame {
         jLabel1.setPreferredSize(new java.awt.Dimension(70, 35));
         OP_Orders.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 0, 130, 35));
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("الأدوات");
+
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("__________________________");
+
         Order_List.setBackground(new java.awt.Color(20, 63, 111));
         Order_List.setPreferredSize(new java.awt.Dimension(190, 35));
         Order_List.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -614,16 +647,11 @@ public class StorageFrame extends javax.swing.JFrame {
         });
         Order_List.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("لائحة الطلبيات");
         jLabel4.setPreferredSize(new java.awt.Dimension(82, 35));
-        Order_List.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 0, 95, -1));
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("الطلبيات");
+        Order_List.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 100, -1));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -631,13 +659,17 @@ public class StorageFrame extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Order_List, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                     .addComponent(OP_Orders, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(AddOrder_Change, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Order_List, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -647,9 +679,11 @@ public class StorageFrame extends javax.swing.JFrame {
                 .addComponent(AddOrder_Change, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addComponent(OP_Orders, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel11)
+                .addGap(18, 18, 18)
                 .addComponent(Order_List, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout SidePannelLayout = new javax.swing.GroupLayout(SidePannel);
@@ -684,7 +718,7 @@ public class StorageFrame extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 210, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
                 .addComponent(LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59))
         );
@@ -711,6 +745,7 @@ public class StorageFrame extends javax.swing.JFrame {
                 "null", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setEnabled(false);
         jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
@@ -1104,14 +1139,13 @@ public class StorageFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(OK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 19, Short.MAX_VALUE))
         );
 
         jLabel56.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
@@ -1139,7 +1173,7 @@ public class StorageFrame extends javax.swing.JFrame {
                 .addComponent(jLabel56)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75))
+                .addGap(56, 56, 56))
         );
 
         StorageCards.add(AddChangeTool, "card4");
@@ -1155,12 +1189,15 @@ public class StorageFrame extends javax.swing.JFrame {
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel25.setText("اسم الأداة");
 
-        search.setBackground(new java.awt.Color(0, 43, 91));
-        search.setForeground(new java.awt.Color(51, 51, 51));
-        search.setPreferredSize(new java.awt.Dimension(147, 42));
-        search.addMouseListener(new java.awt.event.MouseAdapter() {
+        search1.setBackground(new java.awt.Color(0, 43, 91));
+        search1.setForeground(new java.awt.Color(51, 51, 51));
+        search1.setPreferredSize(new java.awt.Dimension(147, 42));
+        search1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                searchMouseClicked(evt);
+                search1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                search1MouseEntered(evt);
             }
         });
 
@@ -1169,17 +1206,17 @@ public class StorageFrame extends javax.swing.JFrame {
         jLabel40.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel40.setText("بحث");
 
-        javax.swing.GroupLayout searchLayout = new javax.swing.GroupLayout(search);
-        search.setLayout(searchLayout);
-        searchLayout.setHorizontalGroup(
-            searchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(searchLayout.createSequentialGroup()
+        javax.swing.GroupLayout search1Layout = new javax.swing.GroupLayout(search1);
+        search1.setLayout(search1Layout);
+        search1Layout.setHorizontalGroup(
+            search1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(search1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(43, Short.MAX_VALUE))
         );
-        searchLayout.setVerticalGroup(
-            searchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        search1Layout.setVerticalGroup(
+            search1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
         );
 
@@ -1189,9 +1226,9 @@ public class StorageFrame extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(search1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchKey1)
+                .addComponent(searchKey12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1202,16 +1239,16 @@ public class StorageFrame extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(search1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchKey1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(searchKey12, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
-        jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 634, -1));
+        jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 634, -1));
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1239,7 +1276,7 @@ public class StorageFrame extends javax.swing.JFrame {
         Supplier1.setBackground(new java.awt.Color(250, 250, 250));
         jPanel9.add(Supplier1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
 
-        jPanel6.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
+        jPanel6.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
 
         jPanel21.setBackground(new java.awt.Color(255, 255, 255));
         jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1323,11 +1360,11 @@ public class StorageFrame extends javax.swing.JFrame {
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29))
+                    .addComponent(jPanel24, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel27, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1364,7 +1401,7 @@ public class StorageFrame extends javax.swing.JFrame {
         colorNo1.setBackground(new java.awt.Color(250, 250, 250));
         jPanel28.add(colorNo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
 
-        jPanel6.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 540, 280, -1));
+        jPanel6.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 540, 280, -1));
 
         jPanel29.setBackground(new java.awt.Color(255, 255, 255));
         jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1477,70 +1514,83 @@ public class StorageFrame extends javax.swing.JFrame {
             new String [] {
                 "null", "Title 2", "Title 3", "Title 4"
             }
-        ));
-        jScrollPane3.setViewportView(jTable2);
+        )
+        {
+            public boolean isCellEditable (int row ,int column){
+                return false;
+            }
 
-        jLabel39.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        jLabel39.setForeground(new java.awt.Color(0, 43, 91));
-        jLabel39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel39.setText("لائحة الطلبيات");
+        }
+    );
+    jTable2.setEnabled(false);
+    jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            jTable2MouseClicked(evt);
+        }
+    });
+    jScrollPane3.setViewportView(jTable2);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+    jLabel39.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    jLabel39.setForeground(new java.awt.Color(0, 43, 91));
+    jLabel39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel39.setText("لائحة الطلبيات");
+
+    javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+    jPanel5.setLayout(jPanel5Layout);
+    jPanel5Layout.setHorizontalGroup(
+        jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+            .addContainerGap(589, Short.MAX_VALUE)
+            .addComponent(jLabel39)
+            .addGap(84, 84, 84))
+        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(589, Short.MAX_VALUE)
-                .addComponent(jLabel39)
-                .addGap(84, 84, 84))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                    .addContainerGap(79, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 634, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(77, Short.MAX_VALUE)))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(jLabel39)
-                .addContainerGap(676, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                    .addContainerGap(104, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(68, Short.MAX_VALUE)))
-        );
+                .addContainerGap(79, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 634, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE)))
+    );
+    jPanel5Layout.setVerticalGroup(
+        jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGap(49, 49, 49)
+            .addComponent(jLabel39)
+            .addContainerGap(676, Short.MAX_VALUE))
+        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(104, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE)))
+    );
 
-        javax.swing.GroupLayout OrderList1Layout = new javax.swing.GroupLayout(OrderList1);
-        OrderList1.setLayout(OrderList1Layout);
-        OrderList1Layout.setHorizontalGroup(
-            OrderList1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        OrderList1Layout.setVerticalGroup(
-            OrderList1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+    javax.swing.GroupLayout OrderList1Layout = new javax.swing.GroupLayout(OrderList1);
+    OrderList1.setLayout(OrderList1Layout);
+    OrderList1Layout.setHorizontalGroup(
+        OrderList1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    OrderList1Layout.setVerticalGroup(
+        OrderList1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
 
-        StorageCards.add(OrderList1, "card2");
+    StorageCards.add(OrderList1, "card2");
 
-        jPanel1.add(StorageCards);
-        StorageCards.setBounds(0, 0, 790, 750);
+    jPanel1.add(StorageCards);
+    StorageCards.setBounds(0, 0, 790, 750);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
 
-        pack();
-        setLocationRelativeTo(null);
+    pack();
+    setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void ExpiredListOfToolsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExpiredListOfToolsMouseClicked
@@ -1787,7 +1837,7 @@ public class StorageFrame extends javax.swing.JFrame {
         search();
     }//GEN-LAST:event_SearchBTNMouseClicked
 
-    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+    private void search1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search1MouseClicked
         // TODO add your handling code here:
         Vector data = new Vector();
         this.Tool2.setText("");
@@ -1812,9 +1862,10 @@ public class StorageFrame extends javax.swing.JFrame {
         int ordernumber1=0;
         int colornumber1=0;
         int area=0;
-        String search=this.searchKey1.getText();
-        if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
+        String search=this.searchKey12.getText();
+        if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field1s" );System.out.print(search);}
         else{
+            JOptionPane.showMessageDialog(this,"Empty Search Field1s2" );
             char TypeOfTool=search.charAt(0);
             Connection connection;
             PreparedStatement ps,ps1,ps2;
@@ -1951,23 +2002,30 @@ public class StorageFrame extends javax.swing.JFrame {
         this.isle.setText(Integer.toString(isle));
         this.CarierNo1.setText(Integer.toString(carierNo));
         this.colorNo1.setText(Integer.toString(colornumber1));
-    }//GEN-LAST:event_searchMouseClicked
+    }//GEN-LAST:event_search1MouseClicked
 
     private void OkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OkMouseClicked
         // TODO add your handling code here:
+    // TODO add your handling code here:
     String otype=(String) this.OPTool.getSelectedItem(); 
-    boolean empty=this.searchKey1.getText().isEmpty();
+    boolean empty=this.searchKey12.getText().isEmpty();
     
     if(empty){JOptionPane.showMessageDialog(this, "اذخل اسم الأداة");}
     else{
+
       if(otype=="استعارة"){
-      String search=this.searchKey1.getText();
+      String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
       if(type=='D'){
           Connection connection;
           try {
+              
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+               PreparedStatement p = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
+              p.setString(1,search);
+                ResultSet ss = p.executeQuery();
+                if(ss.next()){
               PreparedStatement ps = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
               ps.setString(1,search);
                 ResultSet s1 = ps.executeQuery();
@@ -1983,15 +2041,21 @@ public class StorageFrame extends javax.swing.JFrame {
                 }
                 else JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
                 
+         
+          }
+                  else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
-         
+          } 
       }
       else  if(type=='P'){
           Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                  PreparedStatement p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
+              p.setString(1,search);
+                ResultSet ss = p.executeQuery();
+                if(ss.next()){
               PreparedStatement ps = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
               ps.setString(1,search);
                 ResultSet s2 = ps.executeQuery();
@@ -2006,7 +2070,8 @@ public class StorageFrame extends javax.swing.JFrame {
                
                 }
                 else JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
-                
+                }
+                  else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
           }
@@ -2016,6 +2081,10 @@ public class StorageFrame extends javax.swing.JFrame {
           Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+               PreparedStatement p = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
+              p.setString(1,search);
+                ResultSet ss = p.executeQuery();
+                if(ss.next()){
               PreparedStatement ps = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
               ps.setString(1,search);
                 ResultSet s3 = ps.executeQuery();
@@ -2030,7 +2099,8 @@ public class StorageFrame extends javax.swing.JFrame {
                
                 }
                 else JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
-                
+                 }
+                  else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
           }
@@ -2038,13 +2108,17 @@ public class StorageFrame extends javax.swing.JFrame {
       } 
   }
     if(otype=="ارجاع" ){
-      String search=this.searchKey1.getText();
+      String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
       if(type=='D'){
           Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+               PreparedStatement p = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
+              p.setString(1,search);
+                ResultSet ss = p.executeQuery();
+                if(ss.next()){
               PreparedStatement ps = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
               ps.setString(1,search);
                 ResultSet s1 = ps.executeQuery();
@@ -2059,7 +2133,8 @@ public class StorageFrame extends javax.swing.JFrame {
                
                 }
                 else JOptionPane.showMessageDialog(this, "الاداة  متوفرة ");
-                
+                                 }
+                  else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
           }
@@ -2069,6 +2144,10 @@ public class StorageFrame extends javax.swing.JFrame {
           Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                PreparedStatement p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
+              p.setString(1,search);
+                ResultSet ss = p.executeQuery();
+                if(ss.next()){
               PreparedStatement ps = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
               ps.setString(1,search);
                 ResultSet s2 = ps.executeQuery();
@@ -2083,7 +2162,8 @@ public class StorageFrame extends javax.swing.JFrame {
                
                 }
                 else JOptionPane.showMessageDialog(this, "الاداة متوفرة");
-                
+                 }
+                  else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
           }
@@ -2093,6 +2173,10 @@ public class StorageFrame extends javax.swing.JFrame {
           Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                PreparedStatement p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
+              p.setString(1,search);
+                ResultSet ss = p.executeQuery();
+                if(ss.next()){
               PreparedStatement ps = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
               ps.setString(1,search);
                 ResultSet s3 = ps.executeQuery();
@@ -2107,7 +2191,8 @@ public class StorageFrame extends javax.swing.JFrame {
                
                 }
                 else JOptionPane.showMessageDialog(this, "الاداة متوفرة");
-                
+                   }
+                  else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
           }
@@ -2115,7 +2200,7 @@ public class StorageFrame extends javax.swing.JFrame {
       } 
   }
         if(otype=="حذف" ){
-      String search=this.searchKey1.getText();
+      String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
       if(type=='D'){
@@ -2181,6 +2266,25 @@ public class StorageFrame extends javax.swing.JFrame {
   }
     }//GEN-LAST:event_OkMouseClicked
 
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+        int row=jTable2.rowAtPoint(evt.getPoint());
+        System.out.print(row);
+        DefaultTableModel model= (DefaultTableModel)jTable2.getModel();
+        String path = model.getValueAt(row, 4).toString();  
+        System.out.print(path);
+        try {
+           Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  path);
+        } catch (IOException ex) {
+            Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void search1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search1MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search1MouseEntered
+
     /**
      * @param args the command line arguments
      */
@@ -2211,7 +2315,11 @@ public class StorageFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StorageFrame("").setVisible(true);
+                try {
+                    new StorageFrame("").setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -2256,6 +2364,7 @@ public class StorageFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -2333,9 +2442,9 @@ public class StorageFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JPanel search;
+    private javax.swing.JPanel search1;
     private javax.swing.JPanel search3;
-    private javax.swing.JTextField searchKey1;
+    private javax.swing.JTextField searchKey12;
     private javax.swing.JTextField searchKey2;
     private javax.swing.JTextField sector;
     private javax.swing.JComboBox<String> suplier;

@@ -11,6 +11,8 @@ package hijawicampany;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.Image;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -46,6 +49,10 @@ public class ManagementFrame extends javax.swing.JFrame {
         this.username=UserID;
         this.jLabel2.setText(username);
         tabelcontent();
+        
+        Image icon;
+        icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
+        this.setIconImage(icon);
 
     }
     
@@ -209,6 +216,8 @@ public class ManagementFrame extends javax.swing.JFrame {
         jLabel42 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Management");
+        setResizable(false);
 
         jPanel1.setLayout(null);
 
@@ -1126,6 +1135,12 @@ public class ManagementFrame extends javax.swing.JFrame {
                 "null", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setEnabled(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
@@ -1687,6 +1702,20 @@ public class ManagementFrame extends javax.swing.JFrame {
             }catch (HeadlessException | SQLException ex ) {JOptionPane.showMessageDialog(this,"Wrong \n"+ex );}
         }
     }//GEN-LAST:event_SearchWorker1MouseClicked
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+         int row=jTable1.rowAtPoint(evt.getPoint());
+        System.out.print(row);
+        DefaultTableModel model= (DefaultTableModel)jTable1.getModel();
+        String path = model.getValueAt(row, 4).toString();  
+        System.out.print(path);
+        try {
+           Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  path);
+        } catch (IOException ex) {
+            Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments

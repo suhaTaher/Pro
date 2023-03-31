@@ -8,7 +8,10 @@ package hijawicampany;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.io.File;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.Date;
@@ -20,10 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -48,10 +53,23 @@ public class PlannerFrame extends javax.swing.JFrame {
         setColor(this.AddEmp);
         cardLayout.show(PlannerCards, "card2");
         
+        Image icon;
+        icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
+        this.setIconImage(icon);
+        
         this.username=UserID;
         this.jLabel2.setText(username);    
         OrderDate.setDate(Tdate);
-        tabelcontent();
+        Timer timer = new Timer(0, new ActionListener() {
+
+       @Override
+       public void actionPerformed(ActionEvent e) {
+          tabelcontent();
+       }
+       });
+
+      timer.setDelay(10000);
+      timer.start();
     }
     
         public void tabelcontent(){
@@ -146,12 +164,12 @@ public class PlannerFrame extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
         DateOfFinish = new javax.swing.JTextField();
-        jLabel31 = new javax.swing.JLabel();
+        State = new javax.swing.JLabel();
         jPanel21 = new javax.swing.JPanel();
         jLabel32 = new javax.swing.JLabel();
         SearchOrder = new javax.swing.JPanel();
         jLabel33 = new javax.swing.JLabel();
-        jPanel24 = new javax.swing.JPanel();
+        DeleteO = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
         AddOrderFrame = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -244,11 +262,14 @@ public class PlannerFrame extends javax.swing.JFrame {
         newPassword = new javax.swing.JTextField();
         EditPass = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
         AddWorker = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
         jLabel57 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Planning");
+        setResizable(false);
 
         jPanel1.setLayout(null);
 
@@ -508,6 +529,12 @@ public class PlannerFrame extends javax.swing.JFrame {
                 "null", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setEnabled(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
@@ -682,8 +709,8 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addGap(41, 41, 41))
         );
 
-        jLabel31.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel31.setText("Status");
+        State.setForeground(new java.awt.Color(204, 0, 0));
+        State.setText("Status");
 
         jPanel21.setBackground(new java.awt.Color(255, 255, 255));
         jPanel21.setPreferredSize(new java.awt.Dimension(420, 365));
@@ -728,11 +755,11 @@ public class PlannerFrame extends javax.swing.JFrame {
             .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
         );
 
-        jPanel24.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel24.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 43, 91), 1, true));
-        jPanel24.addMouseListener(new java.awt.event.MouseAdapter() {
+        DeleteO.setBackground(new java.awt.Color(255, 255, 255));
+        DeleteO.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 43, 91), 1, true));
+        DeleteO.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel24MouseClicked(evt);
+                DeleteOMouseClicked(evt);
             }
         });
 
@@ -741,17 +768,17 @@ public class PlannerFrame extends javax.swing.JFrame {
         jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel34.setText("حذف");
 
-        javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
-        jPanel24.setLayout(jPanel24Layout);
-        jPanel24Layout.setHorizontalGroup(
-            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel24Layout.createSequentialGroup()
+        javax.swing.GroupLayout DeleteOLayout = new javax.swing.GroupLayout(DeleteO);
+        DeleteO.setLayout(DeleteOLayout);
+        DeleteOLayout.setHorizontalGroup(
+            DeleteOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DeleteOLayout.createSequentialGroup()
                 .addGap(112, 112, 112)
                 .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel24Layout.setVerticalGroup(
-            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        DeleteOLayout.setVerticalGroup(
+            DeleteOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
         );
 
@@ -766,7 +793,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                         .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel44Layout.createSequentialGroup()
                                 .addGap(50, 50, 50)
-                                .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(DeleteO, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel44Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -780,7 +807,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                                 .addGap(32, 32, 32)
                                 .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel44Layout.createSequentialGroup()
-                                        .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(State, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(27, 27, 27)
                                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))))))
@@ -798,7 +825,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(State, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
@@ -806,7 +833,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                     .addGroup(jPanel44Layout.createSequentialGroup()
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(56, 56, 56)
-                        .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(DeleteO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
@@ -1682,13 +1709,16 @@ public class PlannerFrame extends javax.swing.JFrame {
             .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
+        jLabel36.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel36.setText("الرقم التعريفي");
+
         javax.swing.GroupLayout jPanel43Layout = new javax.swing.GroupLayout(jPanel43);
         jPanel43.setLayout(jPanel43Layout);
         jPanel43Layout.setHorizontalGroup(
             jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel43Layout.createSequentialGroup()
                 .addContainerGap(23, Short.MAX_VALUE)
-                .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(EditPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel43Layout.createSequentialGroup()
@@ -1697,7 +1727,11 @@ public class PlannerFrame extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel43Layout.createSequentialGroup()
                             .addComponent(jPanel45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addContainerGap()))
-                    .addComponent(empNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel43Layout.createSequentialGroup()
+                        .addComponent(empNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel43Layout.setVerticalGroup(
             jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1705,7 +1739,9 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(empNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(empNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(47, 47, 47)
                 .addComponent(jPanel45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
@@ -2161,7 +2197,7 @@ public class PlannerFrame extends javax.swing.JFrame {
 
     private void addTheOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addTheOrderMouseClicked
         // TODO add your handling code here:
-        String ToolNam= ToolName.getText();
+ String ToolNam= ToolName.getText();
         String Path = FilePath.getText();
         String Date2="NO DaTE WAS SET" ;
         SimpleDateFormat D = new SimpleDateFormat();
@@ -2184,9 +2220,36 @@ public class PlannerFrame extends javax.swing.JFrame {
         // SimpleDateFormat D = new SimpleDateFormat();
         //Date2 = D.format(FinishDate.getDate());
         Connection connection;
-        PreparedStatement ps,p;
+        PreparedStatement ps = null,p;
+          ResultSet s1;
+          String stext=ToolName.getText();
+          char schar=stext.charAt(0);
+          int e = 2;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+            if(schar=='D'){
+             p = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
+              p.setString(1,ToolName.getText());
+                s1 = p.executeQuery();
+                if(s1.next())e= s1.getInt(1);
+                 else   JOptionPane.showMessageDialog(this, "tool not found");
+                    }
+               if(schar=='P'){
+             p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
+              p.setString(1,ToolName.getText());
+                s1 = p.executeQuery();
+                if(s1.next())e= s1.getInt(1);
+                 else   JOptionPane.showMessageDialog(this, "tool not found");
+                    }
+                  if(schar=='C'){
+             p = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
+              p.setString(1,ToolName.getText());
+                s1 = p.executeQuery();
+                if(s1.next())e= s1.getInt(1);
+                 else   JOptionPane.showMessageDialog(this, "tool not found");
+                    }
+                  else   JOptionPane.showMessageDialog(this, "tool not found");
+            if(e==1){
             ps = connection.prepareStatement("INSERT INTO orders (ordernumber,OrderDate,FinishDate,ToolUsedName,fileUrl)VALUES (?,?,?,?,?)");
                 ps.setInt(1,ordernumber);
                 ps.setDate(2,Tdate);
@@ -2194,26 +2257,24 @@ public class PlannerFrame extends javax.swing.JFrame {
                 ps.setString(4,ToolNam);
                 ps.setString(5,Path);
                 boolean rs = ps.execute();
-            if(!rs)
-            {
-                    JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح");
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(this, "Erorr");
-           }
+            if(!rs) JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح");
+            else   JOptionPane.showMessageDialog(this, "Erorr");
 
+            }
+            
+             else  if(e==0) JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
         } catch (HeadlessException | SQLException ex ) {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.getLocalizedMessage() );
        }
        }
+       
       catch(Exception ex) {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.toString() );   
        }
        }
     }//GEN-LAST:event_addTheOrderMouseClicked
 
-    private void jPanel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel24MouseClicked
+    private void DeleteOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteOMouseClicked
         // TODO add your handling code here:
         if(SearchO.getText().isEmpty()){
              JOptionPane.showMessageDialog(this, "empty field");
@@ -2232,7 +2293,11 @@ public class PlannerFrame extends javax.swing.JFrame {
                       p.setInt(1,ONo);
                       boolean s = p.execute();
                      if(!s){
-                     SearchO.setText("");
+                    // SearchO.setText("");
+                     TName.setText("");
+                     DateOfOrder.setText("");
+                     DateOfFinish.setText("");
+                     State.setText("");
                      JOptionPane.showMessageDialog(this, "تم الحذف بنجاح");
                      }
                      else{ JOptionPane.showMessageDialog(this, "Error"); }
@@ -2243,7 +2308,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
         }
-    }//GEN-LAST:event_jPanel24MouseClicked
+    }//GEN-LAST:event_DeleteOMouseClicked
 
     private void EditPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditPassMouseClicked
         // TODO add your handling code here:
@@ -2276,6 +2341,20 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_EditPassMouseClicked
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        int row=jTable1.rowAtPoint(evt.getPoint());
+        System.out.print(row);
+        DefaultTableModel model= (DefaultTableModel)jTable1.getModel();
+        String path = model.getValueAt(row, 4).toString();  
+        System.out.print(path);
+        try {
+           Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  path);
+        } catch (IOException ex) {
+            Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -2324,6 +2403,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JList<String> Colors1;
     private javax.swing.JTextField DateOfFinish;
     private javax.swing.JTextField DateOfOrder;
+    private javax.swing.JPanel DeleteO;
     private javax.swing.JPanel EditPass;
     private javax.swing.JTextField FilePath;
     private com.toedter.calendar.JDateChooser FinishDate;
@@ -2339,6 +2419,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel SearchOrder;
     private javax.swing.JPanel SearchToolFrame;
     private javax.swing.JPanel SidePannel;
+    private javax.swing.JLabel State;
     private javax.swing.JLabel Status1;
     private javax.swing.JTextField Supplier1;
     private javax.swing.JTextField TName;
@@ -2377,11 +2458,11 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
@@ -2423,7 +2504,6 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
-    private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
