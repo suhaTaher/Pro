@@ -1950,7 +1950,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             PreparedStatement ps,ps1,ps2;
 
             switch (TypeOfTool) {
-                case 'D':
+                case 'D' : case  'd' :
                 try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
@@ -1989,7 +1989,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }       break;
-                case 'P':
+                case 'P': case  'p':
                 try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
@@ -2028,7 +2028,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }       break;
-                case 'C':
+                case 'C': case  'c':
                 try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
@@ -2229,7 +2229,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
             if(schar=='D'){
              p = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
-              p.setString(1,ToolName.getText());
+             p.setString(1,ToolName.getText());
                 s1 = p.executeQuery();
                 if(s1.next())e= s1.getInt(1);
                  else   JOptionPane.showMessageDialog(this, "tool not found");
