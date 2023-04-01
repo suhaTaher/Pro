@@ -113,6 +113,27 @@ public class PlannerFrame extends javax.swing.JFrame {
        // panel.setBackground(new Color(0,43,91));
         panel.setBackground(new Color(20,63,111));
     }
+    
+        
+    int getSectorno(String Sector){//for dicut and clasheh standered sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=3;}
+         else if(Sector.equals("تعليم")){sectorno=4;}
+         else{sectorno=5;}
+        return sectorno;
+    }
+    
+    int getSectorno1(String Sector){//for plates standered sizes and dicut clicheh other sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=1;}
+         else if(Sector.equals("تعليم")){sectorno=2;}
+         else{sectorno=3;}
+        return sectorno;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -225,6 +246,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         jPanel35 = new javax.swing.JPanel();
         jLabel51 = new javax.swing.JLabel();
         sector1 = new javax.swing.JTextField();
+        sectorno = new javax.swing.JTextField();
         jLabel52 = new javax.swing.JLabel();
         jPanel36 = new javax.swing.JPanel();
         jLabel53 = new javax.swing.JLabel();
@@ -560,14 +582,14 @@ public class PlannerFrame extends javax.swing.JFrame {
         OrderListFrameLayout.setHorizontalGroup(
             OrderListFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, OrderListFrameLayout.createSequentialGroup()
-                .addContainerGap(572, Short.MAX_VALUE)
+                .addContainerGap(582, Short.MAX_VALUE)
                 .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(65, 65, 65))
             .addGroup(OrderListFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(OrderListFrameLayout.createSequentialGroup()
                     .addGap(58, 58, 58)
                     .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(58, Short.MAX_VALUE)))
+                    .addContainerGap(68, Short.MAX_VALUE)))
         );
         OrderListFrameLayout.setVerticalGroup(
             OrderListFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1092,7 +1114,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(AddOrderFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AddOrderFrameLayout.createSequentialGroup()
-                        .addGap(0, 43, Short.MAX_VALUE)
+                        .addGap(0, 53, Short.MAX_VALUE)
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(AddOrderFrameLayout.createSequentialGroup()
@@ -1292,7 +1314,11 @@ public class PlannerFrame extends javax.swing.JFrame {
 
         sector1.setEditable(false);
         sector1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel35.add(sector1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+        jPanel35.add(sector1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
+
+        sectorno.setEditable(false);
+        sectorno.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel35.add(sectorno, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 40, 42));
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
@@ -1440,7 +1466,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SearchToolFrameLayout.createSequentialGroup()
                         .addComponent(jLabel55)
                         .addGap(49, 49, 49)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         SearchToolFrameLayout.setVerticalGroup(
             SearchToolFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1720,17 +1746,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(EditPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel43Layout.createSequentialGroup()
-                            .addComponent(jLabel58)
-                            .addContainerGap())
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel43Layout.createSequentialGroup()
-                            .addComponent(jPanel45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap()))
                     .addGroup(jPanel43Layout.createSequentialGroup()
-                        .addComponent(empNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel43Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel58, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jPanel45, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel43Layout.createSequentialGroup()
+                                .addComponent(empNo2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
         );
         jPanel43Layout.setVerticalGroup(
@@ -1935,6 +1959,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         String supplier1="";
         String status1="";
         int status;
+        int sectorno=0;
         int size=0;
         int flag=0;
         int isle=0;
@@ -1971,12 +1996,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -2015,9 +2043,11 @@ public class PlannerFrame extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -2049,12 +2079,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -2071,7 +2104,8 @@ public class PlannerFrame extends javax.swing.JFrame {
                 break;
             }
         }
-
+        
+        this.sectorno.setText(Integer.toString(sectorno));
         this.Tool_name1.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Tool_size1.setText(size1);
@@ -2432,8 +2466,6 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel addTheOrder;
     private javax.swing.JTextField aisle1;
     private javax.swing.JTextField colorNo1;
-    private javax.swing.JTextField empNo;
-    private javax.swing.JTextField empNo1;
     private javax.swing.JTextField empNo2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2503,11 +2535,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
-    private javax.swing.JPanel jPanel25;
-    private javax.swing.JPanel jPanel26;
-    private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
@@ -2540,6 +2568,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel search1;
     private javax.swing.JTextField searchKey1;
     private javax.swing.JTextField sector1;
+    private javax.swing.JTextField sectorno;
     private javax.swing.JPanel tools;
     private javax.swing.JTextField workerID;
     private javax.swing.JComboBox<String> workertype;

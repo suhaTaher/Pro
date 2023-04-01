@@ -31,6 +31,26 @@ public class SearchForSales extends javax.swing.JFrame {
         icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
         this.setIconImage(icon);
     }
+    
+    int getSectorno(String Sector){//for dicut and clasheh standered sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=3;}
+         else if(Sector.equals("تعليم")){sectorno=4;}
+         else{sectorno=5;}
+        return sectorno;
+    }
+    
+    int getSectorno1(String Sector){//for plates standered sizes and dicut clicheh other sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=1;}
+         else if(Sector.equals("تعليم")){sectorno=2;}
+         else{sectorno=3;}
+        return sectorno;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,6 +98,7 @@ public class SearchForSales extends javax.swing.JFrame {
         jPanel35 = new javax.swing.JPanel();
         jLabel51 = new javax.swing.JLabel();
         sector1 = new javax.swing.JTextField();
+        sectorno = new javax.swing.JTextField();
         jLabel52 = new javax.swing.JLabel();
         jPanel36 = new javax.swing.JPanel();
         jLabel53 = new javax.swing.JLabel();
@@ -325,7 +346,8 @@ public class SearchForSales extends javax.swing.JFrame {
 
         sector1.setEditable(false);
         sector1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel35.add(sector1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+        jPanel35.add(sector1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
+        jPanel35.add(sectorno, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 40, 42));
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
@@ -528,6 +550,7 @@ public class SearchForSales extends javax.swing.JFrame {
         String supplier1="";
         String status1="";
         int status;
+        int sectorno=0;
         int size=0;
         int flag=0;
         int isle=0;
@@ -543,7 +566,7 @@ public class SearchForSales extends javax.swing.JFrame {
             PreparedStatement ps,ps1,ps2;
 
             switch (TypeOfTool) {
-                case 'D':
+                case 'D': case 'd':
                 try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
@@ -564,12 +587,15 @@ public class SearchForSales extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -582,7 +608,7 @@ public class SearchForSales extends javax.swing.JFrame {
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }       break;
-                case 'P':
+                case 'P': case 'p':
                 try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
@@ -608,9 +634,11 @@ public class SearchForSales extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -621,7 +649,7 @@ public class SearchForSales extends javax.swing.JFrame {
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }       break;
-                case 'C':
+                case 'C': case 'c':
                 try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
@@ -642,12 +670,15 @@ public class SearchForSales extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -664,7 +695,8 @@ public class SearchForSales extends javax.swing.JFrame {
                 break;
             }
         }
-
+        
+        this.sectorno.setText(Integer.toString(sectorno));
         this.Tool_name1.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Tool_size1.setText(size1);
@@ -765,5 +797,6 @@ public class SearchForSales extends javax.swing.JFrame {
     private javax.swing.JPanel search1;
     private javax.swing.JTextField searchKey1;
     private javax.swing.JTextField sector1;
+    private javax.swing.JTextField sectorno;
     // End of variables declaration//GEN-END:variables
 }

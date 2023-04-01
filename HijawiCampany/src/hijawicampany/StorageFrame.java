@@ -224,6 +224,28 @@ public void toolexpired(){
         panel.setBackground(new Color(20,63,111));
     }
     
+    int getSectorno(String Sector){//for dicut and clasheh standered sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=3;}
+         else if(Sector.equals("تعليم")){sectorno=4;}
+         else{sectorno=5;}
+        return sectorno;
+    }
+    
+    int getSectorno1(String Sector){//for plates standered sizes and dicut clicheh other sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=1;}
+         else if(Sector.equals("تعليم")){sectorno=2;}
+         else{sectorno=3;}
+        return sectorno;
+    }
+    
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -285,6 +307,7 @@ public void toolexpired(){
         jPanel35 = new javax.swing.JPanel();
         jLabel51 = new javax.swing.JLabel();
         Sector = new javax.swing.JComboBox<>();
+        sectorno1 = new javax.swing.JTextField();
         jLabel52 = new javax.swing.JLabel();
         jPanel36 = new javax.swing.JPanel();
         jLabel53 = new javax.swing.JLabel();
@@ -329,6 +352,7 @@ public void toolexpired(){
         jPanel27 = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
         sector = new javax.swing.JTextField();
+        Sectorno = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
         jPanel28 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
@@ -826,7 +850,11 @@ public void toolexpired(){
 
         Sector.setForeground(new java.awt.Color(0, 43, 91));
         Sector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "مطاعم", "الادوية", "بنوك", "تعليم", "اخرى" }));
-        jPanel35.add(Sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+        jPanel35.add(Sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 42));
+
+        sectorno1.setEditable(false);
+        sectorno1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel35.add(sectorno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 34, 42));
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
@@ -985,12 +1013,12 @@ public void toolexpired(){
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(Status1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
                         .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addComponent(Status1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)))
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1206,7 +1234,8 @@ public void toolexpired(){
 
         sector.setEditable(false);
         sector.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel27.add(sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+        jPanel27.add(sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
+        jPanel27.add(Sectorno, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 40, 40));
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -1701,6 +1730,7 @@ public void toolexpired(){
         String supplier1="";
         String status1="";
         int status;
+        int sectorno=0;
         int size=0;
         int flag=0;
         int isle=0;
@@ -1738,12 +1768,15 @@ public void toolexpired(){
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -1783,9 +1816,11 @@ public void toolexpired(){
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -1818,12 +1853,15 @@ public void toolexpired(){
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -1841,8 +1879,8 @@ public void toolexpired(){
             }
         }
 
-        //this.Tool2.setText(TypeOfTool1);
-        //this.Tool1.setSelectedItem(TypeOfTool1);
+        this.sectorno1.setText(TypeOfTool1);
+        this.Tool1.setSelectedItem(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Size2.setSelectedItem(size1);
         this.sector.setText(JobOfTool1);
@@ -1858,6 +1896,7 @@ public void toolexpired(){
     private void search1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search1MouseClicked
         // TODO add your handling code here:
         Vector data = new Vector();
+        this.Sectorno.setText("");
         this.Tool2.setText("");
         this.Supplier1.setText("");
         this.Size1.setText("");
@@ -1873,6 +1912,7 @@ public void toolexpired(){
         String supplier1="";
         String status1="";
         int status;
+        int sectorno=0;
         int size=0;
         int flag=0;
         int isle=0;
@@ -1910,16 +1950,20 @@ public void toolexpired(){
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
                         }
+                        
 
                     }
 
@@ -1955,9 +1999,11 @@ public void toolexpired(){
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             case 2:
                             size1="50×30";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -1990,12 +2036,14 @@ public void toolexpired(){
                         switch (size) {
                             case 1:
                             size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 2:
-                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
                             break;
                             case 3:
                             size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
                             break;
                             default:
                             break;
@@ -2012,13 +2060,14 @@ public void toolexpired(){
                 break;
             }
         }
-        
+
         
 
         this.Tool2.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Size1.setText(size1);
         this.sector.setText(JobOfTool1);
+        this.Sectorno.setText(Integer.toString(sectorno));
         this.Status.setText(status1);
         this.area.setText(Integer.toString(area));
         this.isle.setText(Integer.toString(isle));
@@ -2483,6 +2532,7 @@ public void toolexpired(){
     private javax.swing.JPanel Order_List;
     private javax.swing.JPanel SearchBTN;
     private javax.swing.JComboBox<String> Sector;
+    private javax.swing.JTextField Sectorno;
     private javax.swing.JPanel SidePannel;
     private javax.swing.JTextField Size1;
     private javax.swing.JComboBox<String> Size2;
@@ -2584,6 +2634,7 @@ public void toolexpired(){
     private javax.swing.JTextField searchKey12;
     private javax.swing.JTextField searchKey2;
     private javax.swing.JTextField sector;
+    private javax.swing.JTextField sectorno1;
     private javax.swing.JComboBox<String> suplier;
     // End of variables declaration//GEN-END:variables
 }

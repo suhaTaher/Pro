@@ -97,6 +97,26 @@ public class ManagementFrame extends javax.swing.JFrame {
        // panel.setBackground(new Color(0,43,91));
         panel.setBackground(new Color(20,63,111));
     }
+    
+    int getSectorno(String Sector){//for dicut and clasheh standered sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=3;}
+         else if(Sector.equals("تعليم")){sectorno=4;}
+         else{sectorno=5;}
+        return sectorno;
+    }
+    
+    int getSectorno1(String Sector){//for plates standered sizes and dicut clicheh other sizes
+        int sectorno=0;
+         if(Sector.equals("مطاعم")){sectorno=1;}
+         else if(Sector.equals("الادوية")){sectorno=2;}
+         else if(Sector.equals("بنوك")){sectorno=1;}
+         else if(Sector.equals("تعليم")){sectorno=2;}
+         else{sectorno=3;}
+        return sectorno;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -184,6 +204,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         jPanel27 = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
         sector = new javax.swing.JTextField();
+        sectorno = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
         jPanel28 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
@@ -941,7 +962,11 @@ public class ManagementFrame extends javax.swing.JFrame {
 
         sector.setEditable(false);
         sector.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel27.add(sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
+        jPanel27.add(sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
+
+        sectorno.setEditable(false);
+        sectorno.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel27.add(sectorno, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 40, 42));
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -1515,6 +1540,7 @@ public class ManagementFrame extends javax.swing.JFrame {
        String supplier1="";
        String status1="";
        int status;
+       int sectorno=0;
        int size=0;
        int flag=0;
        int isle=0;
@@ -1551,12 +1577,15 @@ public class ManagementFrame extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                                 size1="70×100";
+                                sectorno=getSectorno(JobOfTool1);
                                 break;
                             case 2:
                                 size1="50×30";
+                                sectorno=getSectorno(JobOfTool1);
                                 break;
                             case 3:
                                 size1="غير ذلك";
+                                sectorno=getSectorno1(JobOfTool1);
                                 break;
                             default:
                                 break;
@@ -1595,9 +1624,11 @@ public class ManagementFrame extends javax.swing.JFrame {
                         switch (size) {
                             case 1:
                                 size1="70×100";
+                                sectorno=getSectorno1(JobOfTool1);
                                 break;
                             case 2:
                                 size1="50×30";
+                                sectorno=getSectorno1(JobOfTool1);
                                 break;
                             default:
                                 break;
@@ -1629,12 +1660,15 @@ public class ManagementFrame extends javax.swing.JFrame {
                         switch (size) {
                            case 1:
                                 size1="70×100";
+                                sectorno=getSectorno(JobOfTool1);
                                 break;
                             case 2:
                                 size1="50×30";
+                                sectorno=getSectorno(JobOfTool1);
                                 break;
                             case 3:
                                 size1="غير ذلك";
+                                sectorno=getSectorno1(JobOfTool1);
                                 break;
                             default:
                                 break;
@@ -1652,6 +1686,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         }
         }
         
+    this.sectorno.setText(Integer.toString(sectorno));
     this.Tool_name.setText(TypeOfTool1);
     this.Supplier.setText(supplier1);
     this.Tool_size.setText(size1);
@@ -1782,8 +1817,6 @@ public class ManagementFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -1795,7 +1828,6 @@ public class ManagementFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
@@ -1821,12 +1853,9 @@ public class ManagementFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
@@ -1855,9 +1884,6 @@ public class ManagementFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JPanel list;
     private javax.swing.JTextField name;
     private javax.swing.JTextField name1;
@@ -1866,6 +1892,7 @@ public class ManagementFrame extends javax.swing.JFrame {
     private javax.swing.JPanel search;
     private javax.swing.JTextField searchKey;
     private javax.swing.JTextField sector;
+    private javax.swing.JTextField sectorno;
     private javax.swing.JPanel tools;
     private javax.swing.JTextField workerID;
     private javax.swing.JComboBox<String> workertype;
