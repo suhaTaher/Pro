@@ -1212,7 +1212,7 @@
                               </AuxValues>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                                  <AbsoluteConstraints x="0" y="0" width="150" height="42"/>
+                                  <AbsoluteConstraints x="0" y="0" width="140" height="42"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
@@ -1225,7 +1225,7 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                                  <AbsoluteConstraints x="150" y="0" width="34" height="42"/>
+                                  <AbsoluteConstraints x="150" y="0" width="40" height="42"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
@@ -1982,9 +1982,15 @@
                               </Constraints>
                             </Component>
                             <Component class="javax.swing.JTextField" name="Sectorno">
+                              <Properties>
+                                <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                                </Property>
+                              </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                                  <AbsoluteConstraints x="150" y="0" width="40" height="40"/>
+                                  <AbsoluteConstraints x="150" y="0" width="40" height="42"/>
                                 </Constraint>
                               </Constraints>
                             </Component>

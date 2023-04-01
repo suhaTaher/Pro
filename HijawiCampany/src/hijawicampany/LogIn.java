@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.regex.*; 
+import java.util.*; 
 /**
  *
  * @author ASUS
@@ -20,12 +22,16 @@ public class LogIn extends javax.swing.JFrame {
     /**
      * Creates new form LogIn
      */
+    
+    
     public LogIn() {
         initComponents();
         Image icon;
         icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
         this.setIconImage(icon);
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -212,7 +218,8 @@ public class LogIn extends javax.swing.JFrame {
         // TODO add your handling code here:
         String password=new String(PassWord.getPassword());              
         Connection connection;
-        PreparedStatement ps;  
+        PreparedStatement ps; 
+        
         if(UserID.getText().isEmpty() || password.isEmpty()){
             JOptionPane.showMessageDialog(this,"Empty Passwoord or email" );
         }

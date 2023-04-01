@@ -23,6 +23,8 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -116,6 +118,18 @@ public class ManagementFrame extends javax.swing.JFrame {
          else if(Sector.equals("تعليم")){sectorno=2;}
          else{sectorno=3;}
         return sectorno;
+    }
+    
+    boolean validate(String email){
+        boolean x=false;
+        //Regular Expression   
+        String regex = "^(.+)@(.+)$";  
+        //Compile regular expression to get the pattern  
+        Pattern pattern = Pattern.compile(regex); 
+        Matcher matcher = pattern.matcher(email); 
+        x= matcher.matches();
+        return x;
+    
     }
 
     /**
@@ -1416,6 +1430,9 @@ public class ManagementFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"Empty username or email" );
         }
         else{
+            boolean x=validate(email);
+            if(!x){JOptionPane.showMessageDialog(this,"Wrong email" );}
+            else{
         String type=(String) this.workertype.getSelectedItem();
         Connection connection;
         PreparedStatement ps,p;
@@ -1453,6 +1470,7 @@ public class ManagementFrame extends javax.swing.JFrame {
             else{ JOptionPane.showMessageDialog(this, "Erorr");}
         } catch (HeadlessException | SQLException ex ) {JOptionPane.showMessageDialog(this,"Wrong \n"+ex );}
           }
+        }
     }//GEN-LAST:event_AddWorkerMouseClicked
 
     private void EditPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditPassMouseClicked

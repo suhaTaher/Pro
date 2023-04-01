@@ -19,6 +19,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -41,7 +42,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     /**
      * Creates new form PlannerFrame
      */
-    
+    functions f = new functions();
     long millis=System.currentTimeMillis();
     java.sql.Date Tdate = new java.sql.Date(millis);
     private final String username;
@@ -134,6 +135,29 @@ public class PlannerFrame extends javax.swing.JFrame {
          else{sectorno=3;}
         return sectorno;
     }
+    
+    public  boolean checkDates(Date d1, String d2)    {
+        SimpleDateFormat dfDate  = new SimpleDateFormat("yyyy-MM-dd ");
+    boolean b = false;
+    try {
+        if(d1.before(dfDate.parse(d2)))
+        {
+            b = true;//If start date is before end date
+        }
+        else if(d1.equals(dfDate.parse(d2)))
+        {
+            b = true;//If two dates are equal
+        }
+        else
+        {
+            b = false; //If start date is after the end date
+        }
+    } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+    return b;
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1970,6 +1994,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         String search=this.searchKey1.getText();
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
         else{
+
             char TypeOfTool=search.charAt(0);
             Connection connection;
             PreparedStatement ps,ps1,ps2;
@@ -2105,6 +2130,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
         }
         
+        
         this.sectorno.setText(Integer.toString(sectorno));
         this.Tool_name1.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
@@ -2232,17 +2258,26 @@ public class PlannerFrame extends javax.swing.JFrame {
 
     private void addTheOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addTheOrderMouseClicked
         // TODO add your handling code here:
- String ToolNam= ToolName.getText();
+        String ToolNam= ToolName.getText();
         String Path = FilePath.getText();
         String Date2="NO DaTE WAS SET" ;
-        SimpleDateFormat D = new SimpleDateFormat();
+        SimpleDateFormat D = new SimpleDateFormat("yyyy-MM-dd ");
         Date2 = D.format(FinishDate.getDate());
+         boolean check=  checkDates(Tdate,Date2);
+        boolean xx=false;
+        
         if( ToolName.getText().isEmpty()|| FilePath.getText().isEmpty() || OrderNo.getText().isEmpty()   ){
            //|| FinishDate.getDate().toString().isEmpty()
            boolean x =this.FinishDate.getDateFormatString().isEmpty();
            JOptionPane.showMessageDialog(this, "empty fields");   
        }
-       else{  
+       else{
+            System.err.print(xx);
+            xx = f.DoesItExist("orders",OrderNo.getText(),"ordernumber");
+            System.err.print(xx);
+            if(xx){JOptionPane.showMessageDialog(this,"this ordernumber already exists" );}
+            else {
+                if(check){
        try { 
         //java.util.Date FD = new java.util.Date("mm/dd/yyy");
         //FDate = (Date) D.parse(D.format(FinishDate.getDate()));
@@ -2292,7 +2327,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                 ps.setString(4,ToolNam);
                 ps.setString(5,Path);
                 boolean rs = ps.execute();
-            if(!rs) JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح");
+            if(!rs) {
+                JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح");
+                ToolName.setText("");
+                OrderNo.setText("");
+                FilePath.setText("");
+                OrderDate.setDateFormatString("");
+                FinishDate.setDateFormatString("");
+            
+            }
             else   JOptionPane.showMessageDialog(this, "Erorr");
 
             }
@@ -2302,11 +2345,15 @@ public class PlannerFrame extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.getLocalizedMessage() );
        }
        }
-       
       catch(Exception ex) {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.toString() );   
        }
        }
+      else{
+                JOptionPane.showMessageDialog(this, "التاريخ غير صحيح");
+                }
+            }
+        }
     }//GEN-LAST:event_addTheOrderMouseClicked
 
     private void DeleteOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteOMouseClicked

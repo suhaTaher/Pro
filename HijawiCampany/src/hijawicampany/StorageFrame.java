@@ -40,7 +40,7 @@ public class StorageFrame extends javax.swing.JFrame {
      */
     private final String username;
     private CardLayout cardLayout;
-    public functions f=null;
+    public functions f=new functions();
 
     public StorageFrame(String UserID) throws IOException {
         initComponents();
@@ -189,20 +189,21 @@ public void toolexpired(){
     }
      
     void deleteTool(String TableName,String ToolName){
-        System.out.println("1");
      int x = f.Delete(TableName, ToolName);
      if (x==1){//deleted
-         System.out.println("2");
+         System.out.println("1");
          JOptionPane.showMessageDialog(this, "تم حذف" + ToolName +"بنجاح");
      }
      else if (x==0){// does not exist
-         JOptionPane.showMessageDialog(this, "هذه الأداة غير مموجودة");
+         JOptionPane.showMessageDialog(this, "هذه الأداة غير موجودة");
+         System.out.println("255555555555");
      }
      else if (x==2){// error db
          JOptionPane.showMessageDialog(this, "لقد حدث خطأ");
+         System.out.println("3");
      }
      else{
-        JOptionPane.showMessageDialog(this, "لقد حدث خط1أ");
+        JOptionPane.showMessageDialog(this, "لقد حدث خط1أ");System.out.println("4");
      }
      }
      
@@ -243,6 +244,17 @@ public void toolexpired(){
          else{sectorno=3;}
         return sectorno;
     }
+    
+    void borow(int status,String search,String Table){
+                String Status1 = f.returnvalue(Table, search, "name");
+               status= Integer.valueOf(Status1);
+               if(status==1){
+               int upx=f.UpdateTool("iclasheh", search, 2);
+               }
+             else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلافها من قبل");
+              else JOptionPane.showMessageDialog(this, " الاداة غير متوفرة");
+     }
+    
     
     
     
@@ -850,11 +862,11 @@ public void toolexpired(){
 
         Sector.setForeground(new java.awt.Color(0, 43, 91));
         Sector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "مطاعم", "الادوية", "بنوك", "تعليم", "اخرى" }));
-        jPanel35.add(Sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 42));
+        jPanel35.add(Sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
 
         sectorno1.setEditable(false);
         sectorno1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel35.add(sectorno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 34, 42));
+        jPanel35.add(sectorno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 40, 42));
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
@@ -1235,7 +1247,10 @@ public void toolexpired(){
         sector.setEditable(false);
         sector.setBackground(new java.awt.Color(255, 255, 255));
         jPanel27.add(sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
-        jPanel27.add(Sectorno, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 40, 40));
+
+        Sectorno.setEditable(false);
+        Sectorno.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel27.add(Sectorno, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 40, 42));
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -1906,6 +1921,12 @@ public void toolexpired(){
         this.CarierNo1.setText("");
         this.colorNo1.setText("");
         this.Colors1.setListData(data);
+        ArrayList<String> list =new ArrayList<String>();
+       /* String search=this.searchKey12.getText();
+        if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );System.out.print(search);}
+        else{
+            list=f.SearchTool(search);
+        }*/
         String TypeOfTool1="";
         String size1="";
         String JobOfTool1="";
@@ -2061,8 +2082,6 @@ public void toolexpired(){
             }
         }
 
-        
-
         this.Tool2.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Size1.setText(size1);
@@ -2073,6 +2092,17 @@ public void toolexpired(){
         this.isle.setText(Integer.toString(isle));
         this.CarierNo1.setText(Integer.toString(carierNo));
         this.colorNo1.setText(Integer.toString(colornumber1));
+        /*this.Tool2.setText(list.get(2));
+        this.Supplier1.setText(list.get(10));
+        this.Size1.setText(list.get(4));
+        this.sector.setText(list.get(3));
+        this.Sectorno.setText(list.get(10));
+        this.Status.setText(list.get(5));
+        this.area.setText(list.get(6));
+        this.isle.setText(list.get(7));
+        this.CarierNo1.setText(list.get(8));
+       // this.colorNo1.setText(list.get(9))*/
+        
     }//GEN-LAST:event_search1MouseClicked
 
     private void OkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OkMouseClicked
@@ -2275,73 +2305,24 @@ public void toolexpired(){
       String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
-      if(type=='D'){
-          Connection connection;
-          try {
-              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
-              PreparedStatement ps = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
-              ps.setString(1,search);
-                ResultSet s1 = ps.executeQuery();
-                if(s1.next()) {
-                     PreparedStatement ps1 = connection.prepareStatement("DELETE FROM dicut WHERE  name=?");  
-                 ps1.setString(1,search);
-                    boolean rs1 = ps1.execute();
-             if(!rs1)JOptionPane.showMessageDialog(this, "تم ىنجاح");
-             else  JOptionPane.showMessageDialog(this, "Erorr"); 
-                }  
-                   JOptionPane.showMessageDialog(this, "لم يتم العثور على الاداة");
-          } catch (SQLException ex) {
-              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
-         
+      if(type=='D'||type=='d'){
+           this.deleteTool("dicut",searchKey12.getText()); 
       }
-      else  if(type=='P'){
-          Connection connection;
-          try {
-              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
-              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
-              ps.setString(1,search);
-                ResultSet s1 = ps.executeQuery();
-                if(s1.next()) {
-                     PreparedStatement ps1 = connection.prepareStatement("DELETE FROM iplate  WHERE  name=?");  
-                 ps1.setString(1,search);
-                    boolean rs1 = ps1.execute();
-             if(!rs1)JOptionPane.showMessageDialog(this, "تم ىنجاح");
-             else  JOptionPane.showMessageDialog(this, "Erorr"); 
-                }   
-                   JOptionPane.showMessageDialog(this, "لم يتم العثور على الاداة");
-          } catch (SQLException ex) {
-              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
-         
+      else  if(type=='P'||type=='p'){
+          this.deleteTool("iplate",searchKey12.getText());
       } 
-            else  if(type=='C'){
-          Connection connection;
-          try {
-              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
-              PreparedStatement ps = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
-              ps.setString(1,search);
-               ResultSet s1 = ps.executeQuery();
-              if(s1.next()) {
-                     PreparedStatement ps1 = connection.prepareStatement("DELETE FROM iclasheh  WHERE  name=?");  
-                 ps1.setString(1,search);
-                    boolean rs1 = ps1.execute();
-             if(!rs1)JOptionPane.showMessageDialog(this, "تم ىنجاح");
-             else  JOptionPane.showMessageDialog(this, "Erorr"); 
-                }  
-              JOptionPane.showMessageDialog(this, "لم يتم العثور على الاداة");
-          } catch (SQLException ex) {
-              Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          } 
+      else  if(type=='C'||type=='c'){
+                this.deleteTool("iclasheh",searchKey12.getText());
       } 
-       else  JOptionPane.showMessageDialog(this,"Not Found" );
+      else  JOptionPane.showMessageDialog(this,"Not Found" );
         }
            if(otype=="تالفة" ){
       String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
       if(type=='D'){
-          Connection connection;
+          borow(status, search,"dicut" );
+          /*Connection connection;
           try {
                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                PreparedStatement p = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
@@ -2364,11 +2345,12 @@ public void toolexpired(){
                   else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          }*/
          
       }
       else  if(type=='P'){
-           Connection connection;
+          borow(status, search,"iplate" );
+           /*Connection connection;
           try {
                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                PreparedStatement p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
@@ -2391,38 +2373,34 @@ public void toolexpired(){
                   else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          }*/
          
       } 
             else  if(type=='C'){
-            Connection connection;
-          try {
-               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                borow(status, search,"iclasheh" );
+            //Connection connection;
+         // try {
+               /*connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                PreparedStatement p = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
                p.setString(1,search);
                ResultSet ss = p.executeQuery();
                if(ss.next()){
-               status =ss.getInt(1);
-               if(status==1){
-               PreparedStatement ps1 = connection.prepareStatement("UPDATE iclasheh SET status=? WHERE name=?");
+               status =ss.getInt(1);*/
+              /* PreparedStatement ps1 = connection.prepareStatement("UPDATE iclasheh SET status=? WHERE name=?");
                ps1.setInt(1,2);
                  ps1.setString(2,search);
                     boolean rs = ps1.execute();
              if(!rs)JOptionPane.showMessageDialog(this, "تم ىنجاح");
-             else  JOptionPane.showMessageDialog(this, "Erorr"); 
-               
-                }
-                   else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلافها من قبل");
-                else JOptionPane.showMessageDialog(this, " الاداة غير متوفرة");
-             }
-                  else  JOptionPane.showMessageDialog(this,"Not Found" );
-          } catch (SQLException ex) {
+             else  JOptionPane.showMessageDialog(this, "Erorr"); */
+                  
+        /*  } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
-      } 
+          }*/
+          } 
        else  JOptionPane.showMessageDialog(this,"Not Found" );
-  }
-  }
+  //}
+           }
+    }
     }//GEN-LAST:event_OkMouseClicked
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
