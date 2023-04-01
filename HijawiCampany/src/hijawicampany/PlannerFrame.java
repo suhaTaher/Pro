@@ -2137,6 +2137,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         }
         else {
             int ONo=Integer.parseInt(SearchO.getText());
+           
             Connection connection;
             PreparedStatement ps,p;
             try {
