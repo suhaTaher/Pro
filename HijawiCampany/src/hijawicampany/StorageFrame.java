@@ -245,14 +245,34 @@ public void toolexpired(){
         return sectorno;
     }
     
-    void borow(int status,String search,String Table){
+    void SChange(int status,String search,String Table,String OType){
                 String Status1 = f.returnvalue(Table, search, "name");
                status= Integer.valueOf(Status1);
-               if(status==1){
-               int upx=f.UpdateTool("iclasheh", search, 2);
+            if(OType.equals("expired")){
+               if(status==2){
+               int upx=f.UpdateTool(Table, search, 2);
+               JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
                }
-             else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلافها من قبل");
+               else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلافها من قبل");
               else JOptionPane.showMessageDialog(this, " الاداة غير متوفرة");
+            }
+            if(OType.equals("return")){
+               if(status==0){
+               int upx=f.UpdateTool(Table, search, 1);
+               JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
+               }
+               else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");
+              else JOptionPane.showMessageDialog(this, " الاداة موجودة");
+            }
+            if(OType.equals("borrow")){
+               if(status==1){        
+                int upx=f.UpdateTool(Table, search, 0);
+               JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
+               }
+               else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");
+              else JOptionPane.showMessageDialog(this, " الأداة تمت استعارتها ");
+            }
+            
      }
     
     
@@ -1566,8 +1586,8 @@ public void toolexpired(){
         char jobOfTool='R';
         int cNo=0;
         int area=0;
-             if(size=="70×100")size1=1;
-             else if(size=="50×30")size1=2; 
+             if(size=="70*100")size1=1;
+             else if(size=="50*30")size1=2; 
              else size1=3; 
              
              if("Ramallah".equals(supplier))s='R';
@@ -2117,8 +2137,9 @@ public void toolexpired(){
       String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
-      if(type=='D'){
-          Connection connection;
+      if(type=='D'||type=='d'){
+          SChange(status, search,"iplate","borrow" );
+         /* Connection connection;
           try {
               
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2146,10 +2167,11 @@ public void toolexpired(){
                   else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          } 
+          } */
       }
-      else  if(type=='P'){
-          Connection connection;
+      else  if(type=='P'||type=='p'){
+          SChange(status, search,"iplate","borrow" );
+          /*Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                   PreparedStatement p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
@@ -2174,11 +2196,12 @@ public void toolexpired(){
                   else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          }*/
          
       } 
-            else  if(type=='C'){
-          Connection connection;
+            else  if(type=='C'||type=='c'){
+                SChange(status, search,"iplate","borrow" );
+        /*  Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                PreparedStatement p = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
@@ -2203,7 +2226,7 @@ public void toolexpired(){
                   else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          }*/
          
       } 
        else  JOptionPane.showMessageDialog(this,"Not Found" );
@@ -2212,8 +2235,9 @@ public void toolexpired(){
       String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
-      if(type=='D'){
-          Connection connection;
+      if(type=='D'||type=='d'){
+          SChange(status, search,"dicut","return" );
+         /* Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                PreparedStatement p = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
@@ -2238,11 +2262,12 @@ public void toolexpired(){
                   else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          }*/
          
       }
-      else  if(type=='P'){
-          Connection connection;
+      else  if(type=='P'||type=='p'){
+          SChange(status, search,"iplate","return" );
+        /*  Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                 PreparedStatement p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
@@ -2267,11 +2292,12 @@ public void toolexpired(){
                   else  JOptionPane.showMessageDialog(this,"Not Found" );
           } catch (SQLException ex) {
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
-          }
+          }*/
          
       } 
-            else  if(type=='C'){
-          Connection connection;
+            else  if(type=='C' ||type=='c'){
+                SChange(status, search,"iclesheh","return" );
+        /*Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                 PreparedStatement p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
@@ -2298,7 +2324,7 @@ public void toolexpired(){
               Logger.getLogger(StorageFrame.class.getName()).log(Level.SEVERE, null, ex);
           }
          
-      } 
+     */ } 
        else  JOptionPane.showMessageDialog(this,"Not Found" );
   }
         if(otype=="حذف" ){
@@ -2320,8 +2346,8 @@ public void toolexpired(){
       String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
-      if(type=='D'){
-          borow(status, search,"dicut" );
+      if(type=='D'||type=='d'){
+          SChange(status, search,"dicut","expired" );
           /*Connection connection;
           try {
                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2348,8 +2374,8 @@ public void toolexpired(){
           }*/
          
       }
-      else  if(type=='P'){
-          borow(status, search,"iplate" );
+      else  if(type=='P'||type=='p'){
+          SChange(status, search,"iplate","expired" );
            /*Connection connection;
           try {
                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2376,8 +2402,8 @@ public void toolexpired(){
           }*/
          
       } 
-            else  if(type=='C'){
-                borow(status, search,"iclasheh" );
+            else  if(type=='C'||type=='c'){
+                SChange(status, search,"iclasheh" ,"expired");
             //Connection connection;
          // try {
                /*connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
