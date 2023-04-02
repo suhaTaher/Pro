@@ -190,6 +190,32 @@ public class functions {
        return updateed;
    }
  
+  public int UpdateToolUrl (String TableName,String Search,String url){// 0: do not exist 1: deleted 2:error
+        boolean x= false;
+        int updateed=0;//is it deleted or not
+        x = DoesItExist( TableName, Search,"name");
+        if(x){//exixt in DB
+          Connection connection;
+          String sql= String.format("UPDATE %s SET path=? WHERE name=? ",TableName); 
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps1 = connection.prepareStatement(sql);  
+              ps1.setString(1 ,url);
+              ps1.setString(2, Search);
+              
+              boolean rs1 = ps1.execute();
+              if(!rs1) {updateed =1;}//exist and updated
+              else     {updateed = 2;} // error
+              } catch (SQLException ex) { 
+              Logger.getLogger(functions.class.getName()).log(Level.SEVERE, null, ex);
+             } 
+          }
+      else {//Doesnot exist in DB
+          updateed = 0;
+      }
+       return updateed;
+   }
+ 
      int getSectorno(String Sector){//for dicut and clasheh standered sizes
         int sectorno=0;
          if(Sector.equals("مطاعم")){sectorno=1;}

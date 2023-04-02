@@ -11,6 +11,7 @@ import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Connection;
@@ -771,9 +772,10 @@ public class PlannerFrame extends javax.swing.JFrame {
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
-                .addGap(0, 29, Short.MAX_VALUE)
-                .addComponent(jLabel32))
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel32)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         SearchOrder.setBackground(new java.awt.Color(0, 43, 91));
@@ -1832,23 +1834,22 @@ public class PlannerFrame extends javax.swing.JFrame {
         jPanel19Layout.setHorizontalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
-                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel19Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel19Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel19Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel19Layout.createSequentialGroup()
-                                .addGap(438, 438, 438)
+                                .addGap(67, 67, 67)
                                 .addComponent(AddWorker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel19Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel56, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
-                                .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel43, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
@@ -1857,18 +1858,18 @@ public class PlannerFrame extends javax.swing.JFrame {
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(AddWorker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel19Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel57, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(AddWorker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(jPanel43, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanel43, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel57)
+                        .addGap(79, 79, 79))))
         );
 
         javax.swing.GroupLayout AddEmpFrameLayout = new javax.swing.GroupLayout(AddEmpFrame);
@@ -2216,7 +2217,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                      String FolderPath = s.getString(5);                      
                         Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  FolderPath);
                      }
-                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");}  
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr File");}  
                  }
                  else{ JOptionPane.showMessageDialog(this, "This Order Does Not Exist"); } 
             }
@@ -2228,12 +2229,12 @@ public class PlannerFrame extends javax.swing.JFrame {
 
     private void AttachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AttachMouseClicked
         // TODO add your handling code here:
-      /*  JFileChooser Chooser =new JFileChooser();
+        JFileChooser Chooser =new JFileChooser();
         Chooser.showOpenDialog(null);
         File f= Chooser.getSelectedFile();
         String fileName=f.getAbsolutePath();
-        FilePath.setText(fileName);*/
-        JFileChooser chooser;
+        FilePath.setText(fileName);
+       /* JFileChooser chooser;
         String choosertitle="";
         chooser = new JFileChooser(); 
         chooser.setCurrentDirectory(new java.io.File("."));
@@ -2253,7 +2254,7 @@ public class PlannerFrame extends javax.swing.JFrame {
       }
       else {
       System.out.println("اختر ملف ");
-      }
+      }*/
     }//GEN-LAST:event_AttachMouseClicked
 
     private void addTheOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addTheOrderMouseClicked
@@ -2304,14 +2305,14 @@ public class PlannerFrame extends javax.swing.JFrame {
                 if(s1.next())e= s1.getInt(1);
                  else   JOptionPane.showMessageDialog(this, "tool not found");
                     }
-               if(schar=='P'){
+            else if(schar=='P'){
              p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
               p.setString(1,ToolName.getText());
                 s1 = p.executeQuery();
                 if(s1.next())e= s1.getInt(1);
                  else   JOptionPane.showMessageDialog(this, "tool not found");
                     }
-                  if(schar=='C'){
+            else if(schar=='C'){
              p = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
               p.setString(1,ToolName.getText());
                 s1 = p.executeQuery();
@@ -2340,7 +2341,16 @@ public class PlannerFrame extends javax.swing.JFrame {
 
             }
             
-             else  if(e==0) JOptionPane.showMessageDialog(this, "الاداة غير متوفرة تمت استعارتها");
+             else  if(e==0){ 
+                  p = connection.prepareStatement("SELECT OrderDate,FinishDate FROM orders WHERE   ToolUsedName=?");
+                p.setString(1,ToolName.getText());
+                s1 = p.executeQuery();
+                if(s1.next()){
+                 DateValidate d=new DateValidate(s1.getDate(1).toString(),s1.getString(2)) ; 
+                 d.setVisible(true);
+                }
+
+             }
         } catch (HeadlessException | SQLException ex ) {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.getLocalizedMessage() );
        }

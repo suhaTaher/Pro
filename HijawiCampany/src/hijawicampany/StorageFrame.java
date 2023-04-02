@@ -5,6 +5,7 @@
  */
 package hijawicampany;
 
+import static hijawicampany.functions.DoesItExist;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -23,6 +24,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -245,38 +248,159 @@ public void toolexpired(){
         return sectorno;
     }
     
-    void SChange(int status,String search,String Table,String OType){
-                String Status1 = f.returnvalue(Table, search, "name");
+    String SChange(int status,String search,String Table,String OType){
+        String sl="";
+               String Status1 = f.returnvalue(Table, search, "name");
                status= Integer.valueOf(Status1);
             if(OType.equals("expired")){
-               if(status==2){
+               if(status==1){
                int upx=f.UpdateTool(Table, search, 2);
                JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
+               sl="متوفرة";
                }
-               else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلافها من قبل");
-              else JOptionPane.showMessageDialog(this, " الاداة غير متوفرة");
+               else if(status==2){JOptionPane.showMessageDialog(this, "لقد تم اتلافها من قبل");sl="تالفة";}
+              else {JOptionPane.showMessageDialog(this, " الاداة غير متوفرة");sl="غير متوفرة";}
+               return sl;
             }
             if(OType.equals("return")){
                if(status==0){
                int upx=f.UpdateTool(Table, search, 1);
                JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
+               sl="غير متوفرة";
                }
-               else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");
-              else JOptionPane.showMessageDialog(this, " الاداة موجودة");
+               else if(status==2){JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");sl="تالفة";}
+              else {JOptionPane.showMessageDialog(this, " الاداة موجودة");sl="متوفرة";}
+               return sl;
             }
+            
             if(OType.equals("borrow")){
                if(status==1){        
                 int upx=f.UpdateTool(Table, search, 0);
                JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
+               sl="متوفرة";
                }
-               else if(status==2)JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");
-              else JOptionPane.showMessageDialog(this, " الأداة تمت استعارتها ");
+               else if(status==2){JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");sl="تالفة";}
+              else {JOptionPane.showMessageDialog(this, " الأداة تمت استعارتها ");sl="غير متوفرة";}
+               return sl;
             }
+            return sl;
+    }
+    
+    void SearchForTool(String ToolType,String search){
+         Vector data = new Vector();
+        this.Sectorno.setText("");
+        this.Tool2.setText("");
+        this.Supplier1.setText("");
+        this.Size1.setText("");
+        this.sector.setText("ddddddddd");
+        this.area.setText("");
+        this.isle.setText("");
+        this.CarierNo1.setText("");
+        this.colorNo1.setText("");
+        String TypeOfTool1="";
+        String size1="";
+        String JobOfTool1="";
+        String supplier1="";
+        String status1="";
+        String Path="";
+        int status;
+        int sectorno=0;
+        int size=0;
+        int flag=0;
+        int isle=0;
+        int carierNo =0;
+        int ordernumber1=0;
+        int colornumber1=0;
+        int area=0;
+        String s =ToolType;
+        Connection connection;
+        PreparedStatement ps;
+        try {
+           String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
+                     
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps = connection.prepareStatement(sql);
+                    ps.setString(1,search );
+                    ResultSet rs = ps.executeQuery();
+                   
+                    if(rs.next())
+                    {
+                        System.out.print("im in");
+                        TypeOfTool1=rs.getString(2);
+                        JobOfTool1=rs.getString(3);
+                        size=rs.getInt(4);
+                        area=rs.getInt(5);
+                        status=rs.getInt(6);
+                        supplier1=rs.getString(9);
+                        isle=rs.getInt(10);
+                        carierNo =rs.getInt(11);
+                        Path=rs.getString(12);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        if(s.equals("dicut")|| s.equals("iclasheh")){
+                        switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
+                            break;
+                            default:
+                            break;
+                        }
+                        }
+                        else if (s.equals("iplate")){
+                            switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                         default:
+                            break;
+                        
+                        }
+                        }
+                                             try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
+                    this.Tool2.setText((TypeOfTool1));
+
+                    }
+
+                    else  JOptionPane.showMessageDialog(this,"Not Found5" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                } 
+        
+        this.Tool2.setText(TypeOfTool1);
+        
+        System.out.print(TypeOfTool1);
+       // this.Tool2.setBackground(Color.yellow);
+        this.Supplier1.setText(supplier1);
+        this.Size1.setText(size1);
+        this.sector.setText(JobOfTool1);
+        this.Sectorno.setText(Integer.toString(sectorno));
+        this.Status.setText(status1);
+        this.area.setText(Integer.toString(area));
+        this.isle.setText(Integer.toString(isle));
+        this.CarierNo1.setText(Integer.toString(carierNo));
+        this.colorNo1.setText(Integer.toString(colornumber1));
+ 
+    }
             
-     }
-    
-    
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -353,6 +477,9 @@ public void toolexpired(){
         Status1 = new javax.swing.JLabel();
         OK = new javax.swing.JPanel();
         jLabel43 = new javax.swing.JLabel();
+        Attach1 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        FileUrl = new javax.swing.JTextField();
         jLabel56 = new javax.swing.JLabel();
         OPOnTools = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -716,7 +843,8 @@ public void toolexpired(){
 
         StorageCards.add(ExpiredToolsList, "card5");
 
-        AddChangeTool.setBackground(new java.awt.Color(250, 250, 250));
+        AddChangeTool.setBackground(new java.awt.Color(255, 255, 255));
+        AddChangeTool.setPreferredSize(new java.awt.Dimension(790, 750));
 
         jPanel15.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -757,6 +885,11 @@ public void toolexpired(){
         OP.setForeground(new java.awt.Color(0, 43, 91));
         OP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "اضافة", "تعديل" }));
         OP.setPreferredSize(new java.awt.Dimension(80, 42));
+        OP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OPActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -776,7 +909,7 @@ public void toolexpired(){
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(13, 13, 13)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(OP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -784,7 +917,7 @@ public void toolexpired(){
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(searchKey2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel17.setBackground(new java.awt.Color(255, 255, 255));
@@ -941,7 +1074,7 @@ public void toolexpired(){
         jLabel54.setForeground(new java.awt.Color(0, 43, 91));
         jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel54.setText("الألوان");
-        jPanel37.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
+        jPanel37.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 75, 40));
 
         jCheckBox1.setBackground(new java.awt.Color(250, 250, 250));
         jCheckBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -951,25 +1084,30 @@ public void toolexpired(){
                 jCheckBox1ActionPerformed(evt);
             }
         });
-        jPanel37.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
+        jPanel37.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, -1));
 
         jCheckBox2.setBackground(new java.awt.Color(250, 250, 250));
         jCheckBox2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCheckBox2.setForeground(new java.awt.Color(0, 43, 91));
         jCheckBox2.setText("أزرق");
-        jPanel37.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+        jPanel37.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jCheckBox4.setBackground(new java.awt.Color(250, 250, 250));
         jCheckBox4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCheckBox4.setForeground(new java.awt.Color(204, 0, 0));
         jCheckBox4.setText("أحمر");
-        jPanel37.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox4ActionPerformed(evt);
+            }
+        });
+        jPanel37.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, -1));
 
         jCheckBox5.setBackground(new java.awt.Color(250, 250, 250));
         jCheckBox5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCheckBox5.setForeground(new java.awt.Color(204, 204, 0));
         jCheckBox5.setText("أصفر");
-        jPanel37.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jPanel37.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, -1, -1));
 
         Status1.setForeground(new java.awt.Color(204, 0, 0));
         Status1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1004,6 +1142,30 @@ public void toolexpired(){
             .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
+        Attach1.setBackground(new java.awt.Color(0, 43, 91));
+        Attach1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Attach1MouseClicked(evt);
+            }
+        });
+
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setText("ارفاق ملف");
+
+        javax.swing.GroupLayout Attach1Layout = new javax.swing.GroupLayout(Attach1);
+        Attach1.setLayout(Attach1Layout);
+        Attach1Layout.setHorizontalGroup(
+            Attach1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Attach1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel16)
+                .addGap(30, 30, 30))
+        );
+        Attach1Layout.setVerticalGroup(
+            Attach1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
@@ -1011,61 +1173,69 @@ public void toolexpired(){
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Status1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(85, 85, 85))
                     .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                                    .addGap(17, 17, 17)
-                                    .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(OK, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(28, 28, 28))
-                                .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                                .addComponent(OK, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(FileUrl, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Attach1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(24, Short.MAX_VALUE))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Status1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(Status1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)))
+                .addContainerGap()
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(FileUrl, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(OK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 19, Short.MAX_VALUE))
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel15Layout.createSequentialGroup()
+                                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Status1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29))
+                            .addComponent(jPanel37, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel15Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(Attach1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(OK, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         jLabel56.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
@@ -1077,28 +1247,28 @@ public void toolexpired(){
         AddChangeTool.setLayout(AddChangeToolLayout);
         AddChangeToolLayout.setHorizontalGroup(
             AddChangeToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddChangeToolLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddChangeToolLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel56)
-                .addGap(79, 79, 79))
+                .addGap(69, 69, 69))
             .addGroup(AddChangeToolLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(30, 30, 30)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         AddChangeToolLayout.setVerticalGroup(
             AddChangeToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddChangeToolLayout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
                 .addComponent(jLabel56)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         StorageCards.add(AddChangeTool, "card4");
 
-        OPOnTools.setBackground(new java.awt.Color(250, 250, 250));
+        OPOnTools.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1562,10 +1732,13 @@ public void toolexpired(){
 
     private void OKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OKMouseClicked
         // TODO add your handling code here:
-        
+String FolderPath;
         ArrayList<String> color=new ArrayList<String>();  
         int no=0;
         String otype=(String) this.OP.getSelectedItem();
+        String path=this.FileUrl.getText();
+        if(path.isEmpty()){JOptionPane.showMessageDialog(this, "اختر مجلد للأداه");}
+        else{
         if(otype=="اضافة"){
         if(this.jCheckBox1.isSelected()){color.add("أسود");no++;}
         if(this.jCheckBox2.isSelected()){color.add("أزرق");no++;}
@@ -1627,7 +1800,7 @@ public void toolexpired(){
                 if(s1.next()){
                      cNo=s1.getInt(1)+1;
                 }
-             ps = connection.prepareStatement("INSERT INTO dicut(name,type,sector,size,area,status,DateOfAttachment,supplier,isle,carierNo) VALUES (?,?,?,?,?,?,?,?,?,?)");
+             ps = connection.prepareStatement("INSERT INTO dicut(name,type,sector,size,area,status,DateOfAttachment,supplier,isle,carierNo,path) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
              toolname.append('D');//type
              toolname.append(size1);//size
              toolname.append(jobOfTool);
@@ -1644,9 +1817,14 @@ public void toolexpired(){
              ps.setString(8,supplier);
              ps.setInt(9,isle);
              ps.setInt(10,cNo);
+             ps.setString(11,path);
 
              boolean rs = ps.execute();
-             if(!rs)JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+             if(!rs){
+                 JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString())
+                         ;this.FileUrl.setText("");
+                              
+             }
              else  JOptionPane.showMessageDialog(this, "Erorr");       
              } catch (HeadlessException | SQLException ex ) {
              JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
@@ -1670,7 +1848,7 @@ public void toolexpired(){
                if(s1.next()){
                      cNo=s1.getInt(1)+1;
                 }
-             ps = connection.prepareStatement("INSERT INTO iclasheh(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber) VALUES (?,?,?,?,?,?,?,?,?,?)");
+             ps = connection.prepareStatement("INSERT INTO iclasheh(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
              toolname.append('C');//type
              toolname.append(size1);//size
              toolname.append(jobOfTool);
@@ -1687,8 +1865,9 @@ public void toolexpired(){
              ps.setInt(8,isle);
              ps.setInt(9,cNo);//?????????????????????????????????cariire
              ps.setInt(10,colorno);
+             ps.setString(11,path);
              boolean rs = ps.execute();
-             if(!rs)JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+             if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());this.FileUrl.setText("");}
              else { JOptionPane.showMessageDialog(this, "ادخل الالوان");  System.err.print("5ra");}     
              } catch (HeadlessException | SQLException ex ) {
              JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
@@ -1723,7 +1902,7 @@ public void toolexpired(){
              toolname.append(cNo);//????????????????????????????car
              toolname.append(no);//color
 
-             ps = connection.prepareStatement("INSERT INTO iplate(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber) VALUES (?,?,?,?,?,?,?,?,?,?)");
+             ps = connection.prepareStatement("INSERT INTO iplate(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
            
              ps.setString(1,toolname.toString());
              ps.setString(2,tooltype);
@@ -1735,8 +1914,9 @@ public void toolexpired(){
              ps.setInt(8,isle);
              ps.setInt(9,cNo);//?????????????????????????????????cariire
              ps.setInt(10,no);
+             ps.setString(11,path);
              boolean rs = ps.execute();
-             if(!rs)JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+             if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());this.FileUrl.setText("");}
              else  JOptionPane.showMessageDialog(this, "اختر الالوان"); 
          
               for (String color1 : color) {
@@ -1752,11 +1932,30 @@ public void toolexpired(){
              }
              else  JOptionPane.showMessageDialog(this, "Erorr");    
        }
-
+        
+         if(otype=="تعديل"){
+             String search=this.searchKey2.getText();
+             String path1 = FileUrl.getText();
+             char TypeOfTool=search.charAt(0);
+             switch (TypeOfTool) {
+             case 'D':case  'd':
+                f.UpdateToolUrl("dicut", search, path1);
+                break;
+             case 'P':case  'p':
+                f.UpdateToolUrl("iplate", search, path1);
+                break;
+             case 'C':case  'c':
+                f.UpdateToolUrl("iclasheh", search, path1);
+                break;
+             }
+             JOptionPane.showMessageDialog(this, "تم تعديل الأداة");
+         }
+        }
     }//GEN-LAST:event_OKMouseClicked
 
     private void SearchBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchBTNMouseClicked
         // TODO add your handling code here:
+        String Path;
         Vector data = new Vector();
         this.Colors1.setListData(data);
         String TypeOfTool1="";
@@ -1798,6 +1997,8 @@ public void toolexpired(){
                         supplier1=rs.getString(9);
                         isle=rs.getInt(10);
                         carierNo =rs.getInt(11);
+                        Path=rs.getString(12);
+                        System.out.print(Path);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         switch (size) {
@@ -1816,7 +2017,11 @@ public void toolexpired(){
                             default:
                             break;
                         }
-
+                     try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
                     }
 
                     else  JOptionPane.showMessageDialog(this,"Not Found" );
@@ -1841,6 +2046,7 @@ public void toolexpired(){
                         isle=rs1.getInt(9);
                         carierNo =rs1.getInt(10);
                         colornumber1=rs1.getInt(11);
+                        Path=rs1.getString(12);
                         ps2 = connection.prepareStatement("select * from color where platename= ?");
                         ps2.setString(1,search );
                         ResultSet rs2 = ps2.executeQuery();
@@ -1860,6 +2066,11 @@ public void toolexpired(){
                             default:
                             break;
                         }
+                         try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
                     }
                     else  JOptionPane.showMessageDialog(this,"Not Found" );
                 }
@@ -1883,6 +2094,7 @@ public void toolexpired(){
                         isle=rs1.getInt(9);
                         carierNo=rs1.getInt(10);
                         colornumber1=rs1.getInt(11);
+                        Path=rs1.getString(12);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         switch (size) {
@@ -1901,6 +2113,11 @@ public void toolexpired(){
                             default:
                             break;
                         }
+                                             try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
 
                     }
                     else  JOptionPane.showMessageDialog(this,"Not Found" );
@@ -1914,7 +2131,7 @@ public void toolexpired(){
             }
         }
 
-        this.sectorno1.setText(TypeOfTool1);
+        this.sectorno1.setText(Integer.toString(sectorno));
         this.Tool1.setSelectedItem(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Size2.setSelectedItem(size1);
@@ -1930,6 +2147,7 @@ public void toolexpired(){
 
     private void search1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search1MouseClicked
         // TODO add your handling code here:
+        String Path;
         Vector data = new Vector();
         this.Sectorno.setText("");
         this.Tool2.setText("");
@@ -1970,7 +2188,8 @@ public void toolexpired(){
 
             switch (TypeOfTool) {
                 case 'D': case 'd':
-                try {
+                    SearchForTool("dicut", search);
+               /* try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
                     ps.setString(1,search );
@@ -1986,6 +2205,7 @@ public void toolexpired(){
                         supplier1=rs.getString(9);
                         isle=rs.getInt(10);
                         carierNo =rs.getInt(11);
+                        Path=rs.getString(12);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         switch (size) {
@@ -2004,7 +2224,12 @@ public void toolexpired(){
                             default:
                             break;
                         }
-                        
+                                             try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
+                    
 
                     }
 
@@ -2012,9 +2237,10 @@ public void toolexpired(){
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }  */     break;
                 case 'P': case 'p':
-                try{
+                     SearchForTool("iplate", search);
+               /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
                     ps1.setString(1,search );
@@ -2030,6 +2256,7 @@ public void toolexpired(){
                         isle=rs1.getInt(9);
                         carierNo =rs1.getInt(10);
                         colornumber1=rs1.getInt(11);
+                        Path=rs1.getString(12);
                         ps2 = connection.prepareStatement("select * from color where platename= ?");
                         ps2.setString(1,search );
                         ResultSet rs2 = ps2.executeQuery();
@@ -2049,14 +2276,20 @@ public void toolexpired(){
                             default:
                             break;
                         }
+                                                                     try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
                     }
                     else  JOptionPane.showMessageDialog(this,"Not Found" );
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }   */    break;
                 case 'C': case 'c':
-                try{
+                     SearchForTool("iclasheh", search);
+               /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
                     ps1.setString(1,search );
@@ -2072,6 +2305,7 @@ public void toolexpired(){
                         isle=rs1.getInt(9);
                         carierNo=rs1.getInt(10);
                         colornumber1=rs1.getInt(11);
+                        Path=rs1.getString(12);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         switch (size) {
@@ -2089,20 +2323,25 @@ public void toolexpired(){
                             default:
                             break;
                         }
+                                                                     try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
 
                     }
-                    else  JOptionPane.showMessageDialog(this,"Not Found" );
+                    else  JOptionPane.showMessageDialog(this,"Not Found6666" );
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                } */      break;
                 default:
-                JOptionPane.showMessageDialog(this,"Not Found" );
+                JOptionPane.showMessageDialog(this,"Not Found5555" );
                 break;
             }
         }
 
-        this.Tool2.setText(TypeOfTool1);
+        /*this.Tool2.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Size1.setText(size1);
         this.sector.setText(JobOfTool1);
@@ -2111,17 +2350,8 @@ public void toolexpired(){
         this.area.setText(Integer.toString(area));
         this.isle.setText(Integer.toString(isle));
         this.CarierNo1.setText(Integer.toString(carierNo));
-        this.colorNo1.setText(Integer.toString(colornumber1));
-        /*this.Tool2.setText(list.get(2));
-        this.Supplier1.setText(list.get(10));
-        this.Size1.setText(list.get(4));
-        this.sector.setText(list.get(3));
-        this.Sectorno.setText(list.get(10));
-        this.Status.setText(list.get(5));
-        this.area.setText(list.get(6));
-        this.isle.setText(list.get(7));
-        this.CarierNo1.setText(list.get(8));
-       // this.colorNo1.setText(list.get(9))*/
+        this.colorNo1.setText(Integer.toString(colornumber1));*/
+
         
     }//GEN-LAST:event_search1MouseClicked
 
@@ -2135,10 +2365,12 @@ public void toolexpired(){
 
       if(otype=="استعارة"){
       String search=this.searchKey12.getText();
+      String ss;
       char type=search.charAt(0);
       int status=0;
       if(type=='D'||type=='d'){
-          SChange(status, search,"iplate","borrow" );
+         ss= SChange(status, search,"iplate","borrow" );
+         Status.setText(ss);
          /* Connection connection;
           try {
               
@@ -2170,7 +2402,8 @@ public void toolexpired(){
           } */
       }
       else  if(type=='P'||type=='p'){
-          SChange(status, search,"iplate","borrow" );
+          ss=SChange(status, search,"iplate","borrow" );
+          Status.setText(ss);
           /*Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2200,7 +2433,8 @@ public void toolexpired(){
          
       } 
             else  if(type=='C'||type=='c'){
-                SChange(status, search,"iplate","borrow" );
+               ss= SChange(status, search,"iplate","borrow" );
+               Status.setText(ss);
         /*  Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2232,11 +2466,13 @@ public void toolexpired(){
        else  JOptionPane.showMessageDialog(this,"Not Found" );
   }
     if(otype=="ارجاع" ){
+        String ss;
       String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
       if(type=='D'||type=='d'){
-          SChange(status, search,"dicut","return" );
+         ss= SChange(status, search,"dicut","return" );
+         Status.setText(ss);
          /* Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2266,7 +2502,8 @@ public void toolexpired(){
          
       }
       else  if(type=='P'||type=='p'){
-          SChange(status, search,"iplate","return" );
+          ss=SChange(status, search,"iplate","return" );
+          Status.setText(ss);
         /*  Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2296,7 +2533,8 @@ public void toolexpired(){
          
       } 
             else  if(type=='C' ||type=='c'){
-                SChange(status, search,"iclesheh","return" );
+               ss= SChange(status, search,"iclesheh","return" );
+               Status.setText(ss);
         /*Connection connection;
           try {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2343,11 +2581,13 @@ public void toolexpired(){
       else  JOptionPane.showMessageDialog(this,"Not Found" );
         }
            if(otype=="تالفة" ){
+               String ss;
       String search=this.searchKey12.getText();
       char type=search.charAt(0);
       int status=0;
       if(type=='D'||type=='d'){
-          SChange(status, search,"dicut","expired" );
+         ss= SChange(status, search,"dicut","expired" );
+         Status.setText(ss);
           /*Connection connection;
           try {
                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2375,7 +2615,8 @@ public void toolexpired(){
          
       }
       else  if(type=='P'||type=='p'){
-          SChange(status, search,"iplate","expired" );
+          ss=SChange(status, search,"iplate","expired" );
+          Status.setText(ss);
            /*Connection connection;
           try {
                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2403,7 +2644,8 @@ public void toolexpired(){
          
       } 
             else  if(type=='C'||type=='c'){
-                SChange(status, search,"iclasheh" ,"expired");
+                ss=SChange(status, search,"iclasheh" ,"expired");
+                Status.setText(ss);
             //Connection connection;
          // try {
                /*connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -2451,7 +2693,6 @@ public void toolexpired(){
     private void Tool1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tool1ActionPerformed
         // TODO add your handling code here:
         String selected = Tool1.getSelectedItem().toString();
-        System.out.print("sth");
         if (selected.equals("Dicut")){
            suplier.setEnabled(true);          colorNo3.setEnabled(false);
            jCheckBox1.setEnabled(false);           jCheckBox2.setEnabled(false);
@@ -2476,6 +2717,59 @@ public void toolexpired(){
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void Attach1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Attach1MouseClicked
+        // TODO add your handling code here:
+        JFileChooser chooser;
+        String choosertitle="";
+        chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle(choosertitle);
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        //
+        // disable the "All files" option.
+        //
+        chooser.setAcceptAllFileFilterUsed(false);
+        //
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            System.out.println("getCurrentDirectory(): "
+                +  chooser.getCurrentDirectory());
+            System.out.println("getSelectedFile() : "
+                +  chooser.getSelectedFile());
+            FileUrl.setText(chooser.getCurrentDirectory().toString());
+        }
+        else {
+            System.out.println("اختر ملف ");
+        }
+    }//GEN-LAST:event_Attach1MouseClicked
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void OPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OPActionPerformed
+        // TODO add your handling code here:
+        String selected = OP.getSelectedItem().toString();
+        if(selected.equals("تعديل")){
+            Tool1.setEnabled(false);
+            Size2.setEnabled(false);
+            suplier.setEnabled(false);
+            Sector.setEnabled(false);
+            colorNo3.setEnabled(false);
+            jCheckBox1.setEnabled(false);           jCheckBox4.setEnabled(false);
+            jCheckBox2.setEnabled(false);           jCheckBox5.setEnabled(false);
+        }
+        else if (selected.equals("اضافة")){
+            Tool1.setEnabled(true);
+            Size2.setEnabled(true);
+            suplier.setEnabled(true);
+            Sector.setEnabled(true);
+            colorNo3.setEnabled(true);
+            jCheckBox1.setEnabled(true);           jCheckBox4.setEnabled(true);
+            jCheckBox2.setEnabled(true);           jCheckBox5.setEnabled(true);
+        
+        }
+    }//GEN-LAST:event_OPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2520,11 +2814,14 @@ public void toolexpired(){
     private javax.swing.JPanel AddChangeTool;
     private javax.swing.JPanel AddOrder_Change;
     private javax.swing.JTextField Area3;
+    private javax.swing.JPanel Attach;
+    private javax.swing.JPanel Attach1;
     private javax.swing.JTextField CarierNo1;
     private javax.swing.JTextField CarierNo2;
     private javax.swing.JList<String> Colors1;
     private javax.swing.JPanel ExpiredListOfTools;
     private javax.swing.JPanel ExpiredToolsList;
+    private javax.swing.JTextField FileUrl;
     private javax.swing.JPanel LogOut;
     private javax.swing.JPanel OK;
     private javax.swing.JComboBox<String> OP;
@@ -2558,6 +2855,8 @@ public void toolexpired(){
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
