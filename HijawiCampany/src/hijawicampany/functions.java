@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -25,8 +25,17 @@ import javax.swing.JOptionPane;
 
 public class functions {
     
+    String returnTextState(String state){
+      String status="";
+      if(state.equals("1")){status="موجودة";}      
+      else if(state.equals("0")){status="غير موجودة";}
+      else if(state.equals("2")){status="تالفة";}
+      else {status="محذوفة";}
+      return status;
+    } 
+    
    public String returnvalue(String TableName, String search , String Searchword){
-       String found="no";
+       String found="محذوفة";
        Connection connection=null;
        String sql= String.format("SELECT status FROM %s WHERE  name=?",TableName,Searchword);
         try {
@@ -59,8 +68,8 @@ public class functions {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1,search);
                 ResultSet s1 = ps.executeQuery();
-                if(s1.next()) {x=true;System.out.print("existes");return x;}//exists
-                else{System.out.print("no existes");return x;}//doesnot exist
+                if(s1.next()) {x=true;return x;}//exists
+                else{return x;}//doesnot exist
         } catch (SQLException ex) {
             Logger.getLogger(functions.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,7 +149,6 @@ public class functions {
       boolean x;
       int deleted=0;//is it deleted or not
       x = DoesItExist( TableName, Search,"name");
-      System.out.println(x);
       if(x){//exixt in DB
           Connection connection;
           String sql= String.format("Delete FROM %s WHERE  name=?",TableName); 
@@ -148,21 +156,29 @@ public class functions {
               connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
               PreparedStatement ps1 = connection.prepareStatement(sql);
               ps1.setString(1,Search);
-              System.out.println("taher");
               boolean rs1 = ps1.execute();
-              System.out.println("taher");
-              if(!rs1) {deleted=1;System.out.println("deleted");return deleted;}//exist and deleted
-              else     {deleted = 2;System.out.println("not deleted");return deleted;} // error
+              if(!rs1) {deleted=1;return deleted;}//exist and deleted
+              else     {deleted = 2;return deleted;} // error
               } catch (SQLException ex) { 
               Logger.getLogger(functions.class.getName()).log(Level.SEVERE, null, ex);
              } 
           }
       else {//Doesnot exist in DB
-          deleted = 0;System.out.println("3333333333333333");return deleted;
+          deleted = 0;return deleted;
       }
        return deleted;
      
     }
+   
+
+
+public boolean isNumeric(String strNum) {
+     Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+    if (strNum == null) {
+        return false; 
+    }
+    return pattern.matcher(strNum).matches();
+}
     
  public int UpdateTool (String TableName,String Search,int status){// 0: do not exist 1: deleted 2:error
         boolean x= false;

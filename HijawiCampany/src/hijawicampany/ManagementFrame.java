@@ -129,7 +129,112 @@ public class ManagementFrame extends javax.swing.JFrame {
         Matcher matcher = pattern.matcher(email); 
         x= matcher.matches();
         return x;
+    }
     
+ void SearchForTool(String ToolType,String search){
+        Vector data = new Vector();
+        String TypeOfTool1="";
+        String size1="";
+        String JobOfTool1="";
+        String supplier1="";
+        String status1="";
+        int status;
+        int sectorno=0;
+        int size=0;
+        int flag=0;
+        int isle=0;
+        int carierNo =0;
+        int ordernumber1=0;
+        int colornumber1=0;
+        int area=0;
+        String Path="";
+        search=this.searchKey.getText();
+        String s =ToolType;
+        Connection connection;
+        PreparedStatement ps;
+        try {
+           String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
+                     
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps = connection.prepareStatement(sql);
+                    ps.setString(1,search );
+                    ResultSet rs = ps.executeQuery();
+                   
+                    if(rs.next())
+                    {
+                        System.out.print("im in");
+                        TypeOfTool1=rs.getString(2);
+                        JobOfTool1=rs.getString(3);
+                        size=rs.getInt(4);
+                        area=rs.getInt(5);
+                        status=rs.getInt(6);
+                        supplier1=rs.getString(10);
+                        isle=rs.getInt(11);
+                        carierNo =rs.getInt(12);
+                        Path=rs.getString(13);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        if(status==2) status1="تالفة";
+                        if(s.equals("dicut")|| s.equals("iclasheh")){
+                        switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
+                            break;
+                            default:
+                            break;
+                        }
+                        }
+                        else if (s.equals("iplate")){
+                            switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                         default:
+                            break;
+                        
+                        }
+                        }
+                                             try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
+                    this.Tool_name.setText((TypeOfTool1));
+
+                    }
+
+                    else  JOptionPane.showMessageDialog(this,"Not Found5" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                } 
+        
+
+    this.sectorno.setText(Integer.toString(sectorno));
+    this.Tool_name.setText(TypeOfTool1);
+    this.Supplier.setText(supplier1);
+    this.Tool_size.setText(size1);
+    this.sector.setText(JobOfTool1);
+    this.Status.setText(status1);
+    this.Area.setText(Integer.toString(area));
+    this.aisle.setText(Integer.toString(isle));
+    this.CarierMo.setText(Integer.toString(carierNo));
+    this.colorNo.setText(Integer.toString(colornumber1));
+ 
     }
 
     /**
@@ -1574,8 +1679,9 @@ public class ManagementFrame extends javax.swing.JFrame {
         PreparedStatement ps,ps1,ps2;    
        
         switch (TypeOfTool) {
-            case 'D':
-                try {
+            case 'D': case 'd':
+                SearchForTool("dicut", search);
+               /* try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
                     ps.setString(1,search );
@@ -1615,9 +1721,10 @@ public class ManagementFrame extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break; 
-            case 'P':
-                try{
+                }*/       break; 
+            case 'P':case 'p':
+                SearchForTool("iplate", search);
+              /*  try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
                     ps1.setString(1,search );
@@ -1656,9 +1763,10 @@ public class ManagementFrame extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
-            case 'C':
-                try{
+                }   */    break;
+            case 'C':case 'c':
+                SearchForTool("iclasheh", search);
+               /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
                     ps1.setString(1,search );
@@ -1697,14 +1805,14 @@ public class ManagementFrame extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }   */    break;
             default:
                 JOptionPane.showMessageDialog(this,"Not Found" );
                 break;
         }
         }
         
-    this.sectorno.setText(Integer.toString(sectorno));
+ /*   this.sectorno.setText(Integer.toString(sectorno));
     this.Tool_name.setText(TypeOfTool1);
     this.Supplier.setText(supplier1);
     this.Tool_size.setText(size1);
@@ -1713,7 +1821,7 @@ public class ManagementFrame extends javax.swing.JFrame {
     this.Area.setText(Integer.toString(area));
     this.aisle.setText(Integer.toString(isle));
     this.CarierMo.setText(Integer.toString(carierNo));
-    this.colorNo.setText(Integer.toString(colornumber1));
+    this.colorNo.setText(Integer.toString(colornumber1));*/
     }//GEN-LAST:event_searchMouseClicked
 
     private void listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseClicked

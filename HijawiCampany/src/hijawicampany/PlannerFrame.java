@@ -159,6 +159,113 @@ public class PlannerFrame extends javax.swing.JFrame {
     }
     return b;
 }
+    
+    void SearchForTool(String ToolType,String search){
+        Vector data = new Vector();
+        String TypeOfTool1="";
+        String size1="";
+        String JobOfTool1="";
+        String supplier1="";
+        String status1="";
+        int status;
+        int sectorno=0;
+        int size=0;
+        int flag=0;
+        int isle=0;
+        int carierNo =0;
+        int ordernumber1=0;
+        int colornumber1=0;
+        int area=0;
+        String Path="";
+        search=this.searchKey1.getText();
+       String s =ToolType;
+        Connection connection;
+        PreparedStatement ps;
+        try {
+           String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
+                     
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps = connection.prepareStatement(sql);
+                    ps.setString(1,search );
+                    ResultSet rs = ps.executeQuery();
+                   
+                    if(rs.next())
+                    {
+                        System.out.print("im in");
+                        TypeOfTool1=rs.getString(2);
+                        JobOfTool1=rs.getString(3);
+                        size=rs.getInt(4);
+                        area=rs.getInt(5);
+                        status=rs.getInt(6);
+                        supplier1=rs.getString(10);
+                        isle=rs.getInt(11);
+                        carierNo =rs.getInt(12);
+                        Path=rs.getString(13);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        if(status==2) status1="تالفة";
+                        if(s.equals("dicut")|| s.equals("iclasheh")){
+                        switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
+                            break;
+                            default:
+                            break;
+                        }
+                        }
+                        else if (s.equals("iplate")){
+                            switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                         default:
+                            break;
+                        
+                        }
+                        }
+                                             try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
+                    this.Tool_name1.setText((TypeOfTool1));
+
+                    }
+
+                    else  JOptionPane.showMessageDialog(this,"Not Found5" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                } 
+        
+
+        
+        this.sectorno.setText(Integer.toString(sectorno));
+        this.Tool_name1.setText(TypeOfTool1);
+        this.Supplier1.setText(supplier1);
+        this.Tool_size1.setText(size1);
+        this.sector1.setText(JobOfTool1);
+        this.Status1.setText(status1);
+        this.Area1.setText(Integer.toString(area));
+        this.aisle1.setText(Integer.toString(isle));
+        this.CarierMo1.setText(Integer.toString(carierNo));
+        this.colorNo1.setText(Integer.toString(colornumber1));
+ 
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1978,7 +2085,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         this.CarierMo1.setText("");
         this.colorNo1.setText("");
         this.Colors1.setListData(data);
-        String TypeOfTool1="";
+      /*  String TypeOfTool1="";
         String size1="";
         String JobOfTool1="";
         String supplier1="";
@@ -1991,7 +2098,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         int carierNo =0;
         int ordernumber1=0;
         int colornumber1=0;
-        int area=0;
+        int area=0;*/
         String search=this.searchKey1.getText();
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
         else{
@@ -2002,7 +2109,8 @@ public class PlannerFrame extends javax.swing.JFrame {
 
             switch (TypeOfTool) {
                 case 'D' : case  'd' :
-                try {
+                     SearchForTool("dicut", search);
+                /*try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
                     ps.setString(1,search );
@@ -2042,9 +2150,10 @@ public class PlannerFrame extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }  */     break;
                 case 'P': case  'p':
-                try{
+                     SearchForTool("iplate", search);
+               /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
                     ps1.setString(1,search );
@@ -2083,9 +2192,10 @@ public class PlannerFrame extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }   */    break;
                 case 'C': case  'c':
-                try{
+                    SearchForTool("iclasheh", search);
+               /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
                     ps1.setString(1,search );
@@ -2124,7 +2234,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                } */      break;
                 default:
                 JOptionPane.showMessageDialog(this,"Not Found" );
                 break;
@@ -2132,7 +2242,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         }
         
         
-        this.sectorno.setText(Integer.toString(sectorno));
+       /* this.sectorno.setText(Integer.toString(sectorno));
         this.Tool_name1.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Tool_size1.setText(size1);
@@ -2141,7 +2251,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         this.Area1.setText(Integer.toString(area));
         this.aisle1.setText(Integer.toString(isle));
         this.CarierMo1.setText(Integer.toString(carierNo));
-        this.colorNo1.setText(Integer.toString(colornumber1));
+        this.colorNo1.setText(Integer.toString(colornumber1));*/
     }//GEN-LAST:event_search1MouseClicked
 
     private void AddWorkerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddWorkerMouseClicked
@@ -2202,6 +2312,8 @@ public class PlannerFrame extends javax.swing.JFrame {
             Connection connection;
             PreparedStatement ps,p;
             try {
+                String state = "";
+                String StateText="";
                 connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                  p = connection.prepareStatement("select * from orders where ordernumber = ?");
                  p.setInt(1,ONo);
@@ -2212,7 +2324,13 @@ public class PlannerFrame extends javax.swing.JFrame {
                      String FDate = s.getString(3);
                      DateOfFinish.setText(FDate);
                      String ToolName = s.getString(4);
-                     TName.setText(ToolName);    
+                     TName.setText(ToolName);
+                     //tool name
+                     char schar=ToolName.charAt(0);
+                     if(schar=='D'||schar=='d'){state=f.returnvalue("dicut", ToolName, "name");StateText=f.returnTextState(state);}
+                     else if(schar=='P'||schar=='p'){state=f.returnvalue("iplate", ToolName, "name");StateText=f.returnTextState(state);}
+                     else if(schar=='C'||schar=='c'){state=f.returnvalue("iclasheh", ToolName, "name");StateText=f.returnTextState(state);}
+                     State.setText(StateText);
                      try{
                      String FolderPath = s.getString(5);                      
                         Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  FolderPath);
@@ -2279,6 +2397,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             if(xx){JOptionPane.showMessageDialog(this,"this ordernumber already exists" );}
             else {
                 if(check){
+                    if(f.isNumeric(OrderNo.getText())){
        try { 
         //java.util.Date FD = new java.util.Date("mm/dd/yyy");
         //FDate = (Date) D.parse(D.format(FinishDate.getDate()));
@@ -2292,36 +2411,50 @@ public class PlannerFrame extends javax.swing.JFrame {
         //Date2 = D.format(FinishDate.getDate());
         Connection connection;
         PreparedStatement ps = null,p;
+        PreparedStatement addToolDate;
           ResultSet s1;
           String stext=ToolName.getText();
           char schar=stext.charAt(0);
           int e = 2;
+          String ToolTableName="";          
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
-            if(schar=='D'){
+            if(schar=='D'||schar=='d'){
              p = connection.prepareStatement("SELECT status FROM dicut WHERE  name=?");
              p.setString(1,ToolName.getText());
                 s1 = p.executeQuery();
+                ToolTableName="dicut";
                 if(s1.next())e= s1.getInt(1);
                  else   JOptionPane.showMessageDialog(this, "tool not found");
                     }
-            else if(schar=='P'){
+            else if(schar=='P'||schar=='p'){
              p = connection.prepareStatement("SELECT status FROM iplate WHERE  name=?");
               p.setString(1,ToolName.getText());
                 s1 = p.executeQuery();
+                ToolTableName="iplate";
                 if(s1.next())e= s1.getInt(1);
                  else   JOptionPane.showMessageDialog(this, "tool not found");
                     }
-            else if(schar=='C'){
+            else if(schar=='C'||schar=='c'){
              p = connection.prepareStatement("SELECT status FROM iclasheh WHERE  name=?");
               p.setString(1,ToolName.getText());
                 s1 = p.executeQuery();
+                ToolTableName="iclasheh";
                 if(s1.next())e= s1.getInt(1);
                  else   JOptionPane.showMessageDialog(this, "tool not found");
                     }
-                  else   JOptionPane.showMessageDialog(this, "tool not found");
+            else   JOptionPane.showMessageDialog(this, "tool not found");
+             System.out.println(e);
             if(e==1){
-            ps = connection.prepareStatement("INSERT INTO orders (ordernumber,OrderDate,FinishDate,ToolUsedName,fileUrl)VALUES (?,?,?,?,?)");
+                ToolStatus.setText("متوفرة");
+                String sql = String.format("UPDATE %s SET orderDate=? ,DateOfFinishOrder=? WHERE name=? ",ToolTableName); 
+                addToolDate=connection.prepareStatement(sql);
+                addToolDate.setDate(1, Tdate);
+                addToolDate.setString(2,Date2);
+                addToolDate.setString(3, ToolName.getText());
+                boolean rs1 = addToolDate.execute();
+
+                ps = connection.prepareStatement("INSERT INTO orders (ordernumber,OrderDate,FinishDate,ToolUsedName,fileUrl)VALUES (?,?,?,?,?)");
                 ps.setInt(1,ordernumber);
                 ps.setDate(2,Tdate);
                 ps.setString(3,Date2);
@@ -2333,8 +2466,8 @@ public class PlannerFrame extends javax.swing.JFrame {
                 ToolName.setText("");
                 OrderNo.setText("");
                 FilePath.setText("");
-                OrderDate.setDateFormatString("");
-                FinishDate.setDateFormatString("");
+                //OrderDate.setDateFormatString("");
+                //FinishDate.setDateFormatString("");
             
             }
             else   JOptionPane.showMessageDialog(this, "Erorr");
@@ -2342,15 +2475,32 @@ public class PlannerFrame extends javax.swing.JFrame {
             }
             
              else  if(e==0){ 
-                  p = connection.prepareStatement("SELECT OrderDate,FinishDate FROM orders WHERE   ToolUsedName=?");
+                     
+               //  String ODate = s.getString(2);
+                    // DateOfOrder.setText(ODate);
+                     
+                  ResultSet ss1;               
+                 ToolStatus.setText("غير متوفرة");
+                 String sql1=String.format("SELECT OrderDate,DateOfFinishOrder FROM %s WHERE   name=?", ToolTableName);
+                p = connection.prepareStatement(sql1);
                 p.setString(1,ToolName.getText());
-                s1 = p.executeQuery();
-                if(s1.next()){
-                 DateValidate d=new DateValidate(s1.getDate(1).toString(),s1.getString(2)) ; 
+                ss1 = p.executeQuery();
+                if(ss1.next()){
+                    Date DDATE= ss1.getDate(1);
+                    String dd= DDATE.toString();
+                    System.out.println(DDATE);
+                 DateValidate d=new DateValidate(dd,ss1.getString(2)) ; 
                  d.setVisible(true);
                 }
+                
 
              }
+                            else  if(e==2){
+                ToolStatus.setText("تالفة");
+                 JOptionPane.showMessageDialog(this, "هذه الأداة تالفة");
+                
+                }
+            connection.close();
         } catch (HeadlessException | SQLException ex ) {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.getLocalizedMessage() );
        }
@@ -2358,12 +2508,15 @@ public class PlannerFrame extends javax.swing.JFrame {
       catch(Exception ex) {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.toString() );   
        }
+                    }
+                     else{JOptionPane.showMessageDialog(this, "رقم الطلبية يحب انيكون رقما");}
        }
       else{
                 JOptionPane.showMessageDialog(this, "التاريخ غير صحيح");
                 }
             }
         }
+        
     }//GEN-LAST:event_addTheOrderMouseClicked
 
     private void DeleteOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DeleteOMouseClicked

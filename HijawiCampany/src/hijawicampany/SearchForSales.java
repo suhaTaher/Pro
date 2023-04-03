@@ -25,6 +25,7 @@ public class SearchForSales extends javax.swing.JFrame {
     /**
      * Creates new form SearchForSales
      */
+    functions f = new functions();
     public SearchForSales(String UserID) {
         initComponents();
         Image icon;
@@ -51,6 +52,114 @@ public class SearchForSales extends javax.swing.JFrame {
          else{sectorno=3;}
         return sectorno;
     }
+        void SearchForTool(String ToolType,String search){
+        Vector data = new Vector();
+        this.Colors1.setListData(data);
+        String TypeOfTool1="";
+        String size1="";
+        String JobOfTool1="";
+        String supplier1="";
+        String status1="";
+        String Path="";
+        int status;
+        int sectorno=0;
+        int size=0;
+        int flag=0;
+        int isle=0;
+        int carierNo =0;
+        int ordernumber1=0;
+        int colornumber1=0;
+        int area=0;
+        search=this.searchKey1.getText();
+ String s =ToolType;
+        Connection connection;
+        PreparedStatement ps;
+        try {
+           String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
+                     
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    ps = connection.prepareStatement(sql);
+                    ps.setString(1,search );
+                    ResultSet rs = ps.executeQuery();
+                   
+                    if(rs.next())
+                    {
+                        System.out.print("im in");
+                        TypeOfTool1=rs.getString(2);
+                        JobOfTool1=rs.getString(3);
+                        size=rs.getInt(4);
+                        area=rs.getInt(5);
+                        status=rs.getInt(6);
+                        supplier1=rs.getString(10);
+                        isle=rs.getInt(11);
+                        carierNo =rs.getInt(12);
+                        Path=rs.getString(13);
+                        if(status==1)status1="متوفر";
+                        if(status==0) status1="غير متوفر";
+                        if(status==2) status1="تالفة";
+                        if(s.equals("dicut")|| s.equals("iclasheh")){
+                        switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 3:
+                            size1="غير ذلك";
+                            sectorno=getSectorno1(JobOfTool1);
+                            break;
+                            default:
+                            break;
+                        }
+                        }
+                        else if (s.equals("iplate")){
+                            switch (size) {  
+                            case 1:
+                            size1="70×100";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                            case 2:
+                            size1="50×30";
+                            sectorno=getSectorno(JobOfTool1);
+                            break;
+                         default:
+                            break;
+                        
+                        }
+                        }
+                                             try{
+                                           
+                        Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
+                     }
+                     catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
+                    this.Tool_name1.setText((TypeOfTool1));
+
+                    }
+
+                    else  JOptionPane.showMessageDialog(this,"Not Found5" );
+                }
+                catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
+                } 
+        
+
+        
+        this.sectorno.setText(Integer.toString(sectorno));
+        this.Tool_name1.setText(TypeOfTool1);
+        this.Supplier1.setText(supplier1);
+        this.Tool_size1.setText(size1);
+        this.sector1.setText(JobOfTool1);
+        this.Status1.setText(status1);
+        this.Area1.setText(Integer.toString(area));
+        this.aisle1.setText(Integer.toString(isle));
+        this.CarierMo1.setText(Integer.toString(carierNo));
+        this.colorNo1.setText(Integer.toString(colornumber1));
+ 
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,19 +283,17 @@ public class SearchForSales extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(71, 71, 71)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 626, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 654, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59))
+                .addGap(61, 61, 61))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15))
         );
 
@@ -416,9 +523,9 @@ public class SearchForSales extends javax.swing.JFrame {
 
         jPanel37.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 190, 100));
 
+        Status1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Status1.setForeground(new java.awt.Color(204, 0, 0));
         Status1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Status1.setText("Status");
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
@@ -500,11 +607,11 @@ public class SearchForSales extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(250, 250, 250)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -544,7 +651,7 @@ public class SearchForSales extends javax.swing.JFrame {
         this.CarierMo1.setText("");
         this.colorNo1.setText("");
         this.Colors1.setListData(data);
-        String TypeOfTool1="";
+       /* String TypeOfTool1="";
         String size1="";
         String JobOfTool1="";
         String supplier1="";
@@ -557,7 +664,7 @@ public class SearchForSales extends javax.swing.JFrame {
         int carierNo =0;
         int ordernumber1=0;
         int colornumber1=0;
-        int area=0;
+        int area=0;*/
         String search=this.searchKey1.getText();
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
         else{
@@ -567,7 +674,8 @@ public class SearchForSales extends javax.swing.JFrame {
 
             switch (TypeOfTool) {
                 case 'D': case 'd':
-                try {
+                    SearchForTool("dicut", search);
+                /*try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
                     ps.setString(1,search );
@@ -579,11 +687,12 @@ public class SearchForSales extends javax.swing.JFrame {
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
-                        supplier1=rs.getString(9);
-                        isle=rs.getInt(10);
-                        carierNo =rs.getInt(11);
+                        supplier1=rs.getString(10);
+                        isle=rs.getInt(11);
+                        carierNo =rs.getInt(12);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
+                        if(status==2) status1="تالفة";
                         switch (size) {
                             case 1:
                             size1="70×100";
@@ -607,9 +716,10 @@ public class SearchForSales extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }  */     break;
                 case 'P': case 'p':
-                try{
+                    SearchForTool("iplate", search);
+                /*try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
                     ps1.setString(1,search );
@@ -631,6 +741,7 @@ public class SearchForSales extends javax.swing.JFrame {
                         this.Colors1.setListData(data);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
+                        if(status==2) status1="تالفة";
                         switch (size) {
                             case 1:
                             size1="70×100";
@@ -648,9 +759,10 @@ public class SearchForSales extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }  */     break;
                 case 'C': case 'c':
-                try{
+                    SearchForTool("iclasheh", search);
+                /*try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
                     ps1.setString(1,search );
@@ -667,6 +779,7 @@ public class SearchForSales extends javax.swing.JFrame {
                         colornumber1=rs1.getInt(11);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
+                        if(status==2) status1="تالفة";
                         switch (size) {
                             case 1:
                             size1="70×100";
@@ -689,14 +802,14 @@ public class SearchForSales extends javax.swing.JFrame {
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                } */      break;
                 default:
                 JOptionPane.showMessageDialog(this,"Not Found" );
                 break;
             }
         }
-        
-        this.sectorno.setText(Integer.toString(sectorno));
+
+       /* this.sectorno.setText(Integer.toString(sectorno));
         this.Tool_name1.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Tool_size1.setText(size1);
@@ -705,7 +818,7 @@ public class SearchForSales extends javax.swing.JFrame {
         this.Area1.setText(Integer.toString(area));
         this.aisle1.setText(Integer.toString(isle));
         this.CarierMo1.setText(Integer.toString(carierNo));
-        this.colorNo1.setText(Integer.toString(colornumber1));
+        this.colorNo1.setText(Integer.toString(colornumber1));*/
     }//GEN-LAST:event_search1MouseClicked
 
     private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked

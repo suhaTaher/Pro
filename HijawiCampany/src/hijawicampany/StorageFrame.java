@@ -104,8 +104,8 @@ public void toolexpired(){
                       sector=rs1.getString(3);
                       size1=rs1.getInt(4);
                       area=rs1.getInt(5);
-                      isle=rs1.getInt(10);
-                       cno=rs1.getInt(11);
+                      isle=rs1.getInt(11);
+                       cno=rs1.getInt(12);
                        if(size1==1)size="70*100";
                        else if(size1==2)size="30*50";
                        else size="غير ذلك";
@@ -194,19 +194,16 @@ public void toolexpired(){
     void deleteTool(String TableName,String ToolName){
      int x = f.Delete(TableName, ToolName);
      if (x==1){//deleted
-         System.out.println("1");
          JOptionPane.showMessageDialog(this, "تم حذف" + ToolName +"بنجاح");
      }
      else if (x==0){// does not exist
          JOptionPane.showMessageDialog(this, "هذه الأداة غير موجودة");
-         System.out.println("255555555555");
      }
      else if (x==2){// error db
          JOptionPane.showMessageDialog(this, "لقد حدث خطأ");
-         System.out.println("3");
      }
      else{
-        JOptionPane.showMessageDialog(this, "لقد حدث خط1أ");System.out.println("4");
+        JOptionPane.showMessageDialog(this, "لقد حدث خط1أ");
      }
      }
      
@@ -255,29 +252,36 @@ public void toolexpired(){
             if(OType.equals("expired")){
                if(status==1){
                int upx=f.UpdateTool(Table, search, 2);
-               JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
-               sl="متوفرة";
+                  if(upx==1){
+                     JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
+                     sl="متوفرة";}
+                  else {JOptionPane.showMessageDialog(this, "لقد حدث خطأ");}
+               
                }
                else if(status==2){JOptionPane.showMessageDialog(this, "لقد تم اتلافها من قبل");sl="تالفة";}
               else {JOptionPane.showMessageDialog(this, " الاداة غير متوفرة");sl="غير متوفرة";}
                return sl;
             }
-            if(OType.equals("return")){
+            else if(OType.equals("return")){
                if(status==0){
                int upx=f.UpdateTool(Table, search, 1);
+               if(upx==1){
                JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
-               sl="غير متوفرة";
+               sl="غير متوفرة";}
+               else {JOptionPane.showMessageDialog(this, "لقد حدث خطأ");}
                }
                else if(status==2){JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");sl="تالفة";}
               else {JOptionPane.showMessageDialog(this, " الاداة موجودة");sl="متوفرة";}
                return sl;
             }
             
-            if(OType.equals("borrow")){
-               if(status==1){        
+            else if(OType.equals("borrow")){
+               if(status==1){ 
                 int upx=f.UpdateTool(Table, search, 0);
+                if(upx==1){
                JOptionPane.showMessageDialog(this, " تمت العملية بنجاح");
-               sl="متوفرة";
+               sl="متوفرة";}
+                else {JOptionPane.showMessageDialog(this, "لقد حدث خطأ");}
                }
                else if(status==2){JOptionPane.showMessageDialog(this, "لقد تم اتلاف الأداة");sl="تالفة";}
               else {JOptionPane.showMessageDialog(this, " الأداة تمت استعارتها ");sl="غير متوفرة";}
@@ -325,18 +329,18 @@ public void toolexpired(){
                    
                     if(rs.next())
                     {
-                        System.out.print("im in");
                         TypeOfTool1=rs.getString(2);
                         JobOfTool1=rs.getString(3);
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
-                        supplier1=rs.getString(9);
-                        isle=rs.getInt(10);
-                        carierNo =rs.getInt(11);
-                        Path=rs.getString(12);
+                        supplier1=rs.getString(10);
+                        isle=rs.getInt(11);
+                        carierNo =rs.getInt(12);
+                        Path=rs.getString(13);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
+                        if(status==2) status1="تالفة";
                         if(s.equals("dicut")|| s.equals("iclasheh")){
                         switch (size) {  
                             case 1:
@@ -387,8 +391,6 @@ public void toolexpired(){
         
         this.Tool2.setText(TypeOfTool1);
         
-        System.out.print(TypeOfTool1);
-       // this.Tool2.setBackground(Color.yellow);
         this.Supplier1.setText(supplier1);
         this.Size1.setText(size1);
         this.sector.setText(JobOfTool1);
@@ -1868,7 +1870,7 @@ String FolderPath;
              ps.setString(11,path);
              boolean rs = ps.execute();
              if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());this.FileUrl.setText("");}
-             else { JOptionPane.showMessageDialog(this, "ادخل الالوان");  System.err.print("5ra");}     
+             else { JOptionPane.showMessageDialog(this, "ادخل الالوان");  }     
              } catch (HeadlessException | SQLException ex ) {
              JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
              }    
@@ -1994,11 +1996,10 @@ String FolderPath;
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
-                        supplier1=rs.getString(9);
-                        isle=rs.getInt(10);
-                        carierNo =rs.getInt(11);
-                        Path=rs.getString(12);
-                        System.out.print(Path);
+                        supplier1=rs.getString(10);
+                        isle=rs.getInt(11);
+                        carierNo =rs.getInt(12);
+                        Path=rs.getString(13);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         switch (size) {
@@ -2043,10 +2044,10 @@ String FolderPath;
                         size=rs1.getInt(4);
                         area=rs1.getInt(5);
                         status=rs1.getInt(6);
-                        isle=rs1.getInt(9);
-                        carierNo =rs1.getInt(10);
-                        colornumber1=rs1.getInt(11);
-                        Path=rs1.getString(12);
+                        isle=rs1.getInt(10);
+                        carierNo =rs1.getInt(11);
+                        colornumber1=rs1.getInt(12);
+                        Path=rs1.getString(13);
                         ps2 = connection.prepareStatement("select * from color where platename= ?");
                         ps2.setString(1,search );
                         ResultSet rs2 = ps2.executeQuery();
@@ -2091,10 +2092,10 @@ String FolderPath;
                         size=rs1.getInt(4);
                         status=rs1.getInt(6);
                         area=rs1.getInt(5);
-                        isle=rs1.getInt(9);
-                        carierNo=rs1.getInt(10);
-                        colornumber1=rs1.getInt(11);
-                        Path=rs1.getString(12);
+                        isle=rs1.getInt(10);
+                        carierNo=rs1.getInt(11);
+                        colornumber1=rs1.getInt(12);
+                        Path=rs1.getString(13);
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         switch (size) {
@@ -2165,7 +2166,7 @@ String FolderPath;
         else{
             list=f.SearchTool(search);
         }*/
-        String TypeOfTool1="";
+      /*  String TypeOfTool1="";
         String size1="";
         String JobOfTool1="";
         String supplier1="";
@@ -2177,10 +2178,10 @@ String FolderPath;
         int isle=0;
         int carierNo =0;
         int ordernumber1=0;
-        int colornumber1=0;
+        int colornumber1=0;*/
         int area=0;
         String search=this.searchKey12.getText();
-        if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );System.out.print(search);}
+        if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
         else{
             char TypeOfTool=search.charAt(0);
             Connection connection;
@@ -2369,7 +2370,7 @@ String FolderPath;
       char type=search.charAt(0);
       int status=0;
       if(type=='D'||type=='d'){
-         ss= SChange(status, search,"iplate","borrow" );
+         ss= SChange(status, search,"dicut","borrow" );
          Status.setText(ss);
          /* Connection connection;
           try {
@@ -2433,7 +2434,7 @@ String FolderPath;
          
       } 
             else  if(type=='C'||type=='c'){
-               ss= SChange(status, search,"iplate","borrow" );
+               ss= SChange(status, search,"iclasheh","borrow" );
                Status.setText(ss);
         /*  Connection connection;
           try {
@@ -2674,10 +2675,8 @@ String FolderPath;
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         // TODO add your handling code here:
         int row=jTable2.rowAtPoint(evt.getPoint());
-        System.out.print(row);
         DefaultTableModel model= (DefaultTableModel)jTable2.getModel();
         String path = model.getValueAt(row, 4).toString();  
-        System.out.print(path);
         try {
            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  path);
         } catch (IOException ex) {
@@ -2732,14 +2731,10 @@ String FolderPath;
         chooser.setAcceptAllFileFilterUsed(false);
         //
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): "
-                +  chooser.getCurrentDirectory());
-            System.out.println("getSelectedFile() : "
-                +  chooser.getSelectedFile());
             FileUrl.setText(chooser.getCurrentDirectory().toString());
         }
         else {
-            System.out.println("اختر ملف ");
+            
         }
     }//GEN-LAST:event_Attach1MouseClicked
 
