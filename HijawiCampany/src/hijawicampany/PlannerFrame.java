@@ -5,6 +5,7 @@
  */
 package hijawicampany;
 
+import static hijawicampany.functions.DoesItExist;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -25,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -137,6 +140,17 @@ public class PlannerFrame extends javax.swing.JFrame {
         return sectorno;
     }
     
+    boolean validate(String email){
+        boolean x=false;
+        //Regular Expression   
+        String regex = "^(.+)@(.+)$";  
+        //Compile regular expression to get the pattern  
+        Pattern pattern = Pattern.compile(regex); 
+        Matcher matcher = pattern.matcher(email); 
+        x= matcher.matches();
+        return x;
+    }
+    
     public  boolean checkDates(Date d1, String d2)    {
         SimpleDateFormat dfDate  = new SimpleDateFormat("yyyy-MM-dd ");
     boolean b = false;
@@ -160,8 +174,9 @@ public class PlannerFrame extends javax.swing.JFrame {
     return b;
 }
     
-    void SearchForTool(String ToolType,String search){
+    boolean SearchForTool(String ToolType,String search){
         Vector data = new Vector();
+        boolean x=false;
         String TypeOfTool1="";
         String size1="";
         String JobOfTool1="";
@@ -196,10 +211,21 @@ public class PlannerFrame extends javax.swing.JFrame {
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
+                        Path=rs.getString(13);
+                        
+                                                
+                        if(s.equals("dicut")){
                         supplier1=rs.getString(10);
                         isle=rs.getInt(11);
                         carierNo =rs.getInt(12);
-                        Path=rs.getString(13);
+                        }
+                        
+                        if(s.equals("iplate")|| s.equals("iclasheh")){
+                        isle=rs.getInt(10);
+                        carierNo =rs.getInt(11);
+                        colornumber1=rs.getInt(12);
+                        }
+                        
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         if(status==2) status1="تالفة";
@@ -242,10 +268,11 @@ public class PlannerFrame extends javax.swing.JFrame {
                      }
                      catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
                     this.Tool_name1.setText((TypeOfTool1));
+                    x=true;
 
                     }
 
-                    else  JOptionPane.showMessageDialog(this,"Not Found5" );
+                    else  {x=false;}
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
@@ -263,7 +290,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         this.aisle1.setText(Integer.toString(isle));
         this.CarierMo1.setText(Integer.toString(carierNo));
         this.colorNo1.setText(Integer.toString(colornumber1));
- 
+    return x;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -2099,6 +2126,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         int colornumber1=0;
         int area=0;*/
         String search=this.searchKey1.getText();
+        boolean x,w;
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
         else{
 
@@ -2108,7 +2136,17 @@ public class PlannerFrame extends javax.swing.JFrame {
 
             switch (TypeOfTool) {
                 case 'D' : case  'd' :
-                     SearchForTool("dicut", search);
+                   x= SearchForTool("dicut", search);
+                   if(!x){
+                       w= DoesItExist("dicut",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"dicut");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                 /*try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
@@ -2151,7 +2189,17 @@ public class PlannerFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }  */     break;
                 case 'P': case  'p':
-                     SearchForTool("iplate", search);
+                    x= SearchForTool("iplate", search);
+                   if(!x){
+                       w= DoesItExist("iplate",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iplate");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
@@ -2193,7 +2241,17 @@ public class PlannerFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }   */    break;
                 case 'C': case  'c':
-                    SearchForTool("iclasheh", search);
+                    x= SearchForTool("iclasheh", search);
+                   if(!x){
+                       w= DoesItExist("iclasheh",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iclasheh");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
@@ -2261,6 +2319,9 @@ public class PlannerFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Empty username or email" );
         }
         else{
+            boolean x=validate(email);
+            if(!x){JOptionPane.showMessageDialog(this,"ادخل بريد الكتروني صحيح" );}
+            else{
             String type=(String) this.workertype.getSelectedItem();
             Connection connection;
             PreparedStatement ps,p;
@@ -2297,6 +2358,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 }
                 else{ JOptionPane.showMessageDialog(this, "Erorr");}
             } catch (HeadlessException | SQLException ex ) {JOptionPane.showMessageDialog(this,"Wrong \n"+ex );}
+        }
         }
     }//GEN-LAST:event_AddWorkerMouseClicked
 

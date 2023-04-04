@@ -5,6 +5,7 @@
  */
 package hijawicampany;
 
+import java.awt.Image;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -62,6 +64,9 @@ public class Table extends javax.swing.JFrame {
         initComponents();
         table.getColumnModel().getColumn(1).setMinWidth(0);
         table.getColumnModel().getColumn(1).setMaxWidth(0);
+                Image icon;
+        icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
+        this.setIconImage(icon);
         tabelcontent(Jname,TableName);
     }
 

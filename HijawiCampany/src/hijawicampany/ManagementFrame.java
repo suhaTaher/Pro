@@ -8,6 +8,7 @@
 //jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255,255,255)));
 package hijawicampany;
 
+import static hijawicampany.functions.DoesItExist;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -131,7 +132,8 @@ public class ManagementFrame extends javax.swing.JFrame {
         return x;
     }
     
- void SearchForTool(String ToolType,String search){
+boolean SearchForTool(String ToolType,String search){
+        boolean x=false;
         Vector data = new Vector();
         String TypeOfTool1="";
         String size1="";
@@ -167,10 +169,21 @@ public class ManagementFrame extends javax.swing.JFrame {
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
+                        Path=rs.getString(13);
+                        
+                                                
+                        if(s.equals("dicut")){
                         supplier1=rs.getString(10);
                         isle=rs.getInt(11);
                         carierNo =rs.getInt(12);
-                        Path=rs.getString(13);
+                        }
+                        
+                        if(s.equals("iplate")|| s.equals("iclasheh")){
+                        isle=rs.getInt(10);
+                        carierNo =rs.getInt(11);
+                        colornumber1=rs.getInt(12);
+                        }
+                        
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         if(status==2) status1="تالفة";
@@ -213,10 +226,10 @@ public class ManagementFrame extends javax.swing.JFrame {
                      }
                      catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
                     this.Tool_name.setText((TypeOfTool1));
-
+                    x=true;
                     }
 
-                    else  JOptionPane.showMessageDialog(this,"Not Found5" );
+                    else  {x=false;}
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
@@ -233,6 +246,7 @@ public class ManagementFrame extends javax.swing.JFrame {
     this.aisle.setText(Integer.toString(isle));
     this.CarierMo.setText(Integer.toString(carierNo));
     this.colorNo.setText(Integer.toString(colornumber1));
+    return x;
  
     }
 
@@ -1535,7 +1549,7 @@ public class ManagementFrame extends javax.swing.JFrame {
         }
         else{
             boolean x=validate(email);
-            if(!x){JOptionPane.showMessageDialog(this,"Wrong email" );}
+            if(!x){JOptionPane.showMessageDialog(this,"ادخل بريد الكتروني صحيح" );}
             else{
         String type=(String) this.workertype.getSelectedItem();
         Connection connection;
@@ -1676,10 +1690,20 @@ public class ManagementFrame extends javax.swing.JFrame {
         char TypeOfTool=search.charAt(0);
         Connection connection;
         PreparedStatement ps,ps1,ps2;    
-       
+       boolean x,w;
         switch (TypeOfTool) {
             case 'D': case 'd':
-                SearchForTool("dicut", search);
+                   x= SearchForTool("dicut", search);
+                   if(!x){
+                       w= DoesItExist("dicut",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"dicut");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                /* try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
@@ -1722,7 +1746,17 @@ public class ManagementFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }*/       break; 
             case 'P':case 'p':
-                SearchForTool("iplate", search);
+                   x= SearchForTool("iplate", search);
+                   if(!x){
+                       w= DoesItExist("iplate",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iplate");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
               /*  try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
@@ -1764,7 +1798,17 @@ public class ManagementFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }   */    break;
             case 'C':case 'c':
-                SearchForTool("iclasheh", search);
+                   x= SearchForTool("iclasheh", search);
+                   if(!x){
+                       w= DoesItExist("iclasheh",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iclasheh");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
