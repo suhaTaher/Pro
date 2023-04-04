@@ -162,7 +162,6 @@ public class ManagementFrame extends javax.swing.JFrame {
                    
                     if(rs.next())
                     {
-                        System.out.print("im in");
                         TypeOfTool1=rs.getString(2);
                         JobOfTool1=rs.getString(3);
                         size=rs.getInt(4);
@@ -1867,10 +1866,8 @@ public class ManagementFrame extends javax.swing.JFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
          int row=jTable1.rowAtPoint(evt.getPoint());
-        System.out.print(row);
         DefaultTableModel model= (DefaultTableModel)jTable1.getModel();
         String path = model.getValueAt(row, 4).toString();  
-        System.out.print(path);
         try {
            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  path);
         } catch (IOException ex) {

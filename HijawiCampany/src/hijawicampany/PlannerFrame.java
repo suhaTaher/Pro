@@ -191,7 +191,6 @@ public class PlannerFrame extends javax.swing.JFrame {
                    
                     if(rs.next())
                     {
-                        System.out.print("im in");
                         TypeOfTool1=rs.getString(2);
                         JobOfTool1=rs.getString(3);
                         size=rs.getInt(4);
@@ -2391,9 +2390,7 @@ public class PlannerFrame extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(this, "empty fields");   
        }
        else{
-            System.err.print(xx);
             xx = f.DoesItExist("orders",OrderNo.getText(),"ordernumber");
-            System.err.print(xx);
             if(xx){JOptionPane.showMessageDialog(this,"this ordernumber already exists" );}
             else {
                 if(check){
@@ -2443,8 +2440,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 if(s1.next())e= s1.getInt(1);
                  else   JOptionPane.showMessageDialog(this, "tool not found");
                     }
-            else   JOptionPane.showMessageDialog(this, "tool not found");
-             System.out.println(e);
+            else   JOptionPane.showMessageDialog(this, "tool not found");;
             if(e==1){
                 ToolStatus.setText("متوفرة");
                 String sql = String.format("UPDATE %s SET orderDate=? ,DateOfFinishOrder=? WHERE name=? ",ToolTableName); 
@@ -2488,7 +2484,6 @@ public class PlannerFrame extends javax.swing.JFrame {
                 if(ss1.next()){
                     Date DDATE= ss1.getDate(1);
                     String dd= DDATE.toString();
-                    System.out.println(DDATE);
                  DateValidate d=new DateValidate(dd,ss1.getString(2)) ; 
                  d.setVisible(true);
                 }
@@ -2590,10 +2585,8 @@ public class PlannerFrame extends javax.swing.JFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int row=jTable1.rowAtPoint(evt.getPoint());
-        System.out.print(row);
         DefaultTableModel model= (DefaultTableModel)jTable1.getModel();
         String path = model.getValueAt(row, 4).toString();  
-        System.out.print(path);
         try {
            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  path);
         } catch (IOException ex) {

@@ -52,7 +52,8 @@ public class SearchForSales extends javax.swing.JFrame {
          else{sectorno=3;}
         return sectorno;
     }
-        void SearchForTool(String ToolType,String search){
+    
+    void SearchForTool(String ToolType,String search){
         Vector data = new Vector();
         this.Colors1.setListData(data);
         String TypeOfTool1="";
@@ -71,7 +72,7 @@ public class SearchForSales extends javax.swing.JFrame {
         int colornumber1=0;
         int area=0;
         search=this.searchKey1.getText();
- String s =ToolType;
+        String s =ToolType;
         Connection connection;
         PreparedStatement ps;
         try {
@@ -84,7 +85,6 @@ public class SearchForSales extends javax.swing.JFrame {
                    
                     if(rs.next())
                     {
-                        System.out.print("im in");
                         TypeOfTool1=rs.getString(2);
                         JobOfTool1=rs.getString(3);
                         size=rs.getInt(4);

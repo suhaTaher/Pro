@@ -187,8 +187,7 @@ public void toolexpired(){
         } catch (SQLException ex) {
             Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-                    
+              
     }
      
     void deleteTool(String TableName,String ToolName){
@@ -290,23 +289,16 @@ public void toolexpired(){
             return sl;
     }
     
-    void SearchForTool(String ToolType,String search){
-         Vector data = new Vector();
-        this.Sectorno.setText("");
-        this.Tool2.setText("");
-        this.Supplier1.setText("");
-        this.Size1.setText("");
-        this.sector.setText("ddddddddd");
-        this.area.setText("");
-        this.isle.setText("");
-        this.CarierNo1.setText("");
-        this.colorNo1.setText("");
+     boolean SearchForTool(String ToolType,String search, String rowname ,String callee){
+         boolean c=false;
+        Vector data = new Vector();
+        String Path;
+        this.Colors1.setListData(data);
         String TypeOfTool1="";
         String size1="";
         String JobOfTool1="";
         String supplier1="";
         String status1="";
-        String Path="";
         int status;
         int sectorno=0;
         int size=0;
@@ -320,7 +312,7 @@ public void toolexpired(){
         Connection connection;
         PreparedStatement ps;
         try {
-           String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
+           String sql= String.format("Select * FROM %s WHERE  %s=?",ToolType,rowname); 
                      
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement(sql);
@@ -379,30 +371,43 @@ public void toolexpired(){
                         Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
                      }
                      catch(Exception e){JOptionPane.showMessageDialog(this, "Erorr image");} 
-                    this.Tool2.setText((TypeOfTool1));
+                    this.Tool1.setSelectedItem((TypeOfTool1));
+                    c=true;//found
 
                     }
 
-                    else  JOptionPane.showMessageDialog(this,"Not Found5" );
+                    else  {c=false;}
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 } 
+        if (callee.equals("S1") && rowname.equals("name")){
+            this.sectorno1.setText(Integer.toString(sectorno));
+            this.Tool1.setSelectedItem(TypeOfTool1);
+            this.Supplier1.setText(supplier1);
+            this.Size2.setSelectedItem(size1);
+            this.Sector.setSelectedItem(JobOfTool1);
+            this.Status1.setText(status1);
+            this.Area3.setText(Integer.toString(area));
+            this.aisle3.setText(Integer.toString(isle));
+            this.CarierNo2.setText(Integer.toString(carierNo));
+            this.colorNo3.setText(Integer.toString(colornumber1));
+        }
+        if (callee.equals("s2") && rowname.equals("name")){
+            this.Tool2.setText(TypeOfTool1);
+            this.Supplier1.setText(supplier1);
+            this.Size1.setText(size1);
+            this.sector1.setText(JobOfTool1);
+            this.Sectorno.setText(Integer.toString(sectorno));
+            this.Status.setText(status1);
+            this.area.setText(Integer.toString(area));
+            this.isle.setText(Integer.toString(isle));
+            this.CarierNo1.setText(Integer.toString(carierNo));
+           this.colorNo1.setText(Integer.toString(colornumber1));
+        }
         
-        this.Tool2.setText(TypeOfTool1);
-        
-        this.Supplier1.setText(supplier1);
-        this.Size1.setText(size1);
-        this.sector.setText(JobOfTool1);
-        this.Sectorno.setText(Integer.toString(sectorno));
-        this.Status.setText(status1);
-        this.area.setText(Integer.toString(area));
-        this.isle.setText(Integer.toString(isle));
-        this.CarierNo1.setText(Integer.toString(carierNo));
-        this.colorNo1.setText(Integer.toString(colornumber1));
- 
+        return c;
     }
-            
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -512,7 +517,7 @@ public void toolexpired(){
         CarierNo1 = new javax.swing.JTextField();
         jPanel27 = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
-        sector = new javax.swing.JTextField();
+        sector1 = new javax.swing.JTextField();
         Sectorno = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
         jPanel28 = new javax.swing.JPanel();
@@ -1436,9 +1441,9 @@ public void toolexpired(){
         jLabel34.setText("القطاع");
         jPanel27.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
 
-        sector.setEditable(false);
-        sector.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel27.add(sector, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
+        sector1.setEditable(false);
+        sector1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel27.add(sector1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 42));
 
         Sectorno.setEditable(false);
         Sectorno.setBackground(new java.awt.Color(255, 255, 255));
@@ -1742,6 +1747,7 @@ String FolderPath;
         if(path.isEmpty()){JOptionPane.showMessageDialog(this, "اختر مجلد للأداه");}
         else{
         if(otype=="اضافة"){
+           StringBuilder Jname = new StringBuilder();
         if(this.jCheckBox1.isSelected()){color.add("أسود");no++;}
         if(this.jCheckBox2.isSelected()){color.add("أزرق");no++;}
         if(this.jCheckBox4.isSelected()){color.add("أصفر");no++;}
@@ -1802,24 +1808,31 @@ String FolderPath;
                 if(s1.next()){
                      cNo=s1.getInt(1)+1;
                 }
-             ps = connection.prepareStatement("INSERT INTO dicut(name,type,sector,size,area,status,DateOfAttachment,supplier,isle,carierNo,path) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+             ps = connection.prepareStatement("INSERT INTO dicut(name,type,sector,size,area,status,DateOfAttachment,supplier,isle,carierNo,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
              toolname.append('D');//type
              toolname.append(size1);//size
-             toolname.append(jobOfTool);
-             toolname.append(cNo);
+             toolname.append(jobOfTool);//sector
+             toolname.append(cNo);//carier number
              toolname.append(s);//supplier
+             
+             Jname.append('D');//type
+             Jname.append(size1);//size
+             Jname.append(jobOfTool);//sector
+             Jname.append(s);//supplier
+             
 
              ps.setString(1,toolname.toString());
              ps.setString(2,tooltype);
              ps.setString(3,sector);
              ps.setInt(4,size1);
-              ps.setInt(5,area);
+             ps.setInt(5,area);
              ps.setInt(6,1);//status
              ps.setDate(7,date);
              ps.setString(8,supplier);
              ps.setInt(9,isle);
              ps.setInt(10,cNo);
              ps.setString(11,path);
+             ps.setString(12,Jname.toString());
 
              boolean rs = ps.execute();
              if(!rs){
@@ -1850,12 +1863,17 @@ String FolderPath;
                if(s1.next()){
                      cNo=s1.getInt(1)+1;
                 }
-             ps = connection.prepareStatement("INSERT INTO iclasheh(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+             ps = connection.prepareStatement("INSERT INTO iclasheh(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
              toolname.append('C');//type
              toolname.append(size1);//size
              toolname.append(jobOfTool);
              toolname.append(cNo);//????????????????????????????car
              toolname.append(colorno);
+             
+             Jname.append('C');//type
+             Jname.append(size1);//size
+             Jname.append(jobOfTool);//sector
+             Jname.append(colorno);
 
              ps.setString(1,toolname.toString());
              ps.setString(2,tooltype);
@@ -1868,6 +1886,7 @@ String FolderPath;
              ps.setInt(9,cNo);//?????????????????????????????????cariire
              ps.setInt(10,colorno);
              ps.setString(11,path);
+             ps.setString(12, Jname.toString());
              boolean rs = ps.execute();
              if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());this.FileUrl.setText("");}
              else { JOptionPane.showMessageDialog(this, "ادخل الالوان");  }     
@@ -1903,8 +1922,13 @@ String FolderPath;
              toolname.append(jobOfTool);
              toolname.append(cNo);//????????????????????????????car
              toolname.append(no);//color
+             
+             Jname.append('P');//type
+             Jname.append(size1);//size
+             Jname.append(jobOfTool);//sector
+             Jname.append(no);
 
-             ps = connection.prepareStatement("INSERT INTO iplate(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+             ps = connection.prepareStatement("INSERT INTO iplate(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
            
              ps.setString(1,toolname.toString());
              ps.setString(2,tooltype);
@@ -1917,6 +1941,7 @@ String FolderPath;
              ps.setInt(9,cNo);//?????????????????????????????????cariire
              ps.setInt(10,no);
              ps.setString(11,path);
+             ps.setString(12, Jname.toString());
              boolean rs = ps.execute();
              if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());this.FileUrl.setText("");}
              else  JOptionPane.showMessageDialog(this, "اختر الالوان"); 
@@ -1957,7 +1982,7 @@ String FolderPath;
 
     private void SearchBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchBTNMouseClicked
         // TODO add your handling code here:
-        String Path;
+        /*String Path;
         Vector data = new Vector();
         this.Colors1.setListData(data);
         String TypeOfTool1="";
@@ -1973,17 +1998,34 @@ String FolderPath;
         int carierNo =0;
         int ordernumber1=0;
         int colornumber1=0;
-        int area=0;
+        int area=0;*/
+
+        String Callee="S1";
         String search=this.searchKey2.getText();
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
         else{
+            boolean x,w;
             char TypeOfTool=search.charAt(0);
             Connection connection;
             PreparedStatement ps,ps1,ps2;
 
             switch (TypeOfTool) {
                 case 'D':case  'd':
-                try {
+                   x= SearchForTool("dicut", search,"name",Callee);
+                   if(!x){
+                       w= DoesItExist("dicut",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"dicut");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
+                   
+                       
+
+               /* try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
                     ps.setString(1,search );
@@ -2029,9 +2071,20 @@ String FolderPath;
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                } */      break;
                 case 'P':case  'p':
-                try{
+                   x= SearchForTool("iplate", search,"name",Callee);
+                   if(!x){
+                       w= DoesItExist("iplate",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iplate");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
+               /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
                     ps1.setString(1,search );
@@ -2077,9 +2130,20 @@ String FolderPath;
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                }  */     break;
                 case 'C': case  'c':
-                try{
+                    x= SearchForTool("iclasheh", search,"name",Callee);
+                   if(!x){
+                       w= DoesItExist("iclasheh",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iclasheh");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
+                /*try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
                     ps1.setString(1,search );
@@ -2125,14 +2189,14 @@ String FolderPath;
                 }
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-                }       break;
+                } */      break;
                 default:
                 JOptionPane.showMessageDialog(this,"Not Found" );
                 break;
             }
         }
 
-        this.sectorno1.setText(Integer.toString(sectorno));
+       /* this.sectorno1.setText(Integer.toString(sectorno));
         this.Tool1.setSelectedItem(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Size2.setSelectedItem(size1);
@@ -2141,7 +2205,7 @@ String FolderPath;
         this.Area3.setText(Integer.toString(area));
         this.aisle3.setText(Integer.toString(isle));
         this.CarierNo2.setText(Integer.toString(carierNo));
-        this.colorNo3.setText(Integer.toString(colornumber1));
+        this.colorNo3.setText(Integer.toString(colornumber1));*/
     
     
     }//GEN-LAST:event_SearchBTNMouseClicked
@@ -2154,13 +2218,14 @@ String FolderPath;
         this.Tool2.setText("");
         this.Supplier1.setText("");
         this.Size1.setText("");
-        this.sector.setText("");
+        this.sector1.setText("");
         this.area.setText("");
         this.isle.setText("");
         this.CarierNo1.setText("");
         this.colorNo1.setText("");
         this.Colors1.setListData(data);
         ArrayList<String> list =new ArrayList<String>();
+        String Callee="s2";
        /* String search=this.searchKey12.getText();
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );System.out.print(search);}
         else{
@@ -2186,10 +2251,20 @@ String FolderPath;
             char TypeOfTool=search.charAt(0);
             Connection connection;
             PreparedStatement ps,ps1,ps2;
-
+            boolean x,w;
             switch (TypeOfTool) {
                 case 'D': case 'd':
-                    SearchForTool("dicut", search);
+                   x= SearchForTool("dicut", search,"name",Callee);
+                   if(!x){
+                       w= DoesItExist("dicut",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"dicut");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                /* try {
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps = connection.prepareStatement("select * from dicut where name= ?");
@@ -2240,7 +2315,17 @@ String FolderPath;
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }  */     break;
                 case 'P': case 'p':
-                     SearchForTool("iplate", search);
+                   x= SearchForTool("iplate", search,"name",Callee);
+                   if(!x){
+                       w= DoesItExist("iplate",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iplate");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iplate where name= ?");
@@ -2289,7 +2374,17 @@ String FolderPath;
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 }   */    break;
                 case 'C': case 'c':
-                     SearchForTool("iclasheh", search);
+                   x= SearchForTool("iclasheh", search,"name",Callee);
+                   if(!x){
+                       w= DoesItExist("iclasheh",search,"Jname");
+                       if(w){
+                           Table T = new Table(search,"iclasheh");
+                           T.setVisible(true);
+                       }
+                       else if(!w){
+                          JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
+                       }
+                   }
                /* try{
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     ps1 = connection.prepareStatement("select * from iclasheh where name= ?");
@@ -2337,7 +2432,7 @@ String FolderPath;
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 } */      break;
                 default:
-                JOptionPane.showMessageDialog(this,"Not Found5555" );
+                JOptionPane.showMessageDialog(this,"لم يتم العثور على الأداة" );
                 break;
             }
         }
@@ -2931,7 +3026,7 @@ String FolderPath;
     private javax.swing.JPanel search1;
     private javax.swing.JTextField searchKey12;
     private javax.swing.JTextField searchKey2;
-    private javax.swing.JTextField sector;
+    private javax.swing.JTextField sector1;
     private javax.swing.JTextField sectorno1;
     private javax.swing.JComboBox<String> suplier;
     // End of variables declaration//GEN-END:variables
