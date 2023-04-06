@@ -174,9 +174,7 @@ public void toolexpired(){
                      String Finishdate;
                     String toolname;
                     String fileUrl;
-                    
-                    
-        PreparedStatement ps1 = connection.prepareStatement("select * from orders");
+                   PreparedStatement ps1 = connection.prepareStatement("select * from orders where OrderStatus=0 ORDER BY orderDate DESC");
                     ResultSet rs1 = ps1.executeQuery();
                     while(rs1.next())
                     {
@@ -312,6 +310,7 @@ public void toolexpired(){
         int ordernumber1=0;
         int colornumber1=0;
         int area=0;
+        String Sectors="";
         String s =ToolType;
         Connection connection;
         PreparedStatement ps;
@@ -325,6 +324,11 @@ public void toolexpired(){
                     {
                         TypeOfTool1=rs.getString(2);
                         JobOfTool1=rs.getString(3);
+                        if(JobOfTool1.equals("Restaurant")){Sectors="مطاعم";}
+                        else if(JobOfTool1.equals("Medicine")){Sectors="الادوية";}
+                        else if(JobOfTool1.equals("Others")){Sectors="اخرى";}
+                        else if(JobOfTool1.equals("Education")){Sectors="تعليم";}
+                        else if(JobOfTool1.equals("Banks")){Sectors="بنوك";}
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
@@ -398,7 +402,7 @@ public void toolexpired(){
             this.Tool1.setSelectedItem(TypeOfTool1);
             this.Supplier1.setText(supplier1);
             this.Size2.setSelectedItem(size1);
-            this.Sector.setSelectedItem(JobOfTool1);
+            this.Sector.setSelectedItem(Sectors);
             this.Status1.setText(status1);
             this.Area3.setText(Integer.toString(area));
             this.aisle3.setText(Integer.toString(isle));
@@ -409,7 +413,7 @@ public void toolexpired(){
             this.Tool2.setText(TypeOfTool1);
             this.Supplier1.setText(supplier1);
             this.Size1.setText(size1);
-            this.sector1.setText(JobOfTool1);
+            this.sector1.setText(Sectors);
             this.Sectorno.setText(Integer.toString(sectorno));
             this.Status.setText(status1);
             this.area.setText(Integer.toString(area));
@@ -1764,10 +1768,10 @@ public void toolexpired(){
         else{
         //if(otype=="اضافة"){
            StringBuilder Jname = new StringBuilder();
-        if(this.jCheckBox1.isSelected()){color.add("أسود");no++;}
-        if(this.jCheckBox2.isSelected()){color.add("أزرق");no++;}
-        if(this.jCheckBox4.isSelected()){color.add("أصفر");no++;}
-        if(this.jCheckBox5.isSelected()){color.add("أحمر");no++;}
+        if(this.jCheckBox1.isSelected()){color.add("Black");no++;}
+        if(this.jCheckBox2.isSelected()){color.add("Blue");no++;}
+        if(this.jCheckBox4.isSelected()){color.add("Yellow");no++;}
+        if(this.jCheckBox5.isSelected()){color.add("Red");no++;}
         String tooltype=(String) this.Tool1.getSelectedItem();
         String supplier=(String) this.suplier.getSelectedItem();
         String size=(String) this.Size2.getSelectedItem();
@@ -1780,6 +1784,7 @@ public void toolexpired(){
         int size1=1;
         int isle=0;
         char s;
+        String Sector2="";
         char jobOfTool='R';
         int cNo=0;
         int area=0;
@@ -1793,18 +1798,23 @@ public void toolexpired(){
              if(null!=sector)switch (sector) {
             case "مطاعم":
                 jobOfTool='R';
+                Sector2="Restaurant";
                 break;
             case "الادوية":
                 jobOfTool='M';
+                Sector2="Medicine";
                 break;
             case "اخرى":
                 jobOfTool='O';
+                Sector2="Others";
                 break;
             case "تعليم":
                 jobOfTool='E';
+                Sector2="Education";
                 break;
             case "بنوك":
                 jobOfTool='B';
+                Sector2="Banks";
                 break;
             default:
                 break;
@@ -1839,7 +1849,7 @@ public void toolexpired(){
 
              ps.setString(1,toolname.toString());
              ps.setString(2,tooltype);
-             ps.setString(3,sector);
+             ps.setString(3,Sector2);
              ps.setInt(4,size1);
              ps.setInt(5,area);
              ps.setInt(6,1);//status
@@ -1893,7 +1903,7 @@ public void toolexpired(){
 
              ps.setString(1,toolname.toString());
              ps.setString(2,tooltype);
-             ps.setString(3,sector);
+             ps.setString(3,Sector2);
              ps.setInt(4,size1);
              ps.setInt(5,area);
              ps.setInt(6,1);//status
@@ -1948,7 +1958,7 @@ public void toolexpired(){
            
              ps.setString(1,toolname.toString());
              ps.setString(2,tooltype);
-             ps.setString(3,sector);
+             ps.setString(3,Sector2);
              ps.setInt(4,size1);
              ps.setInt(5,area);
              ps.setInt(6,1);//status

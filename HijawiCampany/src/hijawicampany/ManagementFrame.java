@@ -75,7 +75,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                     String Finishdate;
                     String toolname;
                     String fileUrl;    
-                    PreparedStatement ps1 = connection.prepareStatement("select * from orders");
+                    PreparedStatement ps1 = connection.prepareStatement("select * from orders ORDER BY orderDate Desc");
                     ResultSet rs1 = ps1.executeQuery();
                     while(rs1.next())
                     {
@@ -150,6 +150,7 @@ boolean SearchForTool(String ToolType,String search){
         int colornumber1=0;
         int area=0;
         String Path="";
+        String Sectors="";
         search=this.searchKey.getText();
         String s =ToolType;
         Connection connection;
@@ -166,6 +167,11 @@ boolean SearchForTool(String ToolType,String search){
                     {
                         TypeOfTool1=rs.getString(2);
                         JobOfTool1=rs.getString(3);
+                        if(JobOfTool1.equals("Restaurant")){Sectors="مطاعم";}
+                        else if(JobOfTool1.equals("Medicine")){Sectors="الادوية";}
+                        else if(JobOfTool1.equals("Others")){Sectors="اخرى";}
+                        else if(JobOfTool1.equals("Education")){Sectors="تعليم";}
+                        else if(JobOfTool1.equals("Banks")){Sectors="بنوك";}
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
@@ -240,7 +246,7 @@ boolean SearchForTool(String ToolType,String search){
     this.Tool_name.setText(TypeOfTool1);
     this.Supplier.setText(supplier1);
     this.Tool_size.setText(size1);
-    this.sector.setText(JobOfTool1);
+    this.sector.setText(Sectors);
     this.Status.setText(status1);
     this.Area.setText(Integer.toString(area));
     this.aisle.setText(Integer.toString(isle));
@@ -1551,7 +1557,12 @@ boolean SearchForTool(String ToolType,String search){
             boolean x=validate(email);
             if(!x){JOptionPane.showMessageDialog(this,"ادخل بريد الكتروني صحيح" );}
             else{
-        String type=(String) this.workertype.getSelectedItem();
+        String type1=(String) this.workertype.getSelectedItem();
+        String Type2="";
+        if(type1.equals("الادارة")){Type2="Management";}
+        else if(type1.equals("مسؤول المخازن")){Type2="Storage";}
+        else if(type1.equals("مدير المبيعات")){Type2="Sales";}
+        else if (type1.equals("قسم التخطيط")){Type2="Planning";}
         Connection connection;
         PreparedStatement ps,p;
         try {
@@ -1571,7 +1582,7 @@ boolean SearchForTool(String ToolType,String search){
             ps.setString(1,workername);
             ps.setString(2,password);
             ps.setString(3,email);
-            ps.setString(4,type);
+            ps.setString(4,Type2);
             boolean rs = ps.execute();
             if(!rs)
             {

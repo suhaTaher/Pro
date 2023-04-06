@@ -233,22 +233,22 @@ public class LogIn extends javax.swing.JFrame {
                ResultSet rs = ps.executeQuery();
                if(rs.next()){
                     String type=rs.getString(4);
-                    if(type.equals("قسم التخطيط")){
+                    if(type.equals("Planning")){
                        PlannerFrame p=new PlannerFrame(rs.getString(1)); 
                        this.setVisible(false);
                        p.setVisible(true);
                     }
-                    else  if(type.equals("مسؤول المخازن")){
+                    else  if(type.equals("Storage")){
                        StorageFrame s=new StorageFrame(rs.getString(1)); 
                        this.setVisible(false);
                        s.setVisible(true);
                     }
-                    else  if(type.equals("مدير المبيعات")){
+                    else  if(type.equals("Sales")){
                         SearchForSales s=new SearchForSales(rs.getString(1)); 
                         this.setVisible(false);
                         s.setVisible(true);
                     }
-                    else  if(type.equals("الادارة")){
+                    else  if(type.equals("Management")){
                        ManagementFrame s=new ManagementFrame(rs.getString(1)); 
                        this.setVisible(false);
                        s.setVisible(true);

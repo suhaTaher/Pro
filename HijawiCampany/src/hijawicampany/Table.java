@@ -29,17 +29,19 @@ public class Table extends javax.swing.JFrame {
      * Creates new form Table
      */
          public void tabelcontent(String jname , String TblaeName){
-             String[] columnNames = { "اسم الأداة","الرابط","رقم الحاملة"};
+             String[] columnNames = { "اسم الأداة","رقم الحاملة","الملفات"};
         Connection connection;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                     DefaultTableModel model = new DefaultTableModel();
                      model.setColumnIdentifiers(columnNames);
+                             table.getColumnModel().getColumn(1).setMinWidth(0);
+        table.getColumnModel().getColumn(1).setMaxWidth(0);
                     table.setModel(model);
                     table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
                     table.setFillsViewportHeight(true);
                     table.setRowHeight(40);
-                    int carierno;
+                    int carierno=0;
                     String toolname, path;
                     String sql= String.format("select * from %s where Jname=?",TblaeName); 
                     PreparedStatement ps1 = connection.prepareStatement(sql);
@@ -48,10 +50,13 @@ public class Table extends javax.swing.JFrame {
                     while(rs1.next())
                     {
                         toolname=rs1.getString(1);
-                        carierno=rs1.getInt(11);
-                        path=rs1.getString(14);
+                        char first=toolname.charAt(0);
+                        if(first=='D'||first=='d'){carierno=rs1.getInt(12);}
+                        else if(first=='C'||first=='c' ||first=='P'||first=='p'){carierno=rs1.getInt(11);}
+                        
+                        path=rs1.getString(13);
 
-                       model.addRow(new Object[]{toolname,path,carierno });
+                       model.addRow(new Object[]{toolname,carierno,path });
                     }
                
         } catch (SQLException ex) {
@@ -62,12 +67,11 @@ public class Table extends javax.swing.JFrame {
     
     public Table(String Jname,String TableName) {
         initComponents();
-        table.getColumnModel().getColumn(1).setMinWidth(0);
-        table.getColumnModel().getColumn(1).setMaxWidth(0);
-                Image icon;
+        Image icon;
         icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
         this.setIconImage(icon);
         tabelcontent(Jname,TableName);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -154,7 +158,7 @@ public class Table extends javax.swing.JFrame {
         // TODO add your handling code here:
         int row=table.rowAtPoint(evt.getPoint());
         DefaultTableModel model= (DefaultTableModel)table.getModel();
-        String path = model.getValueAt(row, 1).toString();  
+        String path = model.getValueAt(row, 2).toString();  
         try {
            Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  path);
         } catch (IOException ex) {
