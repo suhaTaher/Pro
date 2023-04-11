@@ -81,7 +81,7 @@ public class functions {
       return x;
    }
    
-   public ArrayList<String> get (String TableName, String search,String Searchword){
+public ArrayList<String> get (String TableName, String search,String Searchword){
        ArrayList<String> list =new ArrayList<String>();
        boolean x=DoesItExist(TableName,search, "name");
        if(x){
@@ -104,8 +104,8 @@ public class functions {
                    area=s1.getInt(5);list.add(Integer.toString(area));
                    status=s1.getInt(6);list.add(Integer.toString(status));
                    list.add(s1.getString(9));
-                   isle=s1.getInt(10);list.add(Integer.toString(isle));
-                   carierno=s1.getInt(11);list.add(Integer.toString(carierno));
+                   isle=s1.getInt(11);list.add(Integer.toString(isle));
+                   carierno=s1.getInt(12);list.add(Integer.toString(carierno));
                    return list;
                    }
                    else if (TableName.equals("iplate")){
@@ -115,9 +115,9 @@ public class functions {
                    size=s1.getInt(4);list.add(Integer.toString(size));
                    area=s1.getInt(5);list.add(Integer.toString(area));
                    status=s1.getInt(6);list.add(Integer.toString(status));
-                   isle=s1.getInt(9);list.add(Integer.toString(isle));
-                   carierno=s1.getInt(10);list.add(Integer.toString(carierno)); 
-                   colorno=s1.getInt(11);list.add(Integer.toString(colorno)); 
+                   isle=s1.getInt(10);list.add(Integer.toString(isle));
+                   carierno=s1.getInt(11);list.add(Integer.toString(carierno)); 
+                   colorno=s1.getInt(12);list.add(Integer.toString(colorno)); 
                    return list;
                    }
                    else if (TableName.equals("iclasheh")){
@@ -127,9 +127,8 @@ public class functions {
                    size=s1.getInt(4);list.add(Integer.toString(size));
                    area=s1.getInt(5);list.add(Integer.toString(area));
                    status=s1.getInt(6);list.add(Integer.toString(status));
-                   isle=s1.getInt(9);list.add(Integer.toString(isle));
-                   carierno=s1.getInt(10);list.add(Integer.toString(carierno));
-                   orderno=s1.getInt(11);list.add(Integer.toString(orderno));
+                   isle=s1.getInt(10);list.add(Integer.toString(isle));
+                   carierno=s1.getInt(11);list.add(Integer.toString(carierno));
                    colorno=s1.getInt(12);list.add(Integer.toString(colorno)); 
                    return list;
                    }
@@ -149,6 +148,9 @@ public class functions {
       boolean x;
       int deleted=0;//is it deleted or not
       x = DoesItExist( TableName, Search,"name");
+      ArrayList<String> info=new ArrayList<String>();
+      
+      info=get(TableName,Search,"name");
       if(x){//exixt in DB
           Connection connection;
           String sql= String.format("Delete FROM %s WHERE  name=?",TableName); 
@@ -157,7 +159,25 @@ public class functions {
               PreparedStatement ps1 = connection.prepareStatement(sql);
               ps1.setString(1,Search);
               boolean rs1 = ps1.execute();
-              if(!rs1) {deleted=1;return deleted;}//exist and deleted
+              if(!rs1) {
+                   if(TableName.equals("dicut")){
+                   PreparedStatement emptycarier = connection.prepareStatement("INSERT INTO emptycarier(tooltype,area,isle,carierNo) VALUES (?,?,?,?)");
+                   emptycarier.setString(1,info.get(1));
+                   emptycarier.setInt(2,Integer.valueOf(info.get(4)));
+                   emptycarier.setInt(3,Integer.valueOf(info.get(7)));
+                   emptycarier.setInt(4,Integer.valueOf(info.get(8)));         
+                    boolean result =  emptycarier.execute();
+                   }
+                   else if(TableName.equals("iclasheh") ||TableName.equals("iplate")){
+                       PreparedStatement emptycarier = connection.prepareStatement("INSERT INTO emptycarier(tooltype,area,isle,carierNo) VALUES (?,?,?,?)");
+                   emptycarier.setString(1,info.get(1));
+                   emptycarier.setInt(2,Integer.valueOf(info.get(4)));
+                   emptycarier.setInt(3,Integer.valueOf(info.get(6)));
+                   emptycarier.setInt(4,Integer.valueOf(info.get(7)));         
+                    boolean result =  emptycarier.execute();
+                   }
+                  deleted=1;
+                  return deleted;}//exist and deleted
               else     {deleted = 2;return deleted;} // error
               } catch (SQLException ex) { 
               Logger.getLogger(functions.class.getName()).log(Level.SEVERE, null, ex);
@@ -169,7 +189,6 @@ public class functions {
        return deleted;
      
     }
-   
 
 
 public boolean isNumeric(String strNum) {

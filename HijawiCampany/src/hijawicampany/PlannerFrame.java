@@ -196,7 +196,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         search=this.searchKey1.getText();
        String s =ToolType;
         Connection connection;
-        PreparedStatement ps;
+        PreparedStatement ps,ps2;
         try {
            String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
                      
@@ -232,6 +232,14 @@ public class PlannerFrame extends javax.swing.JFrame {
                         colornumber1=rs.getInt(12);
                         }
                         
+                        if(s.equals("iplate")){
+                         ps2 = connection.prepareStatement("select * from color where platename= ?");
+                         ps2.setString(1,search );
+                         ResultSet rs2 = ps2.executeQuery();
+                         while(rs2.next()){data.addElement(rs2.getString(2));}
+                         this.Colors1.setListData(data);
+                        }
+                        
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         if(status==2) status1="تالفة";
@@ -239,15 +247,15 @@ public class PlannerFrame extends javax.swing.JFrame {
                         switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 3:
                             size1="غير ذلك";
-                            sectorno=getSectorno1(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             default:
                             break;
@@ -257,11 +265,11 @@ public class PlannerFrame extends javax.swing.JFrame {
                             switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                          default:
                             break;
@@ -356,6 +364,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         jLabel33 = new javax.swing.JLabel();
         DeleteO = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         AddOrderFrame = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -969,6 +978,12 @@ public class PlannerFrame extends javax.swing.JFrame {
             .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
         );
 
+        jCheckBox1.setBackground(new java.awt.Color(255, 255, 255));
+        jCheckBox1.setForeground(new java.awt.Color(0, 43, 91));
+        jCheckBox1.setText("تم التسليم");
+        jCheckBox1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jCheckBox1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout jPanel44Layout = new javax.swing.GroupLayout(jPanel44);
         jPanel44.setLayout(jPanel44Layout);
         jPanel44Layout.setHorizontalGroup(
@@ -983,7 +998,9 @@ public class PlannerFrame extends javax.swing.JFrame {
                                 .addComponent(DeleteO, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel44Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jCheckBox1, javax.swing.GroupLayout.Alignment.TRAILING)))))
                     .addGroup(jPanel44Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1019,7 +1036,9 @@ public class PlannerFrame extends javax.swing.JFrame {
                 .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel44Layout.createSequentialGroup()
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56)
+                        .addGap(29, 29, 29)
+                        .addComponent(jCheckBox1)
+                        .addGap(18, 18, 18)
                         .addComponent(DeleteO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
@@ -1543,11 +1562,6 @@ public class PlannerFrame extends javax.swing.JFrame {
         jLabel54.setText("الألوان");
         jPanel37.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
 
-        Colors1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane3.setViewportView(Colors1);
 
         jPanel37.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 190, 100));
@@ -2003,7 +2017,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                         .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(AddWorker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                         .addComponent(jPanel43, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2397,6 +2411,8 @@ public class PlannerFrame extends javax.swing.JFrame {
                      DateOfFinish.setText(FDate);
                      String ToolName = s.getString(4);
                      TName.setText(ToolName);
+                     if(s.getInt(6)==1){this.jCheckBox1.setSelected(true);}
+                     else if (s.getInt(6)==0){this.jCheckBox1.setSelected(false);}
                      //tool name
                      char schar=ToolName.charAt(0);
                      if(schar=='D'||schar=='d'){state=f.returnvalue("dicut", ToolName, "name");StateText=f.returnTextState(state);}
@@ -2743,6 +2759,7 @@ public class PlannerFrame extends javax.swing.JFrame {
     private javax.swing.JTextField aisle1;
     private javax.swing.JTextField colorNo1;
     private javax.swing.JTextField empNo2;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

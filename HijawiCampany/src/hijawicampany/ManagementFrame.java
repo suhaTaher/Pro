@@ -154,7 +154,7 @@ boolean SearchForTool(String ToolType,String search){
         search=this.searchKey.getText();
         String s =ToolType;
         Connection connection;
-        PreparedStatement ps;
+        PreparedStatement ps,ps2;
         try {
            String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
                      
@@ -190,6 +190,14 @@ boolean SearchForTool(String ToolType,String search){
                         colornumber1=rs.getInt(12);
                         }
                         
+                        if(s.equals("iplate")){
+                         ps2 = connection.prepareStatement("select * from color where platename= ?");
+                         ps2.setString(1,search );
+                         ResultSet rs2 = ps2.executeQuery();
+                         while(rs2.next()){data.addElement(rs2.getString(2));}
+                         this.Colors.setListData(data);
+                        }
+                        
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         if(status==2) status1="تالفة";
@@ -197,15 +205,15 @@ boolean SearchForTool(String ToolType,String search){
                         switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 3:
                             size1="غير ذلك";
-                            sectorno=getSectorno1(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             default:
                             break;
@@ -215,11 +223,11 @@ boolean SearchForTool(String ToolType,String search){
                             switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                          default:
                             break;
@@ -352,7 +360,6 @@ boolean SearchForTool(String ToolType,String search){
         jScrollPane1 = new javax.swing.JScrollPane();
         Colors = new javax.swing.JList<>();
         Status = new javax.swing.JLabel();
-        jLabel40 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
         OrderList = new javax.swing.JPanel();
         jPanel30 = new javax.swing.JPanel();
@@ -1164,11 +1171,6 @@ boolean SearchForTool(String ToolType,String search){
         jLabel37.setText("الألوان");
         jPanel29.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
 
-        Colors.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(Colors);
 
         jPanel29.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 190, 100));
@@ -1236,11 +1238,6 @@ boolean SearchForTool(String ToolType,String search){
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
-        jLabel40.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        jLabel40.setForeground(new java.awt.Color(0, 43, 91));
-        jLabel40.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel40.setText("اضافة موظف");
-
         jLabel41.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
         jLabel41.setForeground(new java.awt.Color(0, 43, 91));
         jLabel41.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1258,11 +1255,6 @@ boolean SearchForTool(String ToolType,String search){
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel41)
                 .addGap(24, 24, 24))
-            .addGroup(SearchToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(SearchToolLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel40)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         SearchToolLayout.setVerticalGroup(
             SearchToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1272,11 +1264,6 @@ boolean SearchForTool(String ToolType,String search){
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(33, Short.MAX_VALUE))
-            .addGroup(SearchToolLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(SearchToolLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel40)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         EmpCards.add(SearchTool, "card5");
@@ -2020,7 +2007,6 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;

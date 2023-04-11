@@ -313,7 +313,7 @@ public void toolexpired(){
         String Sectors="";
         String s =ToolType;
         Connection connection;
-        PreparedStatement ps;
+        PreparedStatement ps,ps2;
         try {
            String sql= String.format("Select * FROM %s WHERE  %s=?",ToolType,rowname);        
                     connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
@@ -345,7 +345,27 @@ public void toolexpired(){
                         carierNo =rs.getInt(11);
                         colornumber1=rs.getInt(12);
                         }
-
+                        
+                        if(s.equals("iplate") && callee.equals("s2")){
+                         ps2 = connection.prepareStatement("select * from color where platename= ?");
+                         ps2.setString(1,search );
+                         ResultSet rs2 = ps2.executeQuery();
+                         while(rs2.next()){data.addElement(rs2.getString(2));}
+                         this.Colors1.setListData(data);
+                        }
+                        
+                        if (callee.equals("S1") && s.equals("iplate")){
+                         ps2 = connection.prepareStatement("select * from color where platename= ?");
+                         ps2.setString(1,search );
+                         ResultSet rs2 = ps2.executeQuery();
+                         while(rs2.next()){
+                             if(rs2.getString(2).equals("Black")){this.jCheckBox1.setSelected(true);}
+                             if(rs2.getString(2).equals("Red")){this.jCheckBox4.setSelected(true);}
+                             if(rs2.getString(2).equals("Yellow")){this.jCheckBox5.setSelected(true);}
+                             if(rs2.getString(2).equals("Blue")){this.jCheckBox2.setSelected(true);}
+                         }
+                        }
+                      
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         if(status==2) status1="تالفة";
@@ -353,15 +373,15 @@ public void toolexpired(){
                         switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 3:
                             size1="غير ذلك";
-                            sectorno=getSectorno1(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             default:
                             break;
@@ -371,11 +391,11 @@ public void toolexpired(){
                             switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                          default:
                             break;
@@ -397,6 +417,7 @@ public void toolexpired(){
                 catch (HeadlessException | SQLException ex ) {
                     JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
                 } 
+
         if (callee.equals("S1") && rowname.equals("name")){
             this.sectorno1.setText(Integer.toString(sectorno));
             this.Tool1.setSelectedItem(TypeOfTool1);
@@ -913,10 +934,10 @@ public void toolexpired(){
         SearchBTN.setLayout(SearchBTNLayout);
         SearchBTNLayout.setHorizontalGroup(
             SearchBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(SearchBTNLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SearchBTNLayout.createSequentialGroup()
+                .addContainerGap(18, Short.MAX_VALUE)
                 .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap())
         );
         SearchBTNLayout.setVerticalGroup(
             SearchBTNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1532,11 +1553,6 @@ public void toolexpired(){
         jLabel37.setText("الألوان");
         jPanel29.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
 
-        Colors1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(Colors1);
 
         jPanel29.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 100));
@@ -1759,7 +1775,7 @@ public void toolexpired(){
 
     private void OKMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OKMouseClicked
         // TODO add your handling code here:
-        String FolderPath;
+               String FolderPath;
         ArrayList<String> color=new ArrayList<String>();  
         int no=0;
         //String otype=(String) this.OP.getSelectedItem();
@@ -1819,6 +1835,8 @@ public void toolexpired(){
             default:
                 break;
         }
+         
+        
                 if("Dicut"==tooltype ){
            try { 
                if(size1==1)isle=1;
@@ -1834,6 +1852,47 @@ public void toolexpired(){
                 if(s1.next()){
                      cNo=s1.getInt(1)+1;
                 }
+                ps1 = connection.prepareStatement("SELECT * FROM emptycarier  WHERE isle=? AND tooltype='Dicut' ORDER BY carierNo ASC LIMIT 1");
+               ps1.setInt(1,isle);
+               ResultSet s5 = ps1.executeQuery();
+                if(s5.next()){
+                      ps = connection.prepareStatement("INSERT INTO dicut(name,type,sector,size,area,status,DateOfAttachment,supplier,isle,carierNo,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+             toolname.append('D');//type
+             toolname.append(size1);//size
+             toolname.append(jobOfTool);//sector
+             toolname.append(s5.getInt(4));//carier number
+             toolname.append(s);//supplier
+             
+             Jname.append('D');//type
+             Jname.append(size1);//size
+             Jname.append(jobOfTool);//sector
+             Jname.append(s);//supplier
+             
+
+             ps.setString(1,toolname.toString());
+             ps.setString(2,tooltype);
+             ps.setString(3,Sector2);
+             ps.setInt(4,size1);
+             ps.setInt(5,area);
+             ps.setInt(6,1);//status
+             ps.setDate(7,date);
+             ps.setString(8,supplier);
+             ps.setInt(9,isle);
+             ps.setInt(10,s5.getInt(4));
+             ps.setString(11,path);
+             ps.setString(12,Jname.toString());
+             boolean rs = ps.execute();
+             if(!rs){
+                 JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+                 this.FileUrl.setText("");
+                 ps = connection.prepareStatement("DELETE FROM emptycarier WHERE isle=? AND carierNo=?");
+                 ps.setInt(1,s5.getInt(3));
+                 ps.setInt(2,s5.getInt(4));
+                 ps.execute();
+             }
+             else  JOptionPane.showMessageDialog(this, "Erorr");  
+                }
+                else{
              ps = connection.prepareStatement("INSERT INTO dicut(name,type,sector,size,area,status,DateOfAttachment,supplier,isle,carierNo,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
              toolname.append('D');//type
              toolname.append(size1);//size
@@ -1866,14 +1925,13 @@ public void toolexpired(){
                          ;this.FileUrl.setText("");
                               
              }
-             else  JOptionPane.showMessageDialog(this, "Erorr");       
+             else  JOptionPane.showMessageDialog(this, "Erorr");  
+                }
              } catch (HeadlessException | SQLException ex ) {
              JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
-             }    
-             }    
-        
-                
-                else if("IClasheh"==tooltype && !this.colorNo3.getText().isEmpty()  ){
+             }  
+                }
+              else if("IClasheh"==tooltype && !this.colorNo3.getText().isEmpty()  ){
                try { 
                int colorno=Integer.parseInt(this.colorNo3.getText());
                if(size1==1)isle=1;
@@ -1889,6 +1947,45 @@ public void toolexpired(){
                if(s1.next()){
                      cNo=s1.getInt(1)+1;
                 }
+               PreparedStatement p = connection.prepareStatement("SELECT * FROM emptycarier  WHERE isle=? AND tooltype='IClasheh' ORDER BY carierNo ASC LIMIT 1");
+               p.setInt(1,isle);
+               ResultSet s5 = p.executeQuery();
+                if(s5.next()){
+             ps = connection.prepareStatement("INSERT INTO iclasheh(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+             toolname.append('C');//type
+             toolname.append(size1);//size
+             toolname.append(jobOfTool);
+             toolname.append(s5.getInt(4));//????????????????????????????car
+             toolname.append(colorno);
+             
+             Jname.append('C');//type
+             Jname.append(size1);//size
+             Jname.append(jobOfTool);//sector
+             Jname.append(colorno);
+
+             ps.setString(1,toolname.toString());
+             ps.setString(2,tooltype);
+             ps.setString(3,Sector2);
+             ps.setInt(4,size1);
+             ps.setInt(5,area);
+             ps.setInt(6,1);//status
+             ps.setDate(7,date);
+             ps.setInt(8,isle);
+             ps.setInt(9,s5.getInt(4));//?????????????????????????????????cariire
+             ps.setInt(10,colorno);
+             ps.setString(11,path);
+             ps.setString(12, Jname.toString());
+             boolean rs = ps.execute();
+             if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+             this.FileUrl.setText("");
+              ps1 = connection.prepareStatement("DELETE FROM emptycarier WHERE isle=? AND carierNo=?");
+              ps1.setInt(1,s5.getInt(3));
+              ps1.setInt(2,s5.getInt(4));
+              ps1.execute();}
+             else { JOptionPane.showMessageDialog(this, "ادخل الالوان");  }  
+                
+                }   
+                 else{
              ps = connection.prepareStatement("INSERT INTO iclasheh(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
              toolname.append('C');//type
              toolname.append(size1);//size
@@ -1914,13 +2011,19 @@ public void toolexpired(){
              ps.setString(11,path);
              ps.setString(12, Jname.toString());
              boolean rs = ps.execute();
-             if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());this.FileUrl.setText("");}
-             else { JOptionPane.showMessageDialog(this, "ادخل الالوان");  }     
+             if(!rs){
+              JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+              this.FileUrl.setText("");
+             
+             }
+             else { JOptionPane.showMessageDialog(this, "ادخل الالوان");  }  
+                
+                }   
              } catch (HeadlessException | SQLException ex ) {
              JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
              }    
              }  
-                
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////              
                else if("Plate"==tooltype && no!=0  ){
                try { 
                if(size1==1 && jobOfTool=='R')isle=1;
@@ -1943,6 +2046,53 @@ public void toolexpired(){
                if(s1.next()){
                      cNo=s1.getInt(1)+1;
                 }
+            
+                      PreparedStatement p = connection.prepareStatement("SELECT * FROM emptycarier  WHERE isle=? AND tooltype='IPlate' ORDER BY carierNo ASC LIMIT 1");
+               p.setInt(1,isle);
+               ResultSet s5 = p.executeQuery();
+                if(s5.next()){
+                    
+                
+             toolname.append('P');//type
+             toolname.append(size1);//size
+             toolname.append(jobOfTool);
+             toolname.append(s5.getInt(4));//????????????????????????????car
+             toolname.append(no);//color
+             
+             Jname.append('P');//type
+             Jname.append(size1);//size
+             Jname.append(jobOfTool);//sector
+             Jname.append(no);
+
+             ps = connection.prepareStatement("INSERT INTO iplate(name,type,sector,size,area,status,DateOfAttachment,isle,carierNo,colornumber,path,Jname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+           
+             ps.setString(1,toolname.toString());
+             ps.setString(2,tooltype);
+             ps.setString(3,Sector2);
+             ps.setInt(4,size1);
+             ps.setInt(5,area);
+             ps.setInt(6,1);//status
+             ps.setDate(7,date);
+             ps.setInt(8,isle);
+             ps.setInt(9,s5.getInt(4));//?????????????????????????????????cariire
+             ps.setInt(10,no);
+             ps.setString(11,path);
+             ps.setString(12, Jname.toString());
+             boolean rs = ps.execute();
+             if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+             this.FileUrl.setText("");
+             ps1 = connection.prepareStatement("DELETE FROM emptycarier WHERE isle=? AND carierNo=?");
+              ps1.setInt(1,s5.getInt(3));
+              ps1.setInt(2,s5.getInt(4));
+              ps1.execute();
+             }
+                
+             else  JOptionPane.showMessageDialog(this, "اختر الالوان"); 
+                }
+                else{
+                
+                      
+                
              toolname.append('P');//type
              toolname.append(size1);//size
              toolname.append(jobOfTool);
@@ -1969,9 +2119,15 @@ public void toolexpired(){
              ps.setString(11,path);
              ps.setString(12, Jname.toString());
              boolean rs = ps.execute();
-             if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());this.FileUrl.setText("");}
+             if(!rs){JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح\n Tool name="+toolname.toString());
+             this.FileUrl.setText("");
+            
+             }
+                
              else  JOptionPane.showMessageDialog(this, "اختر الالوان"); 
-         
+                
+                }
+                
               for (String color1 : color) {
                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                    ps1 = connection.prepareStatement("INSERT INTO color(platename,color) VALUES (?,?)");
@@ -2929,7 +3085,6 @@ public void toolexpired(){
     private javax.swing.JPanel AddChangeTool;
     private javax.swing.JPanel AddOrder_Change;
     private javax.swing.JTextField Area3;
-    private javax.swing.JPanel Attach;
     private javax.swing.JPanel Attach1;
     private javax.swing.JTextField CarierNo1;
     private javax.swing.JTextField CarierNo2;
@@ -2969,7 +3124,6 @@ public void toolexpired(){
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;

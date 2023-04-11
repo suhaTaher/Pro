@@ -72,11 +72,12 @@ public class SearchForSales extends javax.swing.JFrame {
         int carierNo =0;
         int ordernumber1=0;
         int colornumber1=0;
+        String Sectors="";
         int area=0;
         search=this.searchKey1.getText();
         String s =ToolType;
         Connection connection;
-        PreparedStatement ps;
+        PreparedStatement ps,ps2;
         try {
            String sql= String.format("Select * FROM %s WHERE  name=?",ToolType); 
                      
@@ -88,6 +89,11 @@ public class SearchForSales extends javax.swing.JFrame {
                     if(rs.next())
                     {
                         TypeOfTool1=rs.getString(2);
+                        if(JobOfTool1.equals("Restaurant")){Sectors="مطاعم";}
+                        else if(JobOfTool1.equals("Medicine")){Sectors="الادوية";}
+                        else if(JobOfTool1.equals("Others")){Sectors="اخرى";}
+                        else if(JobOfTool1.equals("Education")){Sectors="تعليم";}
+                        else if(JobOfTool1.equals("Banks")){Sectors="بنوك";}
                         JobOfTool1=rs.getString(3);
                         size=rs.getInt(4);
                         area=rs.getInt(5);
@@ -107,6 +113,14 @@ public class SearchForSales extends javax.swing.JFrame {
                         colornumber1=rs.getInt(12);
                         }
                         
+                        if(s.equals("iplate")){
+                         ps2 = connection.prepareStatement("select * from color where platename= ?");
+                         ps2.setString(1,search );
+                         ResultSet rs2 = ps2.executeQuery();
+                         while(rs2.next()){data.addElement(rs2.getString(2));}
+                         this.Colors1.setListData(data);
+                        }
+                        
                         if(status==1)status1="متوفر";
                         if(status==0) status1="غير متوفر";
                         if(status==2) status1="تالفة";
@@ -114,15 +128,15 @@ public class SearchForSales extends javax.swing.JFrame {
                         switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno(Sectors);
                             break;
                             case 3:
                             size1="غير ذلك";
-                            sectorno=getSectorno1(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             default:
                             break;
@@ -132,11 +146,11 @@ public class SearchForSales extends javax.swing.JFrame {
                             switch (size) {  
                             case 1:
                             size1="70×100";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                             case 2:
                             size1="50×30";
-                            sectorno=getSectorno(JobOfTool1);
+                            sectorno=getSectorno1(Sectors);
                             break;
                          default:
                             break;
@@ -165,7 +179,7 @@ public class SearchForSales extends javax.swing.JFrame {
         this.Tool_name1.setText(TypeOfTool1);
         this.Supplier1.setText(supplier1);
         this.Tool_size1.setText(size1);
-        this.sector1.setText(JobOfTool1);
+        this.sector1.setText(Sectors);
         this.Status1.setText(status1);
         this.Area1.setText(Integer.toString(area));
         this.aisle1.setText(Integer.toString(isle));
@@ -528,11 +542,6 @@ public class SearchForSales extends javax.swing.JFrame {
         jLabel54.setText("الألوان");
         jPanel37.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
 
-        Colors1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane3.setViewportView(Colors1);
 
         jPanel37.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 190, 100));
