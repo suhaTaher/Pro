@@ -89,12 +89,13 @@ public class SearchForSales extends javax.swing.JFrame {
                     if(rs.next())
                     {
                         TypeOfTool1=rs.getString(2);
+                        JobOfTool1=rs.getString(3);
                         if(JobOfTool1.equals("Restaurant")){Sectors="مطاعم";}
                         else if(JobOfTool1.equals("Medicine")){Sectors="الادوية";}
                         else if(JobOfTool1.equals("Others")){Sectors="اخرى";}
                         else if(JobOfTool1.equals("Education")){Sectors="تعليم";}
                         else if(JobOfTool1.equals("Banks")){Sectors="بنوك";}
-                        JobOfTool1=rs.getString(3);
+                        
                         size=rs.getInt(4);
                         area=rs.getInt(5);
                         status=rs.getInt(6);
@@ -127,11 +128,11 @@ public class SearchForSales extends javax.swing.JFrame {
                         if(s.equals("dicut")|| s.equals("iclasheh")){
                         switch (size) {  
                             case 1:
-                            size1="70×100";
+                            size1="70*100";
                             sectorno=getSectorno(Sectors);
                             break;
                             case 2:
-                            size1="50×30";
+                            size1="50*30";
                             sectorno=getSectorno(Sectors);
                             break;
                             case 3:
@@ -145,11 +146,11 @@ public class SearchForSales extends javax.swing.JFrame {
                         else if (s.equals("iplate")){
                             switch (size) {  
                             case 1:
-                            size1="70×100";
+                            size1="70*100";
                             sectorno=getSectorno1(Sectors);
                             break;
                             case 2:
-                            size1="50×30";
+                            size1="50*30";
                             sectorno=getSectorno1(Sectors);
                             break;
                          default:

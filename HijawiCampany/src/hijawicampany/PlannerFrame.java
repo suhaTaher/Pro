@@ -246,11 +246,11 @@ public class PlannerFrame extends javax.swing.JFrame {
                         if(s.equals("dicut")|| s.equals("iclasheh")){
                         switch (size) {  
                             case 1:
-                            size1="70×100";
+                            size1="70*100";
                             sectorno=getSectorno(Sectors);
                             break;
                             case 2:
-                            size1="50×30";
+                            size1="50*30";
                             sectorno=getSectorno(Sectors);
                             break;
                             case 3:
@@ -264,11 +264,11 @@ public class PlannerFrame extends javax.swing.JFrame {
                         else if (s.equals("iplate")){
                             switch (size) {  
                             case 1:
-                            size1="70×100";
+                            size1="70*100";
                             sectorno=getSectorno1(Sectors);
                             break;
                             case 2:
-                            size1="50×30";
+                            size1="50*30";
                             sectorno=getSectorno1(Sectors);
                             break;
                          default:
@@ -2539,12 +2539,13 @@ public class PlannerFrame extends javax.swing.JFrame {
                 addToolDate.setString(3, ToolName.getText());
                 boolean rs1 = addToolDate.execute();
 
-                ps = connection.prepareStatement("INSERT INTO orders (ordernumber,OrderDate,FinishDate,ToolUsedName,fileUrl)VALUES (?,?,?,?,?)");
+                ps = connection.prepareStatement("INSERT INTO orders (ordernumber,OrderDate,FinishDate,ToolUsedName,fileUrl,OrderStatus)VALUES (?,?,?,?,?,?)");
                 ps.setInt(1,ordernumber);
                 ps.setDate(2,Tdate);
                 ps.setString(3,Date2);
                 ps.setString(4,ToolNam);
                 ps.setString(5,Path);
+                ps.setInt(6, 0);// means not ready
                 boolean rs = ps.execute();
             if(!rs) {
                 JOptionPane.showMessageDialog(this, "تم الاضافة بنجاح");
@@ -2659,7 +2660,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                     p.setInt(1,workerid);
                     ResultSet s = p.executeQuery();
                     if(s.next()){
-                        ps = connection.prepareStatement("UPDATE * from user SET password = ?  WHERE id = ?");
+                        ps = connection.prepareStatement("UPDATE user SET password = ?  WHERE id = ?");
                         ps.setString(1,newpass);
                         ps.setInt(2,workerid);
                         ps.execute();

@@ -174,7 +174,7 @@ public void toolexpired(){
                      String Finishdate;
                     String toolname;
                     String fileUrl;
-                   PreparedStatement ps1 = connection.prepareStatement("select * from orders where OrderStatus=0 ORDER BY orderDate DESC");
+                   PreparedStatement ps1 = connection.prepareStatement("select * from orders where OrderStatus=0 ORDER BY orderDate DESC");//not ready 
                     ResultSet rs1 = ps1.executeQuery();
                     while(rs1.next())
                     {
@@ -372,11 +372,11 @@ public void toolexpired(){
                         if(s.equals("dicut")|| s.equals("iclasheh")){
                         switch (size) {  
                             case 1:
-                            size1="70×100";
+                            size1="70*100";
                             sectorno=getSectorno(Sectors);
                             break;
                             case 2:
-                            size1="50×30";
+                            size1="50*30";
                             sectorno=getSectorno(Sectors);
                             break;
                             case 3:
@@ -390,19 +390,19 @@ public void toolexpired(){
                         else if (s.equals("iplate")){
                             switch (size) {  
                             case 1:
-                            size1="70×100";
+                            size1="70*100";
                             sectorno=getSectorno1(Sectors);
                             break;
                             case 2:
-                            size1="50×30";
+                            size1="50*30";
                             sectorno=getSectorno1(Sectors);
                             break;
-                         default:
+                            default:
                             break;
                         
                         }
                         }
-                                             try{
+                        try{
                                            
                         Runtime.getRuntime().exec("rundll32 url.dll, FileProtocolHandler " +  Path);
                      }
@@ -421,7 +421,7 @@ public void toolexpired(){
         if (callee.equals("S1") && rowname.equals("name")){
             this.sectorno1.setText(Integer.toString(sectorno));
             this.Tool1.setSelectedItem(TypeOfTool1);
-            this.Supplier1.setText(supplier1);
+            this.suplier.setSelectedItem(supplier1);
             this.Size2.setSelectedItem(size1);
             this.Sector.setSelectedItem(Sectors);
             this.Status1.setText(status1);
@@ -1007,7 +1007,7 @@ public void toolexpired(){
         jPanel23.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 75, 40));
 
         Size2.setForeground(new java.awt.Color(0, 43, 91));
-        Size2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "70*100", "50*30", "غير ذلك", "" }));
+        Size2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "70*100", "50*30", "غير ذلك" }));
         jPanel23.add(Size2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 42));
 
         jPanel31.setBackground(new java.awt.Color(250, 250, 250));
@@ -2025,6 +2025,7 @@ public void toolexpired(){
              }  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////              
                else if("Plate"==tooltype && no!=0  ){
+                   int flage = 0;//if size others then equals 1 
                try { 
                if(size1==1 && jobOfTool=='R')isle=1;
                else if(size1==1 && jobOfTool=='M')isle=1;
@@ -2037,7 +2038,9 @@ public void toolexpired(){
                else if(size1==2 && jobOfTool=='B')isle=4;
                else if(size1==2 && jobOfTool=='E')isle=4;
                else if(size1==2)isle=4;
-               
+               else if (size1==3){flage=1;}
+               if(flage ==1){JOptionPane.showMessageDialog(this, "اختر حجم صحيح ");}
+               else{
                area=2;
                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
                ps1 = connection.prepareStatement("SELECT MAX(carierNo) AS number FROM iplate  WHERE   isle=?");
@@ -2051,13 +2054,21 @@ public void toolexpired(){
                p.setInt(1,isle);
                ResultSet s5 = p.executeQuery();
                 if(s5.next()){
-                    
                 
+                   
+                String txt = "";
+                txt = Size2.getSelectedItem().toString();
+              /*  if(txt.equals("غير ذلك")){
+                   JOptionPane.showMessageDialog(this, "ادخل الالوان"); 
+                }
+                else{*/
              toolname.append('P');//type
              toolname.append(size1);//size
              toolname.append(jobOfTool);
              toolname.append(s5.getInt(4));//????????????????????????????car
              toolname.append(no);//color
+             
+             
              
              Jname.append('P');//type
              Jname.append(size1);//size
@@ -2088,7 +2099,8 @@ public void toolexpired(){
              }
                 
              else  JOptionPane.showMessageDialog(this, "اختر الالوان"); 
-                }
+               // }
+               }
                 else{
                 
                       
@@ -2134,6 +2146,7 @@ public void toolexpired(){
                    ps1.setString(1,toolname.toString());
                    ps1.setString(2, color1);
                    ps1.execute();
+               }
                }
              } catch (HeadlessException | SQLException ex ) {
              JOptionPane.showMessageDialog(this,"Wrong \n"+ex );
@@ -2181,7 +2194,12 @@ public void toolexpired(){
         int ordernumber1=0;
         int colornumber1=0;
         int area=0;*/
-
+        
+        jCheckBox1.setSelected(false);
+        jCheckBox2.setSelected(false);
+        jCheckBox4.setSelected(false);
+        jCheckBox5.setSelected(false);
+        
         String Callee="S1";
         String search=this.searchKey2.getText();
         if(search.isEmpty()){JOptionPane.showMessageDialog(this,"Empty Search Field" );}
@@ -3008,7 +3026,9 @@ public void toolexpired(){
         chooser.setAcceptAllFileFilterUsed(false);
         //
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            FileUrl.setText(chooser.getCurrentDirectory().toString());
+            FileUrl.setText(chooser.getSelectedFile().toString());
+                  /*System.out.println("getSelectedFile() : " 
+         +  chooser.getSelectedFile());*/
         }
         else {
             
