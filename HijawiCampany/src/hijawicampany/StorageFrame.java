@@ -169,7 +169,7 @@ public void toolexpired(){
                     jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
                     jTable2.setFillsViewportHeight(true);
                     jTable2.setRowHeight(40);
-                    int id=0;
+                    String id="";
                     Date orderdate;
                      String Finishdate;
                     String toolname;
@@ -178,7 +178,7 @@ public void toolexpired(){
                     ResultSet rs1 = ps1.executeQuery();
                     while(rs1.next())
                     {
-                        id=rs1.getInt(1);
+                      id=rs1.getString(1);
                       orderdate=rs1.getDate(2);
                       Finishdate=rs1.getString(3);
                       toolname=rs1.getString(4);
