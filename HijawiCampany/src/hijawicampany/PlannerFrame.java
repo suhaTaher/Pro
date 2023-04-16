@@ -2483,7 +2483,7 @@ public class PlannerFrame extends javax.swing.JFrame {
             if(xx){JOptionPane.showMessageDialog(this,"this ordernumber already exists" );}
             else {
                 if(check){
-                    if(f.isNumeric(OrderNo.getText())){
+                  //  if(f.isNumeric(OrderNo.getText())){
        try { 
         //java.util.Date FD = new java.util.Date("mm/dd/yyy");
         //FDate = (Date) D.parse(D.format(FinishDate.getDate()));
@@ -2491,7 +2491,7 @@ public class PlannerFrame extends javax.swing.JFrame {
         //String Date1 = D.format(OrderDate.getDate());
         //java.sql.Date Date1 = new java.sql.Date(FDate.getTime());
         // java.sql.Date Date2 = new java.sql.Date(ODate.getTime());
-        int ordernumber =Integer.parseInt( OrderNo.getText());
+        String ordernumber = OrderNo.getText();
         // this.FinishDate.getDateFormatString();
         // SimpleDateFormat D = new SimpleDateFormat();
         //Date2 = D.format(FinishDate.getDate());
@@ -2540,7 +2540,7 @@ public class PlannerFrame extends javax.swing.JFrame {
                 boolean rs1 = addToolDate.execute();
 
                 ps = connection.prepareStatement("INSERT INTO orders (ordernumber,OrderDate,FinishDate,ToolUsedName,fileUrl,OrderStatus)VALUES (?,?,?,?,?,?)");
-                ps.setInt(1,ordernumber);
+                ps.setString(1,ordernumber);
                 ps.setDate(2,Tdate);
                 ps.setString(3,Date2);
                 ps.setString(4,ToolNam);
@@ -2593,8 +2593,8 @@ public class PlannerFrame extends javax.swing.JFrame {
       catch(Exception ex) {
            JOptionPane.showMessageDialog(this,"Wrong \n"+ex.toString() );   
        }
-                    }
-                     else{JOptionPane.showMessageDialog(this, "رقم الطلبية يحب انيكون رقما");}
+                    //}
+                    // else{JOptionPane.showMessageDialog(this, "رقم الطلبية يحب انيكون رقما");}
        }
       else{
                 JOptionPane.showMessageDialog(this, "التاريخ غير صحيح");

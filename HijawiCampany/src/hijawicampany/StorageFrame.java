@@ -194,6 +194,21 @@ public void toolexpired(){
      
     void deleteTool(String TableName,String ToolName){
      int x = f.Delete(TableName, ToolName);
+     if(TableName.equals("iplate")){
+     
+          Connection connection;
+          String sql= String.format("Delete FROM color WHERE  platename=?"); 
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps1 = connection.prepareStatement(sql);
+              ps1.setString(1,ToolName);
+              boolean rs1 = ps1.execute();
+              if(!rs1) {}
+              else{}
+                 } catch (HeadlessException | SQLException ex ) {
+                    JOptionPane.showMessageDialog(this,"Wrong \n"+ex );}
+     }
+     
      if (x==1){//deleted
          JOptionPane.showMessageDialog(this, "تم حذف" + ToolName +"بنجاح");
      }
@@ -232,7 +247,7 @@ public void toolexpired(){
          else if(Sector.equals("الادوية")){sectorno=2;}
          else if(Sector.equals("بنوك")){sectorno=3;}
          else if(Sector.equals("تعليم")){sectorno=4;}
-         else{sectorno=0;}
+         else{sectorno=5;}
         return sectorno;
     }
     
