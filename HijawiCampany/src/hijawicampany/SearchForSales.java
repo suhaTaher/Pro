@@ -26,12 +26,15 @@ public class SearchForSales extends javax.swing.JFrame {
     /**
      * Creates new form SearchForSales
      */
+     private final String username;
     functions f = new functions();
     public SearchForSales(String UserID) {
         initComponents();
         Image icon;
         icon = new ImageIcon(this.getClass().getResource("/Images/cc.png")).getImage();
         this.setIconImage(icon);
+        this.username=UserID;
+        this.jLabel2.setText(username);
     }
     
     int getSectorno(String Sector){//for dicut and clasheh standered sizes

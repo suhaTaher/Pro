@@ -42,12 +42,28 @@ public class ManagementFrame extends javax.swing.JFrame {
     /**
      * Creates new form ManagementFrame
      */
+    functions f = new functions();
     private CardLayout cardLayout;
     private final String username;
+    int CNo;
+    int PNo;
+    int DNo;
+    
     public ManagementFrame(String UserID) {
         initComponents();
         cardLayout = (CardLayout) EmpCards.getLayout();
         setColor(this.emp);
+        cardLayout.show(EmpCards, "card6");
+        
+        CNo=f.NoOfTool("iclasheh");
+        PNo=f.NoOfTool("iplate");
+        DNo=f.NoOfTool("dicut");
+        this.NoOfClasheh1.setText(Integer.toString(CNo));
+        this.NoOfDicut1.setText(Integer.toString(PNo));
+        this.NoOfPlate1.setText(Integer.toString(DNo));
+        f.ToolTables("iplate",PlateTable1);
+        f.ToolTables("iclasheh",ClashehTable1);
+        f.ToolTables("dicut",DicutTable1);
         
         this.username=UserID;
         this.jLabel2.setText(username);
@@ -70,7 +86,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                     jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
                     jTable1.setFillsViewportHeight(true);
                     jTable1.setRowHeight(40);
-                    int id=0;
+                    String id="";
                     Date orderdate;
                     String Finishdate;
                     String toolname;
@@ -79,7 +95,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                     ResultSet rs1 = ps1.executeQuery();
                     while(rs1.next())
                     {
-                        id=rs1.getInt(1);
+                        id=rs1.getString(1);
                       orderdate=rs1.getDate(2);
                       Finishdate=rs1.getString(3);
                       toolname=rs1.getString(4);
@@ -276,6 +292,26 @@ boolean SearchForTool(String ToolType,String search){
         jSlider1 = new javax.swing.JSlider();
         jPanel1 = new javax.swing.JPanel();
         EmpCards = new javax.swing.JPanel();
+        jPanel33 = new javax.swing.JPanel();
+        toolsTap1 = new javax.swing.JTabbedPane();
+        clasheh1 = new javax.swing.JPanel();
+        jPanel34 = new javax.swing.JPanel();
+        jLabel46 = new javax.swing.JLabel();
+        NoOfClasheh1 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        ClashehTable1 = new javax.swing.JTable();
+        plate1 = new javax.swing.JPanel();
+        jPanel35 = new javax.swing.JPanel();
+        jLabel47 = new javax.swing.JLabel();
+        NoOfPlate1 = new javax.swing.JLabel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        PlateTable1 = new javax.swing.JTable();
+        dicut1 = new javax.swing.JPanel();
+        jPanel36 = new javax.swing.JPanel();
+        jLabel48 = new javax.swing.JLabel();
+        NoOfDicut1 = new javax.swing.JLabel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        DicutTable1 = new javax.swing.JTable();
         AddEmp = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
@@ -372,7 +408,7 @@ boolean SearchForTool(String ToolType,String search){
         emp = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        tools = new javax.swing.JPanel();
+        toolsPan = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         list = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -380,6 +416,9 @@ boolean SearchForTool(String ToolType,String search){
         jLabel11 = new javax.swing.JLabel();
         LogOut = new javax.swing.JPanel();
         jLabel42 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        tools1 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Management");
@@ -390,6 +429,228 @@ boolean SearchForTool(String ToolType,String search){
         EmpCards.setBackground(new java.awt.Color(250, 250, 250));
         EmpCards.setPreferredSize(new java.awt.Dimension(790, 750));
         EmpCards.setLayout(new java.awt.CardLayout());
+
+        jPanel33.setBackground(new java.awt.Color(255, 255, 255));
+
+        clasheh1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel34.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel46.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel46.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel46.setText("عدد الأدوات");
+
+        javax.swing.GroupLayout jPanel34Layout = new javax.swing.GroupLayout(jPanel34);
+        jPanel34.setLayout(jPanel34Layout);
+        jPanel34Layout.setHorizontalGroup(
+            jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel34Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(NoOfClasheh1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(jLabel46, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel34Layout.setVerticalGroup(
+            jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel34Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel46, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(NoOfClasheh1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        ClashehTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane7.setViewportView(ClashehTable1);
+
+        javax.swing.GroupLayout clasheh1Layout = new javax.swing.GroupLayout(clasheh1);
+        clasheh1.setLayout(clasheh1Layout);
+        clasheh1Layout.setHorizontalGroup(
+            clasheh1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, clasheh1Layout.createSequentialGroup()
+                .addContainerGap(430, Short.MAX_VALUE)
+                .addComponent(jPanel34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+            .addGroup(clasheh1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7)
+                .addContainerGap())
+        );
+        clasheh1Layout.setVerticalGroup(
+            clasheh1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(clasheh1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jPanel34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        toolsTap1.addTab("   Clasheh   ", clasheh1);
+
+        plate1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel35.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel47.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel47.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel47.setText("عدد الأدوات");
+
+        javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
+        jPanel35.setLayout(jPanel35Layout);
+        jPanel35Layout.setHorizontalGroup(
+            jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel35Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(NoOfPlate1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(jLabel47, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel35Layout.setVerticalGroup(
+            jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel35Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel47, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(NoOfPlate1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        PlateTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane8.setViewportView(PlateTable1);
+
+        javax.swing.GroupLayout plate1Layout = new javax.swing.GroupLayout(plate1);
+        plate1.setLayout(plate1Layout);
+        plate1Layout.setHorizontalGroup(
+            plate1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, plate1Layout.createSequentialGroup()
+                .addContainerGap(430, Short.MAX_VALUE)
+                .addComponent(jPanel35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+            .addGroup(plate1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane8)
+                .addContainerGap())
+        );
+        plate1Layout.setVerticalGroup(
+            plate1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(plate1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jPanel35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        toolsTap1.addTab("   Plate   ", plate1);
+
+        dicut1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel36.setBackground(new java.awt.Color(250, 250, 250));
+
+        jLabel48.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel48.setForeground(new java.awt.Color(0, 43, 91));
+        jLabel48.setText("عدد الأدوات");
+
+        javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
+        jPanel36.setLayout(jPanel36Layout);
+        jPanel36Layout.setHorizontalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(NoOfDicut1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel36Layout.setVerticalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel36Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel48, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(NoOfDicut1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        DicutTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane9.setViewportView(DicutTable1);
+
+        javax.swing.GroupLayout dicut1Layout = new javax.swing.GroupLayout(dicut1);
+        dicut1.setLayout(dicut1Layout);
+        dicut1Layout.setHorizontalGroup(
+            dicut1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dicut1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+            .addGroup(dicut1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        dicut1Layout.setVerticalGroup(
+            dicut1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dicut1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        toolsTap1.addTab("   Dicut   ", dicut1);
+
+        javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
+        jPanel33.setLayout(jPanel33Layout);
+        jPanel33Layout.setHorizontalGroup(
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel33Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(toolsTap1, javax.swing.GroupLayout.PREFERRED_SIZE, 741, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+        jPanel33Layout.setVerticalGroup(
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel33Layout.createSequentialGroup()
+                .addContainerGap(50, Short.MAX_VALUE)
+                .addComponent(toolsTap1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
+        );
+
+        EmpCards.add(jPanel33, "card7");
 
         AddEmp.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1297,14 +1558,17 @@ boolean SearchForTool(String ToolType,String search){
         jPanel30.setLayout(jPanel30Layout);
         jPanel30Layout.setHorizontalGroup(
             jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+            .addGroup(jPanel30Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+                .addGap(275, 275, 275))
         );
         jPanel30Layout.setVerticalGroup(
             jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel30Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
+                .addContainerGap(24, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
@@ -1316,21 +1580,23 @@ boolean SearchForTool(String ToolType,String search){
         OrderList.setLayout(OrderListLayout);
         OrderListLayout.setHorizontalGroup(
             OrderListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(OrderListLayout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
-                .addGroup(OrderListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, OrderListLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(286, 286, 286))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, OrderListLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         OrderListLayout.setVerticalGroup(
             OrderListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(OrderListLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addGap(24, 24, 24)
                 .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         EmpCards.add(OrderList, "card4");
@@ -1401,19 +1667,19 @@ boolean SearchForTool(String ToolType,String search){
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        tools.setBackground(new java.awt.Color(20, 63, 111));
-        tools.addMouseListener(new java.awt.event.MouseAdapter() {
+        toolsPan.setBackground(new java.awt.Color(20, 63, 111));
+        toolsPan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                toolsMouseClicked(evt);
+                toolsPanMouseClicked(evt);
             }
         });
-        tools.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        toolsPan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("البحث عن أداه");
-        tools.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 110, 50));
+        jLabel7.setText("لائحة الأدوات");
+        toolsPan.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 110, 35));
 
         list.setBackground(new java.awt.Color(20, 63, 111));
         list.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1464,28 +1730,56 @@ boolean SearchForTool(String ToolType,String search){
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("الأدوات");
+
+        tools1.setBackground(new java.awt.Color(20, 63, 111));
+        tools1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tools1MouseClicked(evt);
+            }
+        });
+        tools1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("البحث عن أداه");
+        tools1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 110, 35));
+
         javax.swing.GroupLayout SidePannelLayout = new javax.swing.GroupLayout(SidePannel);
         SidePannel.setLayout(SidePannelLayout);
         SidePannelLayout.setHorizontalGroup(
             SidePannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SidePannelLayout.createSequentialGroup()
-                .addGroup(SidePannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(list, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, SidePannelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(SidePannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(tools, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(emp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, SidePannelLayout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
             .addGroup(SidePannelLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SidePannelLayout.createSequentialGroup()
+                .addGroup(SidePannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(list, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(toolsPan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(emp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(SidePannelLayout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(SidePannelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SidePannelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addGap(36, 36, 36))
+            .addGroup(SidePannelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(SidePannelLayout.createSequentialGroup()
+                .addComponent(tools1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         SidePannelLayout.setVerticalGroup(
             SidePannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1496,13 +1790,17 @@ boolean SearchForTool(String ToolType,String search){
                 .addComponent(emp, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addGap(13, 13, 13)
-                .addComponent(tools, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toolsPan, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(tools1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel11)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(list, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                 .addComponent(LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(62, 62, 62))
         );
@@ -1528,8 +1826,9 @@ boolean SearchForTool(String ToolType,String search){
     private void empMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_empMouseClicked
         // TODO add your handling code here:
         resetColor(this.list);
-        resetColor(this.tools);
+        resetColor(this.toolsPan);
         setColor(this.emp);
+        resetColor(this.tools1);
         cardLayout.show(EmpCards, "card6"); 
     }//GEN-LAST:event_empMouseClicked
 
@@ -1648,13 +1947,16 @@ boolean SearchForTool(String ToolType,String search){
             }
     }//GEN-LAST:event_DeleteWorkerMouseClicked
 
-    private void toolsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_toolsMouseClicked
+    private void toolsPanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_toolsPanMouseClicked
         // TODO add your handling code here:
         resetColor(this.list);
-        setColor(this.tools);
+        resetColor(this.tools1);
         resetColor(this.emp);
-        cardLayout.show(EmpCards, "card5");    
-    }//GEN-LAST:event_toolsMouseClicked
+        setColor(this.toolsPan);
+       //String x= ;System.err.println(x);
+       
+        cardLayout.show(EmpCards, "card7");
+    }//GEN-LAST:event_toolsPanMouseClicked
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
         // TODO add your handling code here:
@@ -1868,8 +2170,9 @@ boolean SearchForTool(String ToolType,String search){
     private void listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseClicked
         // TODO add your handling code here:
         setColor(this.list);
-        resetColor(this.tools);
+        resetColor(this.toolsPan);
         resetColor(this.emp);
+        resetColor(this.tools1);
         cardLayout.show(EmpCards, "card4"); 
     }//GEN-LAST:event_listMouseClicked
 
@@ -1917,6 +2220,15 @@ boolean SearchForTool(String ToolType,String search){
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void tools1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tools1MouseClicked
+        // TODO add your handling code here:
+        resetColor(this.list);
+        resetColor(this.toolsPan);
+        resetColor(this.emp);
+        setColor(this.tools1);
+        cardLayout.show(EmpCards, "card5"); 
+    }//GEN-LAST:event_tools1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1957,13 +2269,19 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JPanel AddWorker;
     private javax.swing.JTextField Area;
     private javax.swing.JTextField CarierMo;
+    private javax.swing.JTable ClashehTable1;
     private javax.swing.JList<String> Colors;
     private javax.swing.JPanel DeleteWorker;
+    private javax.swing.JTable DicutTable1;
     private javax.swing.JPanel EditPass;
     private javax.swing.JPanel EmpCards;
     private javax.swing.JTextField ID;
     private javax.swing.JPanel LogOut;
+    private javax.swing.JLabel NoOfClasheh1;
+    private javax.swing.JLabel NoOfDicut1;
+    private javax.swing.JLabel NoOfPlate1;
     private javax.swing.JPanel OrderList;
+    private javax.swing.JTable PlateTable1;
     private javax.swing.JPanel SearchTool;
     private javax.swing.JPanel SearchWorker1;
     private javax.swing.JPanel SidePannel;
@@ -1973,7 +2291,9 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JTextField Tool_size;
     private javax.swing.JTextField WorkerPassWord;
     private javax.swing.JTextField aisle;
+    private javax.swing.JPanel clasheh1;
     private javax.swing.JTextField colorNo;
+    private javax.swing.JPanel dicut1;
     private javax.swing.JTextField email;
     private javax.swing.JPanel emp;
     private javax.swing.JTextField empNo;
@@ -1982,6 +2302,8 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -2011,6 +2333,9 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -2038,6 +2363,10 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
+    private javax.swing.JPanel jPanel33;
+    private javax.swing.JPanel jPanel34;
+    private javax.swing.JPanel jPanel35;
+    private javax.swing.JPanel jPanel36;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -2046,6 +2375,9 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTable jTable1;
     private javax.swing.JPanel list;
@@ -2053,11 +2385,14 @@ boolean SearchForTool(String ToolType,String search){
     private javax.swing.JTextField name1;
     private javax.swing.JTextField name2;
     private javax.swing.JTextField newPassword;
+    private javax.swing.JPanel plate1;
     private javax.swing.JPanel search;
     private javax.swing.JTextField searchKey;
     private javax.swing.JTextField sector;
     private javax.swing.JTextField sectorno;
-    private javax.swing.JPanel tools;
+    private javax.swing.JPanel tools1;
+    private javax.swing.JPanel toolsPan;
+    private javax.swing.JTabbedPane toolsTap1;
     private javax.swing.JTextField workerID;
     private javax.swing.JComboBox<String> workertype;
     // End of variables declaration//GEN-END:variables

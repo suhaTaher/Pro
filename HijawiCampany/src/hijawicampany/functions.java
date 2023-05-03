@@ -16,6 +16,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -269,6 +271,88 @@ public boolean isNumeric(String strNum) {
          else if(Sector.equals("تعليم")){sectorno=2;}
          else{sectorno=3;}
         return sectorno;
+    }
+    
+    int NoOfTool(String ToolName){
+        int numberOfTool=0;
+          Connection connection;
+          String sql= String.format("SELECT COUNT(*) FROM %s ",ToolName); 
+          try {
+              connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+              PreparedStatement ps1 = connection.prepareStatement(sql); 
+              ResultSet rs = ps1.executeQuery();
+              rs.next();
+              numberOfTool=rs.getInt(1);
+              connection.close();
+              } catch (SQLException ex) { 
+              Logger.getLogger(functions.class.getName()).log(Level.SEVERE, null, ex);
+             }   
+        return numberOfTool;
+    }
+    
+      public void ToolTables(String ToolName,JTable table){
+             String[] columnNames = {"اسم الاداة", "القطاع","رقم المنطقة" ,"الممر", "الحجم"," رقم الحاملة","الملفات"};
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/compony","root","");
+                    DefaultTableModel model = new DefaultTableModel();
+                     model.setColumnIdentifiers(columnNames);
+                    table.setModel(model);
+                    table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    table.setFillsViewportHeight(true);
+                    table.setRowHeight(40);
+                    
+                    String tname;
+                    String ttype;
+                     String sector;
+                    String size="";
+                    int size1;
+                    int area=0;
+                    int isle=0;
+                    String supplier;
+                    int cno=0;
+                    String path="";
+                    
+                    String sql= String.format("SELECT * FROM %s",ToolName);
+                    PreparedStatement ps1 = connection.prepareStatement(sql);//dicut
+                    ResultSet rs1 = ps1.executeQuery();
+                    while(rs1.next())
+                    {
+                        tname=rs1.getString(1);
+                     // ttype=rs1.getString(2);
+                      sector=rs1.getString(3);
+                      size1=rs1.getInt(4);
+                      area=rs1.getInt(5);
+                      
+                    if(ToolName.equals("dicut")){
+                      isle=rs1.getInt(11);
+                       cno=rs1.getInt(12);
+                       path=rs1.getString(13);
+                       if(size1==1)size="70*100";
+                       else if(size1==2)size="30*50";
+                       else size="غير ذلك";
+                      model.addRow(new Object[]{tname, sector, area,isle,size,cno,path});
+                       
+                    }
+                     if(ToolName.equals("iplate")|| ToolName.equals("iclasheh")){
+                                               isle=rs1.getInt(9);
+                       cno=rs1.getInt(10);
+                       path=rs1.getString(13);
+                       if(size1==1)size="70*100";
+                       else if(size1==2)size="30*50";
+                       else size="غير ذلك";
+                      model.addRow(new Object[]{tname, sector, area,isle,size,cno,path});
+                     }
+                    }
+
+
+
+                    
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+                    
     }
 
    public ArrayList<String> SearchTool ( String search){
